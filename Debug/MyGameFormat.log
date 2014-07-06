@@ -1,0 +1,22 @@
+﻿  Sound.cpp
+  Selectable.cpp
+  Scene_Sample.cpp
+  Scene_Base.cpp
+  Player_Sample.cpp
+  MyTask_Sample.cpp
+  MyTaskList.cpp
+  MyTask.cpp
+  MyFiles.cpp
+  main.cpp
+  KeyConfig.cpp
+  Image.cpp
+  GlobalData.cpp
+  Func_Math.cpp
+  Func_Graphics.cpp
+  DXTimeCtrl.cpp
+  DXInput.cpp
+  DXFont.cpp
+  CsvReader.cpp
+  Config.cpp
+  コードを生成中...
+  MyGameFormat.vcxproj -> C:\MyGame\さまよいの国のアリス\Debug\MyGame_Alice.exe

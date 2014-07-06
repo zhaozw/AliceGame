@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9E7DA08D-1890-4BD1-81B8-E01866DFA0C2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>test2</RootNamespace>
+    <ProjectName>MyGame_Alice</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\DxLib_VC\DxLib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\DxLib_VC\DxLib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\DxLib_VC\DxLib;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\DxLib_VC\DxLib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Lua5_1\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Lua5_1\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Lua5_1\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Lua5_1\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="BWindow_AliceCommand.cpp" />
+    <ClCompile Include="BWindow_DollCommand.cpp" />
+    <ClCompile Include="BWindow_SelectEnemy.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="CsvReader.cpp" />
+    <ClCompile Include="Data_DollParam.cpp" />
+    <ClCompile Include="Data_EnemyDraw.cpp" />
+    <ClCompile Include="Data_EnemyGroup.cpp" />
+    <ClCompile Include="Data_EnemyParam.cpp" />
+    <ClCompile Include="Data_EnemySprite.cpp" />
+    <ClCompile Include="DXFont.cpp" />
+    <ClCompile Include="DXInput.cpp" />
+    <ClCompile Include="DXTimeCtrl.cpp" />
+    <ClCompile Include="Func_AliceFile.cpp" />
+    <ClCompile Include="Func_Graphics.cpp" />
+    <ClCompile Include="Func_Math.cpp" />
+    <ClCompile Include="Func_MyGraphic.cpp" />
+    <ClCompile Include="Func_Windows.cpp" />
+    <ClCompile Include="Game_AliceDoll.cpp" />
+    <ClCompile Include="Game_AliceInfo.cpp" />
+    <ClCompile Include="Game_BattleAction.cpp" />
+    <ClCompile Include="Game_BattleDoll.cpp" />
+    <ClCompile Include="Game_BattleEnemy.cpp" />
+    <ClCompile Include="Game_BattleUnit.cpp" />
+    <ClCompile Include="Game_DollList.cpp" />
+    <ClCompile Include="Game_FileHeader.cpp" />
+    <ClCompile Include="Game_UnitCommand.cpp" />
+    <ClCompile Include="GlobalData.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="KeyConfig.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyFiles.cpp" />
+    <ClCompile Include="MyTask.cpp" />
+    <ClCompile Include="MyTaskList.cpp" />
+    <ClCompile Include="MyTask_Sample.cpp" />
+    <ClCompile Include="Player_Sample.cpp" />
+    <ClCompile Include="Scene_Base.cpp" />
+    <ClCompile Include="Scene_Battle.cpp" />
+    <ClCompile Include="Scene_Battle_Action.cpp" />
+    <ClCompile Include="Scene_Battle_Calc.cpp" />
+    <ClCompile Include="Scene_Battle_Data.cpp" />
+    <ClCompile Include="Scene_Battle_Draw.cpp" />
+    <ClCompile Include="Scene_Battle_Unit.cpp" />
+    <ClCompile Include="Scene_Camp.cpp" />
+    <ClCompile Include="Scene_DollBirth.cpp" />
+    <ClCompile Include="Scene_DollCreate.cpp" />
+    <ClCompile Include="Scene_File.cpp" />
+    <ClCompile Include="Scene_Sample.cpp" />
+    <ClCompile Include="Scene_TestBattle.cpp" />
+    <ClCompile Include="Scene_Title.cpp" />
+    <ClCompile Include="Selectable.cpp" />
+    <ClCompile Include="Selectable2D.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="Sprite_Base.cpp" />
+    <ClCompile Include="Sprite_BattleDoll.cpp" />
+    <ClCompile Include="Sprite_BattleEnemy.cpp" />
+    <ClCompile Include="TempData.cpp" />
+    <ClCompile Include="WindowSkin.cpp" />
+    <ClCompile Include="WindowSkin_AttachImage.cpp" />
+    <ClCompile Include="WindowSkin_DrawFocus.cpp" />
+    <ClCompile Include="Window_Base.cpp" />
+    <ClCompile Include="Window_BattleMessage.cpp" />
+    <ClCompile Include="Window_Message.cpp" />
+    <ClCompile Include="Window_DollStatus.cpp" />
+    <ClCompile Include="Window_EnterName.cpp" />
+    <ClCompile Include="Window_Selectable.cpp" />
+    <ClCompile Include="Window_Text.cpp" />
+    <ClCompile Include="Window_Yesno.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BWindow_AliceCommand.h" />
+    <ClInclude Include="BWindow_DollCommand.h" />
+    <ClInclude Include="BWIndow_SelectEnemy.h" />
+    <ClInclude Include="Data_DollParam.h" />
+    <ClInclude Include="Data_EnemyDraw.h" />
+    <ClInclude Include="Data_EnemyGroup.h" />
+    <ClInclude Include="Data_EnemyParam.h" />
+    <ClInclude Include="Data_EnemySprite.h" />
+    <ClInclude Include="EnvData.h" />
+    <ClInclude Include="Func_Windows.h" />
+    <ClInclude Include="Game_BattleAction.h" />
+    <ClInclude Include="Game_BattleDoll.h" />
+    <ClInclude Include="Game_BattleEnemy.h" />
+    <ClInclude Include="Game_BattleUnit.h" />
+    <ClInclude Include="Game_DollList.h" />
+    <ClInclude Include="Game_UnitCommand.h" />
+    <ClInclude Include="Scene_Battle.h" />
+    <ClInclude Include="Scene_TestBattle.h" />
+    <ClInclude Include="Selectable2D.h" />
+    <ClInclude Include="Common_Macro.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="CsvReader.h" />
+    <ClInclude Include="Func_MyGraphic.h" />
+    <ClInclude Include="Game_AliceInfo.h" />
+    <ClInclude Include="Game_FileHeader.h" />
+    <ClInclude Include="DXFont.h" />
+    <ClInclude Include="DXInput.h" />
+    <ClInclude Include="DXTimeCtrl.h" />
+    <ClInclude Include="FlexList.h" />
+    <ClInclude Include="Func_AliceFile.h" />
+    <ClInclude Include="Func_Graphics.h" />
+    <ClInclude Include="Func_Math.h" />
+    <ClInclude Include="Game_AliceDoll.h" />
+    <ClInclude Include="GlobalData.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="KeyConfig.h" />
+    <ClInclude Include="MyFiles.h" />
+    <ClInclude Include="MyTask.h" />
+    <ClInclude Include="MyTaskList.h" />
+    <ClInclude Include="MyTask_Sample.h" />
+    <ClInclude Include="Scene_Base.h" />
+    <ClInclude Include="Scene_Camp.h" />
+    <ClInclude Include="Scene_DollBirth.h" />
+    <ClInclude Include="Scene_DollCreate.h" />
+    <ClInclude Include="Scene_File.h" />
+    <ClInclude Include="Scene_Sample.h" />
+    <ClInclude Include="Scene_Title.h" />
+    <ClInclude Include="Selectable.h" />
+    <ClInclude Include="SortedList.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="Sprite_Base.h" />
+    <ClInclude Include="Sprite_BattleDoll.h" />
+    <ClInclude Include="Sprite_BattleEnemy.h" />
+    <ClInclude Include="Static_AliceDoll.h" />
+    <ClInclude Include="Static_AliceInfo.h" />
+    <ClInclude Include="Static_Battle.h" />
+    <ClInclude Include="Static_BattleUnit.h" />
+    <ClInclude Include="Static_CompileMode.h" />
+    <ClInclude Include="Static_Game.h" />
+    <ClInclude Include="TempData.h" />
+    <ClInclude Include="VectorList.h" />
+    <ClInclude Include="WindowSkin.h" />
+    <ClInclude Include="Window_Base.h" />
+    <ClInclude Include="Window_BattleMessage.h" />
+    <ClInclude Include="Window_Message.h" />
+    <ClInclude Include="Window_DollStatus.h" />
+    <ClInclude Include="Window_EnterName.h" />
+    <ClInclude Include="Window_Selectable.h" />
+    <ClInclude Include="Window_Text.h" />
+    <ClInclude Include="Window_Yesno.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

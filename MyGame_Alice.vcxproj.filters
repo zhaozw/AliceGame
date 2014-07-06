@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Data">
+      <UniqueIdentifier>{91e275a0-203c-43eb-ab08-6395204a80ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Battle">
+      <UniqueIdentifier>{c7e5c699-ef72-4b63-97a0-63d4ffb0a7aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Battle">
+      <UniqueIdentifier>{6c18a95b-bd60-47ee-a433-543e48d59a8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Battle\BSource_Instance">
+      <UniqueIdentifier>{19f0122e-c539-4c07-9f78-6fd6cf2c3849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Battle\BSource_Window">
+      <UniqueIdentifier>{72a29e7e-cf5a-45f4-a313-0cdba45a1ffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Battle\BHeader_Instance">
+      <UniqueIdentifier>{531e70d9-19f3-482c-aeab-b449b55334d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Camp">
+      <UniqueIdentifier>{2e10855a-5770-4e33-be94-583cf10aab30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Camp\CHeader_Scene">
+      <UniqueIdentifier>{57b16bb5-9862-4be6-a52f-3c1f195dc328}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Camp\CHeader_Instance">
+      <UniqueIdentifier>{70d0f04d-b19d-4308-9728-bb6811d6032d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Battle\BHeader_Static">
+      <UniqueIdentifier>{5396dce5-41dc-4ff1-93b3-d4ab3b5779db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Camp\CHeader_Static">
+      <UniqueIdentifier>{85fd2aff-685d-45d0-84c7-89a292ead9cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Camp\CHeader_Window">
+      <UniqueIdentifier>{cc175dda-3f3f-480b-8c78-8ad89c6bd6db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Camp">
+      <UniqueIdentifier>{4825ccb6-713e-4661-88b1-08764585d822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Camp\CSource_Instance">
+      <UniqueIdentifier>{0b29c16e-3be9-402f-a1ea-cd62a5945ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System">
+      <UniqueIdentifier>{5dfbb4ef-5592-4cd7-9a6c-2faf71fcd089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Camp\CSource_Scene">
+      <UniqueIdentifier>{0ece2441-60e8-4f00-a770-87cc34bd3eb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Scene">
+      <UniqueIdentifier>{2615d845-1959-4fa1-8997-2863df4a83ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Resource">
+      <UniqueIdentifier>{4a2570b1-8d0f-4ff8-9de4-d375ba77f4bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System">
+      <UniqueIdentifier>{70a03153-f994-4082-afaf-6cbcca955553}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Utility">
+      <UniqueIdentifier>{352f07ef-fe70-4598-8d86-cab88f5a394b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Tool">
+      <UniqueIdentifier>{dffacc7e-91b2-4bea-80ed-2dd4ec2f4343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Resource">
+      <UniqueIdentifier>{f00e4ee4-fd0e-4c28-b5bc-68a981fdb329}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Tool">
+      <UniqueIdentifier>{245320f5-3f7c-43d8-94d1-8e82458f7d57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Utility">
+      <UniqueIdentifier>{c77c24a7-ba62-47e8-bef8-8f6218356dea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Static">
+      <UniqueIdentifier>{539aa5e2-e33d-4fd9-b3e2-e55e2aa1ba05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Window">
+      <UniqueIdentifier>{f41e7e3d-ad4b-4a7c-bb98-73bd4ca6104a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Scene">
+      <UniqueIdentifier>{84f16ba2-b635-4979-80ca-9e3078a70b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Instance">
+      <UniqueIdentifier>{858e658f-a22e-42f8-93a0-d799b1e21a07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Camp\CSource_Window">
+      <UniqueIdentifier>{624fec01-bf25-4ff0-aee9-24757d05bc38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Class">
+      <UniqueIdentifier>{7a949416-e611-41ee-a91d-fdf0a93a76e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Instance">
+      <UniqueIdentifier>{0dee1748-e748-4bdf-9799-91476048cd33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_System\Source_Window">
+      <UniqueIdentifier>{2405069a-b1e8-4314-9b7f-8be357eda1e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Data">
+      <UniqueIdentifier>{64cb0f13-8284-43e6-a906-a4df462a68d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Battle\BHeader_Window">
+      <UniqueIdentifier>{52d0d129-4ee5-4de7-a48e-0f102455053e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Source_Battle\BSource_Sprite">
+      <UniqueIdentifier>{b43ddb04-f511-4832-841a-8a0d33840bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_Battle\BHeader_Sprite">
+      <UniqueIdentifier>{99f865f6-98b1-467d-a540-94e0197b3a0c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Image.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFont.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DXInput.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="DXTimeCtrl.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFiles.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Selectable.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyConfig.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="CsvReader.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Func_Math.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Func_Graphics.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_Sample.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTaskList.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalData.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Player_Sample.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_Base.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSkin.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSkin_AttachImage.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="TempData.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Func_AliceFile.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_FileHeader.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Func_MyGraphic.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_Selectable.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_Text.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSkin_DrawFocus.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_Yesno.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Selectable2D.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Func_Windows.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_BattleUnit.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_AliceDoll.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_AliceInfo.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_DollList.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Camp.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_DollBirth.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_DollCreate.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_File.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Title.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Base.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Sample.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_DollStatus.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_EnterName.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_BattleDoll.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_BattleEnemy.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle_Unit.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle_Data.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_DollParam.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_EnemyParam.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_EnemySprite.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle_Calc.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_EnemyGroup.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_TestBattle.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_BattleAction.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_UnitCommand.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle_Action.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_Message.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_BattleMessage.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="BWindow_AliceCommand.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="BWindow_DollCommand.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="BWindow_SelectEnemy.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_Base.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_BattleDoll.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Battle_Draw.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_BattleEnemy.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_EnemyDraw.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Image.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Base.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFont.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DXInput.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DXTimeCtrl.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Common_Macro.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Sample.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexList.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="SortedList.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Selectable.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFiles.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyConfig.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="CsvReader.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Func_Math.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Func_Graphics.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask_Sample.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTaskList.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalData.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Base.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowSkin.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_CompileMode.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_Game.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="TempData.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_FileHeader.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Func_AliceFile.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Func_MyGraphic.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Selectable.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Text.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Yesno.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Selectable2D.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorList.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvData.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Func_Windows.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_BattleEnemy.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_BattleUnit.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_DollCreate.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_DollBirth.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Camp.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_BattleUnit.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_AliceInfo.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_DollStatus.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_EnterName.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Title.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_File.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_AliceDoll.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Battle.h">
+      <Filter>ヘッダー ファイル\Header_Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_AliceDoll.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_AliceInfo.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_DollList.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_BattleDoll.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_Battle.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_DollParam.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_EnemyParam.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_EnemySprite.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_EnemyGroup.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_TestBattle.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_BattleAction.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_UnitCommand.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Message.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_BattleMessage.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="BWindow_AliceCommand.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="BWindow_DollCommand.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="BWIndow_SelectEnemy.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite_Base.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite_BattleDoll.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite_BattleEnemy.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_EnemyDraw.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

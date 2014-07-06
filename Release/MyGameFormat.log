@@ -1,0 +1,23 @@
+﻿  Config.cpp
+  CsvReader.cpp
+  DXFont.cpp
+  DXInput.cpp
+  DXTimeCtrl.cpp
+  Func_Graphics.cpp
+  Func_Math.cpp
+  GlobalData.cpp
+  Image.cpp
+  KeyConfig.cpp
+  main.cpp
+  MyFiles.cpp
+  MyTask.cpp
+  MyTaskList.cpp
+  MyTask_Sample.cpp
+  Player_Sample.cpp
+  Scene_Base.cpp
+  Scene_Sample.cpp
+  Selectable.cpp
+  Sound.cpp
+  コード生成しています。
+  コード生成が終了しました。
+  MyGameFormat.vcxproj -> C:\MyGame\さまよいの国のアリス\Release\MyGame_Alice.exe
