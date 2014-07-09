@@ -89,6 +89,10 @@ public:
 	// 戻り値には結果を返す。
 	BYTE Open(bool force=false, bool sudden=false);
 
+	// ウィンドウを開いたときに実行する関数。
+	// 各クラスで派生する。
+	virtual void OnOpened(){};
+
 	// ウィンドウを閉じる。
 	// force :	無理やり閉じる(開いている最中や内容の更新中でも閉じる)。
 	//			これをfalseにすると状態がIDLEの時のみ閉じるようにする。

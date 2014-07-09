@@ -66,6 +66,7 @@ BYTE Window_Base::Open(bool force, bool sudden){
 			// ŠJ‚©‚ê‚½ó‘Ô‚É‚·‚é
 			state = SUSPENDED;
 			openLevel = GetOpenTime();
+			OnOpened();
 		}else{
 			// ŠJ‚«n‚ß‚½ó‘Ô‚É‚·‚é
 			// openLevel‚Í‚¢‚¶‚ç‚È‚¢

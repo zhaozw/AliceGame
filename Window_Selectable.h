@@ -76,6 +76,7 @@ public:
 	virtual void GetContent(LPTSTR str, BYTE index) const;
 	// 結果を取得する。
 	int GetResult() const { return result; };
+	bool Choosed() const { return result != WND_SELECTABLE_RESULT_NONE; };
 	// 省略時のパラメータを計算して代入する
 	void SetAbbrParam();
 	// デフォルトのウィンドウサイズなどの設定を適用する。
@@ -83,6 +84,10 @@ public:
 	// インデックスの初期値を決める。
 	void SetSelectIndex(WORD index){ select.index = index; };
 	int GetSelectIndex(){ return select.index; };
+
+	// 開かれた時の処理。
+	// 選択された項目の初期化を行う。
+	virtual void OnOpened();
 
 	// 内容の更新を行う。
 	virtual void Update();

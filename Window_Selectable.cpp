@@ -158,6 +158,10 @@ void Window_Selectable::DrawContent() const{
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
 
+void Window_Selectable::OnOpened(){
+	result = WND_SELECTABLE_RESULT_NONE;
+}
+
 void Window_Selectable::Update(){
 	// 共通アップデート
 	Update_Common();
