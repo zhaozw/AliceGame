@@ -56,6 +56,7 @@ protected:
 	int content_margin_x;		// 列が複数ある場合の項目同士の幅
 	int content_width;			// 項目の幅。自動計算される。
 	// int color;
+	bool autoClose;		// 選択肢を選んだ後、自動でウィンドウを閉じるか
 public:
 	// コンストラクタ。
 	Window_Selectable();
@@ -85,6 +86,9 @@ public:
 
 	// 内容の更新を行う。
 	virtual void Update();
+
+	// 自動で閉じるかどうかの判定を行う
+	virtual void CheckAutoClose(){};
 
 	// 内容の描画を行う。
 	// クラスごとに派生する。

@@ -88,10 +88,10 @@ int Scene_Battle::Update(){
 
 void Scene_Battle::UpdateObjects(){
 	// バトルメッセージウィンドウのアップデート
-	w_battleMsg.Update();
-	w_aliceCommand.Update();
-	w_dollCommand.Update();
-	w_selectEnemy.Update();
+	w_battleMsg.UpdateA();
+	w_aliceCommand.UpdateA();
+	w_dollCommand.UpdateA();
+	w_selectEnemy.UpdateA();
 }
 
 bool Scene_Battle::AttachDollPtrToSprite(){
@@ -111,22 +111,23 @@ bool Scene_Battle::AttachDollPtrToSprite(){
 }
 
 void Scene_Battle::Draw(){
+	// スプライトの描画
+	DrawDollsSprite();
+	DrawEnemiesSprite();
+
 	// バトルメッセージウィンドウの描画
 	w_battleMsg.Draw();
 	w_aliceCommand.Draw();
 	w_dollCommand.Draw();
 	w_selectEnemy.Draw();
 
-	// スプライトの描画
-	DrawDollsSprite();
-	DrawEnemiesSprite();
 }
 
 bool Scene_Battle::SetupWindow(){
 	// バトルメッセージウィンドウ
 	w_battleMsg.Setup(this);
 	w_aliceCommand.MySetup();
-	w_dollCommand.MySetup();
+	w_dollCommand.MySetup(this);
 	w_selectEnemy.MySetup(enemies);
 	return true;
 }
@@ -159,6 +160,12 @@ int Scene_Battle::GetFrontIndex(WORD position){
 	return -1;
 }
 
+
+BYTE Scene_Battle::OpenSelectEnemyWindow(){
+	return w_selectEnemy.Open();
+}
+
+
 bool Scene_Battle::CheckNextAction(){
 	switch(phaze){
 	case BEFORE_BATTLE:
@@ -184,6 +191,25 @@ bool Scene_Battle::CheckNextAction(){
 			return false;
 		}
 		return true;
+		break;
+	case DOLLS_COMMAND:
+		// ウィンドウが閉じていて、かつインデックスが
+		// 終了状態であれば次へ
+		if(w_dollCommand.GetState() == Window_Base::CLOSED){
+			// 入力した結果を保存する
+			if(currentIndex > 0){
+				commands[currentIndex].Reset();
+
+			}
+			// 現在何番目の人形のコマンドを選択しているか(最初は0)
+			currentIndex++;
+			// 全ての人形のコマンドを終えたら次へ
+			if(currentIndex >= NUM_BATTLEDOLL_FRONT){
+				return true;
+			}else{
+				w_dollCommand.Open();
+			}
+		}
 		break;
 	}
 	return false;
@@ -216,6 +242,10 @@ bool Scene_Battle::ExecuteAction(){
 			return false;
 		}
 		InterpretAction(&nextAction);
+		break;
+	case DOLLS_COMMAND:
+		// すぐさま次のフェイズに移行する。
+		return false;
 		break;
 	}
 	return true;
@@ -285,6 +315,7 @@ void Scene_Battle::SetupAliceCommand(){
 }
 
 void Scene_Battle::SetupAliceCommandDo(){
+	Game_BattleAction action;
 	switch(w_aliceCommand.GetResult()){
 	case ALICE_COMMAND_BATTLE:
 		// 何もしない
@@ -294,10 +325,21 @@ void Scene_Battle::SetupAliceCommandDo(){
 	case ALICE_COMMAND_SPECIAL:
 		break;
 	case ALICE_COMMAND_ESCAPE:
+		// ダミーのコメントを入力
+		action.SetType(Game_BattleAction::TYPE_CALLENEMYNAME);
+		action.SetActor(NULL);
+		action.SetOpponent(NULL);
+		action.SetFlags(0x00000000);
+		action.SetParam(0);
+		actionStack.Push(action);
 		break;
 	}
 }
 
 void Scene_Battle::SetupDollsCommand(){
+	// コマンド入力を促すウィンドウを開く
+	// 最初にインクリメントが行われて0になるので-1から始める。
+	currentIndex = -1;
+
 }
 

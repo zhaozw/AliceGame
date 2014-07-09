@@ -39,6 +39,10 @@ protected:
 	WindowSkin* pSkin;
 	// ウィンドウの状態
 	WINDOWSTATE state;
+	// 子ウィンドウ
+	// このウィンドウから派生してさらにウィンドウが出ている時、
+	// 派生ウィンドウのポインタを代入する。
+	Window_Base*	pChildWindow;
 
 	// 位置
 	int x;
@@ -60,6 +64,9 @@ protected:
 	// ウィンドウが存在している時間の長さ
 	// enabledになってからの時間
 	int activeCount;
+	// ウィンドウが子ウィンドウを持つか否か。
+	// falseになると、UpdateA関数で更新処理は行われない。
+	bool haveChild;
 	// ウィンドウの開き具合
 	// openLevelがWindowSkinのopenTimeと等しくなった時が開ききった状態。
 	int openLevel;
@@ -89,8 +96,11 @@ public:
 	BYTE Close(bool force=false, bool sudden=false);
 
 	// 内容のアップデートを行う。
-	virtual void Update();			// クラスごとに派生するアップデート関数。
-	void Update_Common();	// 基本的に共通のアップデート関数。
+	void UpdateA();			// 子ウィンドウがない場合のみアップデートする。
+							// 基本的にUpdate関数はこちらを使用する。
+	virtual void Update();	// クラスごとに派生するアップデート関数。
+	bool Update_Common();	// 基本的に共通のアップデート関数。
+							// Updateを行わない状態の時はfalseを返す。
 
 	// 内容の描画を行う。
 	// クラスごとに派生する。
@@ -123,6 +133,12 @@ public:
 		content_width = width-padding_x*2; 
 		content_height = height-padding_y*2;
 	};
+
+	// 子ウィンドウのポインタを指定してウィンドウを開く。
+	// ウィンドウを開くと自動的にisActiveがfalseとなり、
+	// 閉じると自動的にtrueになる。
+	// 戻り値：子ウィンドウを開いた結果
+	BYTE OpenChildWindow(Window_Base* _pChild);
 };
 
 #endif // WINDOW_BASE_H

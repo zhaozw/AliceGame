@@ -38,7 +38,17 @@ void BWindow_SelectEnemy::MySetup(Game_BattleEnemy* _pEnemies){
 void BWindow_SelectEnemy::Update(){
 	// 敵の数のアップデートを行う
 	UpdateEnemyNum();
-	Window_Selectable::Update();
+	switch(state){
+	case UPDATING:
+		// 更新
+		Window_Selectable::Update();
+		break;
+	case SUSPENDED:
+		// SUSPENDED状態の判定
+		state = UPDATING;
+		break;
+	}
+	Update_Common();
 }
 
 void BWindow_SelectEnemy::UpdateEnemyNum(){

@@ -151,6 +151,14 @@ public:
 	// 前列のi番目に居る人形が、Game_BattleDollの配列の中では何番目かを取得する。
 	int	GetFrontIndex(WORD position);
 
+	// 各種ウィンドウを開く。
+	// 他のウィンドウからの参照などの形。
+
+	// 敵選択ウィンドウ
+	BYTE	OpenSelectEnemyWindow();
+	int		GetSelectEnemyIndex(){ return w_selectEnemy.GetSelectIndex(); };
+	BWindow_SelectEnemy*	GetWndSelectEnemyPtr(){ return &w_selectEnemy; };
+
 	//=========================================
 	// 外部データの呼び出し・データ連係関連
 	// Scene_Battle_Data.cppに記述する。

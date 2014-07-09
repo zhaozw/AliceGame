@@ -116,9 +116,13 @@ int Selectable2D::Move(int hSnd){
 		index = resultIndex;
 	}
 
+	// ボタン入力の確認
+	return CheckKey();
+}
+
+int Selectable2D::CheckKey(int hSnd){
 	// ボタン入力
 	if(g_input.pushedKey & g_key.input[BTN_CHOOSE]) return SELECT2D_CHOOSE;
 	if(g_input.pushedKey & g_key.input[BTN_CANCEL]) return SELECT2D_CANCEL;
-
-	return 0;
+	return SELECT2D_NONE;
 }

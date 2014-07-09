@@ -128,6 +128,16 @@ BYTE Window_Base::Close(bool force, bool sudden){
 	return result;
 }
 
+void Window_Base::UpdateA(){
+	if(haveChild){
+		Update();
+	}else{
+		if(pChildWindow->GetState() == CLOSED){
+			haveChild = true;
+		}
+	}
+}
+
 void Window_Base::Update(){
 	// SUSPENDEDó‘Ô‚Ì”»’è
 	switch(state){
@@ -138,7 +148,7 @@ void Window_Base::Update(){
 	Update_Common();
 }
 
-void Window_Base::Update_Common(){
+bool Window_Base::Update_Common(){
 	switch(state){
 	case CLOSED:
 		// •Â‚¶‚ç‚ê‚½ó‘ÔB
@@ -171,6 +181,7 @@ void Window_Base::Update_Common(){
 	}
 	// count‚ÌXV
 	count++;
+	return GetActive();
 }
 
 void Window_Base::DrawFrame() const{
@@ -221,4 +232,16 @@ void Window_Base::SetPositionV(int pos, BYTE align){
 		y = pos - height;
 		break;
 	}
+}
+
+BYTE Window_Base::OpenChildWindow(Window_Base* _pChild){
+	BYTE result;
+	haveChild = false;
+	if(_pChild == NULL) return WNDOPEN_FAILED;
+	pChildWindow = _pChild;
+	result = pChildWindow->Open();
+	if(result == WNDOPEN_SUCCEED){
+		haveChild = true;
+	}
+	return result;
 }

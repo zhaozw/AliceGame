@@ -11,6 +11,7 @@ Window_Selectable::Window_Selectable() : Window_Text(),
 		row = 1;
 		result = WND_SELECTABLE_RESULT_NONE;
 		content_padding_x = 0;
+		autoClose = true;
 }
 
 void Window_Selectable::Setup(
@@ -158,14 +159,20 @@ void Window_Selectable::DrawContent() const{
 }
 
 void Window_Selectable::Update(){
-// SUSPENDED状態の判定
+	// 共通アップデート
+	Update_Common();
+	// 選択時にウィンドウを閉じるかの判定
+	CheckAutoClose();
 	switch(state){
 	case UPDATING:
+		// 更新
 		switch(select.Move()){
 		case SELECT2D_CHOOSE:
 			result = select.index;
-			state = IDLE;
-			Close();
+			if(autoClose){
+				state = IDLE;
+				Close();
+			}
 			break;
 		case SELECT2D_CANCEL:
 			if(cancelable){
@@ -176,9 +183,9 @@ void Window_Selectable::Update(){
 		}
 		break;
 	case SUSPENDED:
+		// SUSPENDED状態の判定
 		state = UPDATING;
 		break;
 	}
-	Update_Common();
 }
 

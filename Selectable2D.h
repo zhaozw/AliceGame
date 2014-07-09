@@ -29,6 +29,7 @@ public:
 	// それ以外は0を返す。
 	// hSnd : 移動時に鳴らす音のハンドル。
 	int Move(int hSnd = 0);
+	int CheckKey(int hSnd = 0);
 		
 	// 左右の端がつながっていればtrue。
 	bool canHWrap;
