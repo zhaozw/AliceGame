@@ -74,6 +74,9 @@ public:
 	// ウィンドウの内容を設定する。
 	void SetContent(LPTSTR content, BYTE index);
 	virtual void GetContent(LPTSTR str, BYTE index) const;
+	// ウィンドウの内容を全てクリアする。
+	// 文字をクリアするだけで、大きさなどは変更しない。
+	void ClearContent();	
 	// 結果を取得する。
 	int GetResult() const { return result; };
 	bool Choosed() const { return result != WND_SELECTABLE_RESULT_NONE; };

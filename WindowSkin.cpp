@@ -17,14 +17,16 @@ WindowSkin::WindowSkin(){
 }
 
 bool WindowSkin::AttachImage(int* _img, BYTE _wndSkinID, int _frameSize, FRAMETYPE _type, WNDOPENTYPE _oType, int _openTime){
-	if(_img != NULL){
-		wndImgArray = _img;
-		frameSize = _frameSize;
-		frameType = _type;
-		openType = _oType;
-		openTime = _openTime;
-	}else{
-		return false;
+	// 各パラメータの割り当て
+	wndImgArray = _img;
+	frameSize = _frameSize;
+	frameType = _type;
+	openType = _oType;
+	openTime = _openTime;
+	if(wndImgArray == NULL){
+		if(frameType != FT_NOIMAGE){
+			return false;
+		}
 	}
 	return true;
 }

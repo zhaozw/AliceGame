@@ -3,16 +3,18 @@
 #include "BWindow_SelectEnemy.h"
 #include "WindowSkin.h"
 #include "DXFont.h"
+#include "Scene_Battle.h"
+#include "Game_BattleEnemy.h"
 
 extern WindowSkins			g_wndSkins;
 extern DXFont				g_font;
 
 
 BWindow_SelectEnemy::BWindow_SelectEnemy(){
-
+	pScene = NULL;
 }
 
-void BWindow_SelectEnemy::MySetup(Game_BattleEnemy* _pEnemies){
+void BWindow_SelectEnemy::MySetup(Scene_Battle* _pScene){
 	Window_Selectable_Content content;
 	Window_Selectable::Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
@@ -31,17 +33,15 @@ void BWindow_SelectEnemy::MySetup(Game_BattleEnemy* _pEnemies){
 	// 内容を元にセットアップする
 	SetDefParam();
 
-	pEnemies = _pEnemies;
+	pScene = _pScene;
 	enemyNum = 0;
 }
 
 void BWindow_SelectEnemy::Update(){
-	// 敵の数のアップデートを行う
-	UpdateEnemyNum();
+	// 更新
+	Window_Selectable::Update();
 	switch(state){
 	case UPDATING:
-		// 更新
-		Window_Selectable::Update();
 		break;
 	case SUSPENDED:
 		// SUSPENDED状態の判定
@@ -51,8 +51,25 @@ void BWindow_SelectEnemy::Update(){
 	Update_Common();
 }
 
-void BWindow_SelectEnemy::UpdateEnemyNum(){
-
+void BWindow_SelectEnemy::OnOpened(){
+	// シーンとの連携
+	if(pScene == NULL) return;
+	// 敵の数を取得
+	enemyNum = pScene->GetEnemiesNum();
+	// 描画内容を作成
+	ClearContent();
+	Game_BattleEnemy* pEnemy = NULL;
+	TCHAR buf[BATTLEUNIT_NAME_BYTES];
+	for(int n=0; n<enemyNum; n++){
+		pEnemy = pScene->GetEnemyPtr(n);
+		if(pEnemy != NULL){
+			// 名前のセッティング
+			pEnemy->GetName(buf, BATTLEUNIT_NAME_BYTES);
+			SetContent(buf, n);
+		}
+	}
+	// 入力された名前に合わせてウィンドウを広げる
+	SetDefParam(true);
 }
 
 void BWindow_SelectEnemy::DrawContent() const{

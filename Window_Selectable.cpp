@@ -54,6 +54,12 @@ void Window_Selectable::GetContent(LPTSTR str, BYTE index) const{
 	strcpy_s(str, WND_SELECTABLE_TITLELENGTH-1, content.data[index]);
 }
 
+void Window_Selectable::ClearContent(){
+	for(int n=0; n<WND_SELECTABLE_CONTENT; n++){
+		SetContent(_T(""), n);
+	}
+}
+
 void Window_Selectable::SetAbbrParam(){
 	titleHeight = 1.5*lineHeight;
 	hTitleFont = hFont;

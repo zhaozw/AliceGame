@@ -12,8 +12,9 @@
 // そのメンバ変数であるskinとしてWindowSkinを列挙する形で保持する。
 // 各WindowSkinへの参照をウインドウが保持することで参照を行う。
 
-#define MAX_WNDSKIN		1
+#define MAX_WNDSKIN		2
 #define WNDSKIN_SIMPLE	0
+#define WNDSKIN_NONE	1
 
 class Window_Base;
 class WindowSkin;
@@ -42,7 +43,7 @@ public:
 
 	enum WNDOPENTYPE{
 		OT_NONE,		// 完全に開いたときだけ描画、他は描画しない
-		OT_FADE,	// その場にフェードイン
+		OT_FADE,		// その場にフェードイン
 		OT_EXPAND_Y,	// 縦方向に開く
 	};
 private:

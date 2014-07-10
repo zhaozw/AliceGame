@@ -3,8 +3,8 @@
 
 #include "Window_Selectable.h"
 
-#define BWND_DOLLCOMMAND_X		200
-#define BWND_DOLLCOMMAND_Y		300
+#define BWND_DOLLCOMMAND_X		100
+#define BWND_DOLLCOMMAND_Y		400
 #define BWND_DOLLCOMMAND_W		300
 #define BWND_DOLLCOMMAND_H		200
 #define BWND_DOLLCOMMAND_PX	16

@@ -142,7 +142,7 @@ public:
 	// ウィンドウを開くと自動的にisActiveがfalseとなり、
 	// 閉じると自動的にtrueになる。
 	// 戻り値：子ウィンドウを開いた結果
-	BYTE OpenChildWindow(Window_Base* _pChild);
+	BYTE OpenChildWindow(Window_Base* _pChild, bool sudden = false);
 };
 
 #endif // WINDOW_BASE_H

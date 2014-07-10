@@ -17,6 +17,7 @@ void Window_Base::Initialize(){
 	activeCount = 0;
 	pSkin = NULL;
 	count = 0;
+	haveChild = false;
 }
 
 bool Window_Base::Setup(WindowSkin* pSkin, int _x, int _y, int _w, int _h, int _px, int _py, bool _visible){
@@ -29,6 +30,7 @@ bool Window_Base::Setup(WindowSkin* pSkin, int _x, int _y, int _w, int _h, int _
 	visible = _visible;
 	AttachSkin(pSkin);
 	SetContentSize();
+	haveChild = false;
 	return true;
 }
 
@@ -71,6 +73,7 @@ BYTE Window_Base::Open(bool force, bool sudden){
 			// ŠJ‚«Žn‚ß‚½ó‘Ô‚É‚·‚é
 			// openLevel‚Í‚¢‚¶‚ç‚È‚¢
 			state = OPENING;
+			OnOpened();
 		}
 	}
 
@@ -130,10 +133,10 @@ BYTE Window_Base::Close(bool force, bool sudden){
 }
 
 void Window_Base::UpdateA(){
-	if(haveChild){
+	if(!haveChild){
 		Update();
 	}else{
-		if(pChildWindow->GetState() == CLOSED){
+		if(pChildWindow->GetState() == CLOSED || pChildWindow == NULL){
 			haveChild = true;
 		}
 	}
@@ -235,12 +238,12 @@ void Window_Base::SetPositionV(int pos, BYTE align){
 	}
 }
 
-BYTE Window_Base::OpenChildWindow(Window_Base* _pChild){
+BYTE Window_Base::OpenChildWindow(Window_Base* _pChild, bool sudden){
 	BYTE result;
 	haveChild = false;
 	if(_pChild == NULL) return WNDOPEN_FAILED;
 	pChildWindow = _pChild;
-	result = pChildWindow->Open();
+	result = pChildWindow->Open(false, sudden);
 	if(result == WNDOPEN_SUCCEED){
 		haveChild = true;
 	}

@@ -12,6 +12,11 @@ bool WindowSkins::AttachImages(){
 		WindowSkin::FT_EXTEND, WindowSkin::OT_EXPAND_Y, 5)){
 		return false;
 	}
+	if(!skin[WNDSKIN_NONE].AttachImage(
+		NULL, WNDSKIN_NONE, 0,
+		WindowSkin::FT_NOIMAGE, WindowSkin::OT_EXPAND_Y, 5)){
+		return false;
+	}
 	return true;
 }
 

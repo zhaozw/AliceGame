@@ -52,7 +52,7 @@ void BWindow_DollCommand::Update(){
 			case BWND_DOLLCOMMAND_ATTACK:
 				// 攻撃相手選択ウィンドウを開く
 				commandIndex = BWND_DOLLCOMMAND_ATTACK;
-				OpenChildWindow((Window_Base*)pScene->GetWndSelectEnemyPtr());
+				OpenChildWindow((Window_Base*)pScene->GetWndFocusedEnemyPtr(), true);
 				break;
 			case BWND_DOLLCOMMAND_SKILL:
 				// スキル選択ウィンドウを開く

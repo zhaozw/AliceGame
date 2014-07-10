@@ -327,6 +327,9 @@
     <ClCompile Include="Data_EnemyDraw.cpp">
       <Filter>ソース ファイル\Source_Data</Filter>
     </ClCompile>
+    <ClCompile Include="BWindow_FocusedEnemy.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="Data_EnemyDraw.h">
       <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="BWindow_FocusedEnemy.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

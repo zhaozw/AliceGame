@@ -12,6 +12,7 @@
 #include "BWindow_AliceCommand.h"
 #include "BWindow_DollCommand.h"
 #include "BWIndow_SelectEnemy.h"
+#include "BWindow_FocusedEnemy.h"
 #include "Sprite_BattleDoll.h"
 #include "Sprite_BattleEnemy.h"
 
@@ -81,6 +82,8 @@ private:
 	BWindow_DollCommand					w_dollCommand;
 	// 敵の選択ウィンドウ
 	BWindow_SelectEnemy					w_selectEnemy;
+	// 敵のフォーカスウィンドウ
+	BWindow_FocusedEnemy				w_focusedEnemy;
 	// 人形のスプライト
 	Sprite_BattleDoll					s_dolls[NUM_BATTLEDOLL_FRONT];
 	// 敵のスプライト
@@ -143,13 +146,21 @@ public:
 	int GetDollsNum(){ return dollsNum; } ;
 	int GetEnemiesNum(){ return enemiesNum; };
 
+	// 人形のポインタを取得する。
 	Game_BattleDoll*	GetDollPtr(int index){
 		if(index < 0 || index >= MAX_BATTLEDOLL) return NULL;
 		return &dolls[index];
 	}
 
+	// 敵キャラのポインタを取得する。
+	Game_BattleEnemy*	GetEnemyPtr(int index){
+		if(index < 0 || index >= MAX_BATTLEENEMY) return NULL;
+		return &enemies[index];
+	}
+
 	// 前列のi番目に居る人形が、Game_BattleDollの配列の中では何番目かを取得する。
 	int	GetFrontIndex(WORD position);
+
 
 	// 各種ウィンドウを開く。
 	// 他のウィンドウからの参照などの形。
@@ -158,6 +169,9 @@ public:
 	BYTE	OpenSelectEnemyWindow();
 	int		GetSelectEnemyIndex(){ return w_selectEnemy.GetSelectIndex(); };
 	BWindow_SelectEnemy*	GetWndSelectEnemyPtr(){ return &w_selectEnemy; };
+	BYTE	OpenFocusedEnemyWindow();
+	int		GetFocusedEnemyIndex(){ return w_focusedEnemy.GetSelectIndex(); };
+	BWindow_FocusedEnemy*	GetWndFocusedEnemyPtr(){ return &w_focusedEnemy; };
 
 	//=========================================
 	// 外部データの呼び出し・データ連係関連

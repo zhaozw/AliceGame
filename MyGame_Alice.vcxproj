@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="BWindow_AliceCommand.cpp" />
     <ClCompile Include="BWindow_DollCommand.cpp" />
+    <ClCompile Include="BWindow_FocusedEnemy.cpp" />
     <ClCompile Include="BWindow_SelectEnemy.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="CsvReader.cpp" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="BWindow_AliceCommand.h" />
     <ClInclude Include="BWindow_DollCommand.h" />
+    <ClInclude Include="BWindow_FocusedEnemy.h" />
     <ClInclude Include="BWIndow_SelectEnemy.h" />
     <ClInclude Include="Data_DollParam.h" />
     <ClInclude Include="Data_EnemyDraw.h" />
