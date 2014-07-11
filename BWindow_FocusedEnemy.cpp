@@ -11,6 +11,7 @@ extern	WindowSkins	g_wndSkins;
 BWindow_FocusedEnemy::BWindow_FocusedEnemy() : s_enemy(MAX_BATTLEENEMY, 0, false, true){
 	pScene = NULL;
 	pEnemy = NULL;
+	focusAll = false;
 }
 
 void BWindow_FocusedEnemy::MySetup(Scene_Battle* _pScene){
@@ -25,6 +26,7 @@ void BWindow_FocusedEnemy::MySetup(Scene_Battle* _pScene){
 
 
 void BWindow_FocusedEnemy::OnOpened(){
+	pEnemy = NULL;
 	s_enemy.index = 0;
 	CheckEnemyEnabled();
 	OnIndexChanged();
@@ -59,21 +61,49 @@ void BWindow_FocusedEnemy::Update(){
 	case UPDATING:
 		switch(s_enemy.Move()){
 		case SELECT_CHOOSE:
+			Close(true, true);
+			break;
+		case SELECT_CANCEL:
+			s_enemy.index = SELECTRESULT_CANCELED;
+			Close(true, true);
 			break;
 		}
 		if(s_enemy.index != oldIndex){
 			OnIndexChanged();
 		}
+		
 		break;
 	case SUSPENDED:
 		state = UPDATING;
+		break;
+	case CLOSED:
 		break;
 	}
 }
 
 void BWindow_FocusedEnemy::DrawContent() const{
+	Game_BattleEnemy*	pTmpEnemy = NULL;
+	if(pEnemy == NULL) return;
+	if(!GetActive()) return;
+	if(!focusAll){
+		DrawCntEnemy(pEnemy);
+	}else{
+		// ëSÇƒÇÃìGÇ…Ç¬Ç¢ÇƒÉãÅ[ÉvÇ∑ÇÈ
+		for(int n=0; n<MAX_BATTLEENEMY; n++){
+			if(n < pScene->GetEnemiesNum()){
+				pTmpEnemy = pScene->GetEnemyPtr(n);
+				DrawCntEnemy(pTmpEnemy);
+			}
+		}
+	}
+}
+
+void BWindow_FocusedEnemy::DrawCntEnemy(Game_BattleEnemy* p) const {
+	int tmpX=0, tmpY=0;
+	tmpX = p->GetDrawX();
+	tmpY = p->GetDrawY();
 	DrawBox(
-		GetPositionX()-5, GetPositionY()-5,
-		GetPositionX()+5, GetPositionY()+5,
+		tmpX-5, tmpY-5,
+		tmpX+5, tmpY+5,
 		GetColor(255, 0, 0), 1);
 }

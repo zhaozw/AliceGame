@@ -41,6 +41,7 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 	for(int n=0; n<MAX_UNITCOMMAND; n++){
 		commands[n].Reset();
 	}
+	commandIndex = 0;
 
 	currentIndex = 0;
 	// 味方と敵のセットアップ
@@ -163,11 +164,61 @@ int Scene_Battle::GetFrontIndex(WORD position){
 	return -1;
 }
 
+Game_BattleDoll* Scene_Battle::GetFrontDollPtr(WORD index, bool checkCanTarget){
+	if(index >= NUM_BATTLEDOLL_FRONT) return NULL;
+	Game_BattleDoll* pDoll = GetDollPtr(GetFrontIndex(index));
+	if(checkCanTarget){
+		if(!pDoll->CanTarget()){
+			return NULL;
+		}
+	}
+	return pDoll;
+}
+
+Game_BattleDoll* Scene_Battle::GetRandomDollPtr(){
+	Game_BattleDoll* pDolls[NUM_BATTLEDOLL_FRONT];
+	Game_BattleDoll* pTmpDoll = NULL;
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pDolls[n] = NULL;
+	}
+	int index = 0;
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pTmpDoll = GetFrontDollPtr(n);
+		if(pTmpDoll != NULL){
+			if(pTmpDoll->CanTarget()){
+				pDolls[index] = pTmpDoll;
+				index++;
+			}
+		}
+	}
+	if(index == 0) return NULL;
+	return pDolls[GetRand(index-1)];
+}
+
+Game_BattleEnemy* Scene_Battle::GetRandomEnemyPtr(){
+	Game_BattleEnemy* pEnemies[NUM_BATTLEDOLL_FRONT];
+	Game_BattleEnemy* pTmpEnemy = NULL;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pEnemies[n] = NULL;
+	}
+	int index = 0;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = GetEnemyPtr(n);
+		if(pTmpEnemy != NULL){
+			if(pTmpEnemy->CanTarget()){
+				pEnemies[index] = pTmpEnemy;
+				index++;
+			}
+		}
+	}
+	if(index == 0) return NULL;
+	return pEnemies[GetRand(index-1)];
+}
+
 
 BYTE Scene_Battle::OpenSelectEnemyWindow(){
 	return w_selectEnemy.Open();
 }
-
 
 bool Scene_Battle::CheckNextAction(){
 	switch(phaze){
@@ -210,9 +261,28 @@ bool Scene_Battle::CheckNextAction(){
 			if(currentIndex >= NUM_BATTLEDOLL_FRONT){
 				return true;
 			}else{
-				w_dollCommand.Open();
+				w_dollCommand.OpenWithActor(GetDollPtr(GetFrontIndex(currentIndex)));
 			}
 		}
+		break;
+	case ENEMIES_COMMAND:
+		// 即座に次へ
+		return true;
+		break;
+	case BEFORE_TURN:
+		// 今の所特に処理はなし
+		return true;
+		break;
+	case BATTLE_DO:
+		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
+		if(!w_battleMsg.IsReady()){
+			return false;
+		}
+		return true;
+		break;
+	case AFTER_TURN:
+		// 今の所特に処理はなし
+		return true;
 		break;
 	}
 	return false;
@@ -250,6 +320,24 @@ bool Scene_Battle::ExecuteAction(){
 		// すぐさま次のフェイズに移行する。
 		return false;
 		break;
+	case ENEMIES_COMMAND:
+		// すぐさま次のフェイズに移行する。
+		return false;
+		break;
+	case BEFORE_TURN:
+		return false;
+		break;
+	case BATTLE_DO:
+		// アクションスタックの内容を順に実行する。
+		nextAction = actionStack.Pop();
+		if(nextAction.IsEmpty()){
+			return false;
+		}
+		InterpretAction(&nextAction);
+		break;
+	case AFTER_TURN:
+		return false;
+		break;
 	}
 	return true;
 }
@@ -268,6 +356,21 @@ void Scene_Battle::NextPhaze(){
 		break;
 	case ALICE_COMMAND_DO:
 		phaze = DOLLS_COMMAND;
+		break;
+	case DOLLS_COMMAND:
+		phaze = ENEMIES_COMMAND;
+		break;
+	case ENEMIES_COMMAND:
+		phaze = BEFORE_TURN;
+		break;
+	case BEFORE_TURN:
+		phaze = BATTLE_DO;
+		break;
+	case BATTLE_DO:
+		phaze = AFTER_TURN;
+		break;
+	case AFTER_TURN:
+		phaze = ALICE_COMMAND;
 		break;
 	}
 
@@ -292,6 +395,18 @@ void Scene_Battle::NextPhaze(){
 		break;
 	case DOLLS_COMMAND:
 		SetupDollsCommand();
+		break;
+	case ENEMIES_COMMAND:
+		SetupEnemiesCommand();
+		break;
+	case BEFORE_TURN:
+		SetupBeforeTurn();
+		break;
+	case BATTLE_DO:
+		SetupBattleDo();
+		break;
+	case AFTER_TURN:
+		SetupAfterTurn();
 		break;
 	}
 }
@@ -346,3 +461,20 @@ void Scene_Battle::SetupDollsCommand(){
 
 }
 
+void Scene_Battle::SetupEnemiesCommand(){
+	// 各敵キャラのコマンドをセットする
+	SetEnemyCommands();
+	// コマンドリストをシャッフルする
+	SortUnitCommands();
+}
+
+void Scene_Battle::SetupBeforeTurn(){
+	// 各キャラクターのステートなどを判定
+}
+
+void Scene_Battle::SetupBattleDo(){
+}
+
+
+void Scene_Battle::SetupAfterTurn(){
+}

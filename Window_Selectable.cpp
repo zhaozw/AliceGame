@@ -39,6 +39,9 @@ void Window_Selectable::Setup(
 void Window_Selectable::SetTitle(LPTSTR _title, int _hTitleFont){
 	strcpy_s(content.title, WND_SELECTABLE_TITLELENGTH-1, _title);
 	hTitleFont = (_hTitleFont!=0) ? _hTitleFont : hFont;
+	if(strlen(_title) > 0){
+		useTitle = true;
+	}
 }
 
 void Window_Selectable::GetTitle(LPTSTR str) const{

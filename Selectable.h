@@ -10,6 +10,7 @@
 #define SELECT_CHOOSE 1
 #define SELECT_CANCEL 2
 #define SELECT_NONE 0
+#define SELECTRESULT_CANCELED	-1
 
 class Selectable{
 public:

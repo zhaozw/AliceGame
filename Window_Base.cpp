@@ -136,8 +136,10 @@ void Window_Base::UpdateA(){
 	if(!haveChild){
 		Update();
 	}else{
-		if(pChildWindow->GetState() == CLOSED || pChildWindow == NULL){
-			haveChild = true;
+		// 子ウィンドウが開いている場合
+		if(pChildWindow->GetState() == CLOSED && pChildWindow != NULL){
+			OnChildIsClosed();
+			haveChild = false;
 		}
 	}
 }

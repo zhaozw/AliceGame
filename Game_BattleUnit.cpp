@@ -18,6 +18,11 @@ void Game_BattleUnit::Reset(int n){
 	position = n;
 }
 
+bool Game_BattleUnit::CanTarget(){
+	// ‰¼B
+	return true;
+}
+
 int Game_BattleUnit::GetRawParam(BYTE index){
 	if(index >= BATTLEUNIT_PARAM_NUM){
 		return BATTLEUNIT_PARAM_ERROR;

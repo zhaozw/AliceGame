@@ -38,6 +38,7 @@ void Window_BattleMessage::Setup(Scene_Battle* _pParent){
 
 void Window_BattleMessage::DrawContent() const{
 	int a = 0;
+	if(!GetActive()) return;
 	DrawLine(16, 30, 0);
 	if(lineCount < WND_BATTLEMSG_MOVETIME){ 
 		a = PARAM(192*(1.0-(float)lineCount/WND_BATTLEMSG_MOVETIME));

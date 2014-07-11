@@ -27,6 +27,12 @@ public:
 	static bool SortBySpd(const Game_UnitCommand& aLeft, const Game_UnitCommand& aRight){
 		return aLeft.pOwner->GetSpd() > aRight.pTarget->GetSpd();
 	};
+
+	// アクセサ
+	void SetOwner(Game_BattleUnit* p){ pOwner = p; };
+	void SetTarget(Game_BattleUnit* p){ pTarget = p; };
+	void SetActionType(BYTE t){ actionType = t; };
+	void SetTargetType(BYTE t){ targetType = t; };
 };
 
 #endif GAME_UNITCOMMAND_H

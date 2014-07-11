@@ -40,6 +40,7 @@ public:
 		ALICE_COMMAND,		// アリスのコマンドを選択
 		ALICE_COMMAND_DO,	// アリスのコマンドを実行
 		DOLLS_COMMAND,		// 人形のコマンドを選択
+		ENEMIES_COMMAND,	// 敵のコマンドを選択（即座に終了する）
 		BEFORE_TURN,		// ターンの最初
 		BATTLE_DO,			// 戦闘
 		AFTER_TURN,			// ターン終了時
@@ -70,6 +71,8 @@ private:
 	int									enemiesNum;	// 敵ユニットの最大数（戦闘不能者含む）
 	// 攻撃コマンドの配列
 	Game_UnitCommand					commands[MAX_UNITCOMMAND];
+	// 現在何番目のコマンドまで入っているか。
+	int									commandIndex;
 	// 現在のインデックス（コマンド選択時など）
 	int									currentIndex;
 	// アクションのスタック
@@ -131,7 +134,10 @@ public:
 	void SetupAliceCommand();	// アリスのコマンドウィンドウを開く
 	void SetupAliceCommandDo(); // アリスのコマンドを実行する
 	void SetupDollsCommand();	// 人形のコマンドウィンドウを開く 
-
+	void SetupEnemiesCommand();	// 敵のコマンドを決定する。(即座に終わる)
+	void SetupBeforeTurn();		// ターン開始時。ステートの判定など。
+	void SetupBattleDo();		// 戦闘。
+	void SetupAfterTurn();		// ターン終了時。ステートの判定など。
 
 
 	// 必要なオブジェクト群のアップデートを行う。
@@ -160,6 +166,15 @@ public:
 
 	// 前列のi番目に居る人形が、Game_BattleDollの配列の中では何番目かを取得する。
 	int	GetFrontIndex(WORD position);
+
+	// 前列の指定した順番の人形のポインタを返す。
+	// checkCanTargetをtrueにすると、人形が戦闘不能であった場合NULLを返す。
+	Game_BattleDoll*	GetFrontDollPtr(WORD index, bool checkCanTarget=false);
+	// 前列の人形一体をランダムで返す。
+	Game_BattleDoll*	GetRandomDollPtr();
+	// 敵キャラ一体のポインタをランダムで返す。
+	Game_BattleEnemy*	GetRandomEnemyPtr();
+
 
 
 	// 各種ウィンドウを開く。
@@ -216,6 +231,16 @@ public:
 	//=========================================
 	// 戦闘中の諸演算
 	// Scene_Battle_Calc.cppに記述する。
+
+	// コマンドを追加する。
+	bool SetCommand(Game_UnitCommand cmd);
+	
+	// 敵のコマンドを自動で追加する。
+	// 内部でSetEnemyCommandを使用する。
+	bool SetEnemyCommands();
+
+	// ポインタを使用し、敵のコマンドを算出する。
+	Game_UnitCommand GetEnemyCommand(Game_BattleEnemy* pEnemy);
 
 	// 戦闘行動のソートを行う。
 	bool SortUnitCommands();

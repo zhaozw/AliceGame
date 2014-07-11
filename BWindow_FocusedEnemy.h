@@ -22,6 +22,9 @@ protected:
 	Scene_Battle*			pScene;
 	// 現在参照している敵キャラ
 	Game_BattleEnemy*		pEnemy;
+	// 敵全体にフォーカスした状態
+	// (ウィンドウ一つで敵全体を表示する)
+	bool					focusAll;
 public:
 	// コンストラクタ
 	BWindow_FocusedEnemy();
@@ -47,8 +50,14 @@ public:
 	// 内容の描画を行う。
 	virtual void DrawContent() const;
 
+	// 指定した敵キャラについての描画を行う。
+	virtual void DrawCntEnemy(Game_BattleEnemy*) const;
+
 	// アクセサ
 	int GetSelectIndex() const { return s_enemy.index; };
+	bool GetFocusAll(){ return focusAll; };
+	void SetFocusAll(bool b){ focusAll = b; };
+	Game_BattleEnemy* GetEnemyPtr(){ return pEnemy; };
 
 };
 

@@ -62,6 +62,10 @@ public:
 
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
+
+	// 戦闘中、このキャラが攻撃のターゲットになるかどうかを返す。
+	// 戦闘不能などの時はfalseを返す。
+	bool CanTarget();
 };
 
 #endif // GAME_BATTLEUNIT_H

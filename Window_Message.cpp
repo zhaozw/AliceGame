@@ -438,6 +438,7 @@ int Window_Message::GetLineLength(){
 }
 
 void Window_Message::DrawContent() const{
+	// 表示方法は各クラスに派生する。
 }
 
 void Window_Message::DrawLine(int dx, int dy, int historyCount) const{

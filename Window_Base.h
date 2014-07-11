@@ -90,8 +90,14 @@ public:
 	BYTE Open(bool force=false, bool sudden=false);
 
 	// ウィンドウを開いたときに実行する関数。
+	// (厳密には開こうとした瞬間に実行するので、
+	// ここで内容の書き換えなども可能)
 	// 各クラスで派生する。
 	virtual void OnOpened(){};
+
+	// 子ウィンドウが閉じられた時に実行する関数。
+	// 各クラスで派生する。
+	virtual void OnChildIsClosed(){};
 
 	// ウィンドウを閉じる。
 	// force :	無理やり閉じる(開いている最中や内容の更新中でも閉じる)。
