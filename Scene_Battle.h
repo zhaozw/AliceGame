@@ -231,11 +231,14 @@ public:
 	// Game_BattleActionの内容の処理。
 	// Scene_Battle_Action.cppに記述する。
 	bool InterpretAction(Game_BattleAction* pAction);
+
+	bool Action_Damage(Game_BattleAction* pAction);
 	bool Action_CallEnemyName();
+	bool Action_AssertAttack(Game_BattleAction* pAction);
 
 	//=========================================
-	// Game_BattleActionの内容の処理。
-	// Scene_Battle_Action.cppに記述する。
+	// Game_UnitCommandの内容の処理。
+	// Scene_Battle_Command.cppに記述する。
 
 	// commandPhaze :
 	// 例えば通常攻撃にせよ、
@@ -247,8 +250,10 @@ public:
 	bool InterpretCommand(Game_UnitCommand* pCmd, int commandPhaze=COMMANDPHAZE_NOPHAZE);
 	// commandPhazeによって分岐する
 	bool InterpretCommand_NoPhaze(Game_UnitCommand* pCmd);
+	bool InterpretCommand_Assert(Game_UnitCommand* pCmd);
 	bool InterpretCommand_Pre_Action(Game_UnitCommand* pCmd);
 	bool InterpretCommand_Action(Game_UnitCommand* pCmd);
+	bool InterpretCommand_Check_Death(Game_UnitCommand* pCmd);
 	bool InterpretCommand_Post_Action(Game_UnitCommand* pCmd);
 
 	//=========================================
@@ -270,6 +275,14 @@ public:
 	
 	// commandsの内容を全てクリアする。
 	void ClearCommands();
+
+	// ダメージ計算。
+	// オプションを指定することで、通常攻撃以外のダメージ計算にも対応する。
+	int CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent, int param);
+
+	// 属性ダメージの倍率を計算する。
+	float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr);
+
 
 	//=========================================
 	// 描画

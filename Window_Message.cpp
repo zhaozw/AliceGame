@@ -191,6 +191,9 @@ void Window_Message_StockMsg::ClearAll(){
 bool Window_Message_StockMsg::AddMsg(LPTSTR str, int strlen){
 	// 長さがおかしくないかのチェック
 	if(strlen >= WND_MSG_STOCKLENGTH) return false;
+	if(emptyIndex >= WND_MSG_STOCKLINE){
+		return false;
+	}
 	// バッファに空きがあるかのチェック
 	if(!lines[emptyIndex].IsEmpty()) return false;
 	// 空行に対して内容をコピーする
@@ -215,6 +218,7 @@ void Window_Message_StockMsg::DiscardLine(){
 	strcpy_s(lines[index].chars, WND_MSG_STOCKLENGTH-1, _T(""));	
 	// indexはemptyIndexを追い越してはいけない
 	if(index != emptyIndex) index++;
+	index = SeamLess(index, WND_MSG_STOCKLINE);
 }
 
 //=====================================================

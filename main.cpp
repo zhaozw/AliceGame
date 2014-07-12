@@ -54,6 +54,7 @@
 #include "Data_EnemyParam.h"
 #include "Data_EnemyGroup.h"
 #include "Data_EnemyDraw.h"
+#include "Data_BattleState.h"
 
 // 後で消す
 #include "GlobalData.h"
@@ -83,10 +84,11 @@ Game_AliceInfo	g_aliceInfo;
 Game_DollList	g_dollList;
 
 // データベースクラス
-Data_DollParam	d_dollParam;
-Data_EnemyParam	d_enemyParam;
-Data_EnemyGroup	d_enemyGroup;
-Data_EnemyDraw	d_enemyDraw;
+Data_DollParam		d_dollParam;
+Data_EnemyParam		d_enemyParam;
+Data_EnemyGroup		d_enemyGroup;
+Data_EnemyDraw		d_enemyDraw;
+Data_BattleState	d_battleState;
 
 int			hDrawWindow;	// 描画用画面のハンドル。
 							// 描画内容はここに描画したものを
@@ -380,6 +382,14 @@ bool WinMain_LoadResource(){
 	if(!d_enemyDraw.Load()){
 #ifdef MYGAME_USE_WARN_ERROR
 		MessageBox(NULL, TEXT("敵グラフィックデータベースの読み込みに失敗しました。"),
+		TEXT("エラー"), MB_OK|MB_ICONWARNING);
+#endif // MYGAME_USE_WARN_INIERROR		
+		return false;
+	}
+
+	if(!d_battleState.Load()){
+#ifdef MYGAME_USE_WARN_ERROR
+		MessageBox(NULL, TEXT("ステートデータベースの読み込みに失敗しました。"),
 		TEXT("エラー"), MB_OK|MB_ICONWARNING);
 #endif // MYGAME_USE_WARN_INIERROR		
 		return false;

@@ -7,6 +7,7 @@
 #define IMAGE_SIZE_ROW_NUMBER		3	// 数字画像の配列の縦
 #define NUMBER_I_WIDTH				16
 #define NUMBER_I_HEIGHT				24
+#define IMAGE_SIZE_STATEICON		24
 
 #include "WindowSkin.h"
 #include "Static_AliceDoll.h"
@@ -51,6 +52,8 @@ typedef struct Image_Icon{
 	int doll[DOLL_TYPE_MAX][DOLL_ATTR_NUM][DOLL_FACE_NUM];
 	int attrstone_group;
 	int attrstone[DOLL_GROUP_NUM][DOLL_ATTR_NUM];
+	int state_group;
+	int	state[64];
 }IMAGE_ICON_; // IMAGE_ICONだと組み込みの定数とかぶるので
 
 // 各種背景系（画面全体）の画像を保持する。

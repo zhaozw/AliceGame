@@ -27,13 +27,30 @@
 
 #define COMMANDPHAZE_NOPHAZE		0	// 戦闘行動以外で使用する。
 										// actionPhazeを使用しない場合の値
-#define COMMANDPHAZE_PRE_ACTION		1	// 行動前に行う判定。
-#define COMMANDPHAZE_ACTION			2	// 行動時に行う判定。
-#define COMMANDPHAZE_POST_ACTION	3	// 行動後に行う判定。
+#define COMMANDPHAZE_ASSERT			1	// 行動宣言時に行う判定。
+#define COMMANDPHAZE_PRE_ACTION		2	// 行動前に行う判定。
+#define COMMANDPHAZE_ACTION			3	// 行動時に行う判定。
+#define COMMANDPHAZE_CHECK_DEATH	4	// 行動後にはとりあえず死亡判定。
+#define COMMANDPHAZE_POST_ACTION	5	// 行動後に行う判定。
 
 #define COMMANDPHAZE_ERROR			-1	// エラー
-#define COMMANDPHAZE_FIRSTPHAZE		(COMMANDPHAZE_PRE_ACTION)
+#define COMMANDPHAZE_FIRSTPHAZE		(COMMANDPHAZE_ASSERT)
 #define COMMANDPHAZE_LASTPHAZE		(COMMANDPHAZE_POST_ACTION)
+
+//=========================================
+// 
+#define DAMAGE_MAX			9999
+
+//=========================================
+// 属性攻撃の倍率
+
+#define ATTRRATE_STRONG		2.0
+#define ATTRRATE_WEAK		0.5
+
+//=========================================
+// ダメージ計算のタイプ
+
+#define	CALCDAMAGE_ATTACK			0
 
 
 #endif // STATIC_BATTLE

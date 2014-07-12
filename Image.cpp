@@ -193,12 +193,23 @@ bool Image::Load_Icon(){
 		}
 	}
 
+	// 属性アイコンの読み込み
 	icon.attrstone_group = LoadGraph(_T("img\\attr_stone.png"));
 	for(int h=0; h<DOLL_GROUP_NUM; h++){
 		for(int w=0; w<DOLL_ATTR_NUM; w++){
 			icon.attrstone[w][h] = DerivationGraph(
 				SIZE_ATTRSTONE*w, SIZE_ATTRSTONE*h,
 				SIZE_ATTRSTONE, SIZE_ATTRSTONE, icon.attrstone_group);
+		}
+	}
+
+	// ステートアイコンの読み込み
+	icon.state_group = LoadGraph(_T("img\\state_icon.png"));
+	for(int h=0; h<4; h++){
+		for(int w=0; w<8; w++){
+			icon.state[w+h*8] = DerivationGraph(
+				IMAGE_SIZE_STATEICON*w, IMAGE_SIZE_STATEICON*h,
+				IMAGE_SIZE_STATEICON, IMAGE_SIZE_STATEICON, icon.state_group);
 		}
 	}
 

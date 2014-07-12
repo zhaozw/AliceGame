@@ -93,6 +93,7 @@
     <ClCompile Include="BWindow_SelectEnemy.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="CsvReader.cpp" />
+    <ClCompile Include="Data_BattleState.cpp" />
     <ClCompile Include="Data_DollParam.cpp" />
     <ClCompile Include="Data_EnemyDraw.cpp" />
     <ClCompile Include="Data_EnemyGroup.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="Scene_Battle.cpp" />
     <ClCompile Include="Scene_Battle_Action.cpp" />
     <ClCompile Include="Scene_Battle_Calc.cpp" />
+    <ClCompile Include="Scene_Battle_Command.cpp" />
     <ClCompile Include="Scene_Battle_Data.cpp" />
     <ClCompile Include="Scene_Battle_Draw.cpp" />
     <ClCompile Include="Scene_Battle_Unit.cpp" />
@@ -162,6 +164,7 @@
     <ClInclude Include="BWindow_DollCommand.h" />
     <ClInclude Include="BWindow_FocusedEnemy.h" />
     <ClInclude Include="BWIndow_SelectEnemy.h" />
+    <ClInclude Include="Data_BattleState.h" />
     <ClInclude Include="Data_DollParam.h" />
     <ClInclude Include="Data_EnemyDraw.h" />
     <ClInclude Include="Data_EnemyGroup.h" />

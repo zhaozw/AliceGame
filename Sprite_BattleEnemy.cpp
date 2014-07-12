@@ -3,8 +3,14 @@
 #include "Sprite_BattleEnemy.h"
 #include <DxLib.h>
 #include "Data_EnemyDraw.h"
+#include "Static_AliceDoll.h"
+#include "Func_Graphics.h"
+#include "Image.h"
+#include "DXFont.h"
 
 extern Data_EnemyDraw		d_enemyDraw;
+extern Image				g_image;
+extern DXFont				g_font;
 
 Sprite_BattleEnemy::Sprite_BattleEnemy(){
 	Sprite_Base::Sprite_Base();
@@ -24,7 +30,7 @@ bool Sprite_BattleEnemy::AttachBattleEnemy(Game_BattleEnemy* _pEnemy){
 	// refID‚ðŒ³‚É•`‰æƒf[ƒ^‚ðŽæ“¾‚·‚é
 	UpdateRefID();
 	// •`‰æˆÊ’u‚ðƒZƒbƒg‚·‚é
-	SetPos(pEnemy->GetDrawX(), pEnemy->GetDrawY());
+	SetPos((float)pEnemy->GetDrawX(), (float)pEnemy->GetDrawY());
 	return true;
 }
 
@@ -60,5 +66,60 @@ void Sprite_BattleEnemy::Draw() const{
 	if(refID == 0) return;
 	if(hImg == 0) return;
 	if(pEnemy == NULL) return;
+	// –{‘Ì‚Ì•`‰æ
 	DrawRotaGraph2F(GetX(), GetY(), cx, cy, baseExRate, 0, hImg, 1, 0);
+	// HP‚Ì•`‰æ
+	DrawHPGauge((int)GetX(), (int)GetY());
+}
+
+#define BATTLEENEMY_HPGAUGE_WIDTH	120
+#define BATTLEENEMY_HPGAUGE_HEIGHT	10
+
+void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
+	// ˜g‚ð•`‰æ
+	DrawBox(
+		x-BATTLEENEMY_HPGAUGE_WIDTH/2,
+		y-BATTLEENEMY_HPGAUGE_HEIGHT/2,
+		x+BATTLEENEMY_HPGAUGE_WIDTH/2,
+		y+BATTLEENEMY_HPGAUGE_HEIGHT/2,
+		GetColor(16, 16, 16), 1);
+	DrawBox(
+		x-BATTLEENEMY_HPGAUGE_WIDTH/2,
+		y-BATTLEENEMY_HPGAUGE_HEIGHT/2,
+		x+BATTLEENEMY_HPGAUGE_WIDTH/2,
+		y+BATTLEENEMY_HPGAUGE_HEIGHT/2,
+		GetColor(255,255,255), 0);
+	// ƒQ[ƒW‚ð•`‰æ
+	float rate = (float)pEnemy->GetHP()/pEnemy->GetMaxHP();
+	int color = 0;
+	switch(pEnemy->GetAttr()){
+	case DOLL_ATTR_NONE:
+		color = GetColor(192, 192, 192);
+		break;
+	case DOLL_ATTR_SUN:
+		color = GetColor(255, 0, 0);
+		break;
+	case DOLL_ATTR_MOON:
+		color = GetColor(0, 0, 255);
+		break;
+	case DOLL_ATTR_STAR:
+		color = GetColor(255, 255, 0);
+		break;
+	}
+	int left = x-BATTLEENEMY_HPGAUGE_WIDTH/2 + 2;
+	DrawBox(
+		x-BATTLEENEMY_HPGAUGE_WIDTH/2 + 2,
+		y-BATTLEENEMY_HPGAUGE_HEIGHT/2 + 2,
+		left + (int)(rate*(BATTLEENEMY_HPGAUGE_WIDTH-4)),
+		y+BATTLEENEMY_HPGAUGE_HEIGHT/2 - 2,
+		color, 1);
+	// HP‚ð”’l‚Å•`‰æ
+	TCHAR	hpStr[16];
+	wsprintf(hpStr, _T("%d/%d"), pEnemy->GetHP(), pEnemy->GetMaxHP());
+	DrawStringToHandle(
+		GetX()-BATTLEENEMY_HPGAUGE_WIDTH/2
+		+ GetRightAlignDX(
+		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH),
+		GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2, hpStr,
+		GetColor(255, 255, 255), g_font.hTinyInfo);
 }

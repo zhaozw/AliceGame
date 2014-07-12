@@ -249,19 +249,17 @@ bool Scene_Battle::CheckNextAction(){
 	case DOLLS_COMMAND:
 		// ウィンドウが閉じていて、かつインデックスが
 		// 終了状態であれば次へ
-		if(w_dollCommand.GetState() == Window_Base::CLOSED){
-			// 入力した結果を保存する
-			if(currentIndex > 0){
-				commands[currentIndex].Reset();
-
-			}
+		while(w_dollCommand.GetState() == Window_Base::CLOSED){
 			// 現在何番目の人形のコマンドを選択しているか(最初は0)
 			currentIndex++;
 			// 全ての人形のコマンドを終えたら次へ
 			if(currentIndex >= NUM_BATTLEDOLL_FRONT){
 				return true;
 			}else{
-				w_dollCommand.OpenWithActor(GetDollPtr(GetFrontIndex(currentIndex)));
+				// 戦闘可能な人形についてコマンド選択画面を開く
+				if(GetDollPtr(GetFrontIndex(currentIndex))->CanTarget()){
+					w_dollCommand.OpenWithActor(GetDollPtr(GetFrontIndex(currentIndex)));
+				}
 			}
 		}
 		break;
@@ -367,9 +365,10 @@ bool Scene_Battle::ExecuteAction(){
 				// コマンドを解釈してアクションスタックに追加
 				InterpretCommand(&unitCommand, commandPhaze);
 			}else if(commandPhaze != COMMANDPHAZE_LASTPHAZE){
+				// コマンドを解釈してアクションスタックに追加
+				unitCommand = commands[commandIndex];
 				// フェイズが途中(次にまだフェイズがある)の場合
 				commandPhaze++;
-				// コマンドを解釈してアクションスタックに追加
 				InterpretCommand(&unitCommand, commandPhaze);
 				break; // 解釈は行わずにbreakする
 			}else{
@@ -377,8 +376,9 @@ bool Scene_Battle::ExecuteAction(){
 				// コマンドの解釈は行わずに次のコマンドへ
 				commandPhaze = COMMANDPHAZE_NOPHAZE;
 			}
+		}else{
+			InterpretAction(&nextAction);
 		}
-		InterpretAction(&nextAction);
 		break;
 	case AFTER_TURN:
 		return false;

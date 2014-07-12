@@ -16,8 +16,10 @@ public:
 	// 列挙子を記述する。
 	enum ActionType{
 		TYPE_NONE,			// スタックの0番目の要素が持つタイプ
-		TYPE_DAMAGE,
+		TYPE_DAMAGE,		// キャラ一体がダメージを受ける。
+							// paramがダメージ数値。演算は前もって行う。
 		TYPE_CALLENEMYNAME,	// 戦闘開始時、敵の名前を列挙する。
+		TYPE_ASSERTATTACK,	// 「○○の攻撃！」を表示する
 		TYPE_UNDIFINED,
 	};
 private:
@@ -56,14 +58,14 @@ public:
 	void SetFlags(DWORD p){ flags = p; };
 	DWORD GetFlags(){ return flags; };
 	void SetFlag(DWORD flag){ flags |= flag; };
-	void ResetFlag(DWORD flag){ flags |= ~flag; };
+	void ResetFlag(DWORD flag){ flags &= ~flag; };
+	void ClearFlag(){ flags = 0x00000000; };
 	bool GetFlag(DWORD flag){ return (flags &= flag) != 0; } ;
 	void SetParam(int p){ param = p; };
 	int GetParam(){ return param; };
 
 	// 無効かどうかの判定
 	bool IsEmpty(){ return type == TYPE_UNDIFINED; };
-
 };
 
 // Game_BattleActionクラスのスタックを扱うクラス。

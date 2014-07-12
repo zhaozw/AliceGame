@@ -330,6 +330,12 @@
     <ClCompile Include="BWindow_FocusedEnemy.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
     </ClCompile>
+    <ClCompile Include="Scene_Battle_Command.cpp">
+      <Filter>ソース ファイル\Source_Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_BattleState.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -544,6 +550,9 @@
     </ClInclude>
     <ClInclude Include="BWindow_FocusedEnemy.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_BattleState.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

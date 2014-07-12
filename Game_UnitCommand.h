@@ -30,17 +30,8 @@ public:
 	// 速度を比較して、降順にソートを行う。すなわち、速度が大きい方が
 	// 昇順ソートする際に小さい値として見なされる。
 	// aLeftをaRightよりも前に出したい場合にtrueを返す。
-	static bool SortBySpd(const Game_UnitCommand& aLeft, const Game_UnitCommand& aRight){
-		// 空の要素は後ろに押しやる
-		if(aLeft.IsEmpty()){
-			return false;
-		}else if(aRight.IsEmpty()){
-			return true;
-		}
-		// ここまでで、どちらかの行動が空の場合はfalseかtrueを返した
-		// 後は素早さ同士を比較
-		return aLeft.pOwner->GetSpd() > aRight.pTarget->GetSpd();
-	};
+	static bool SortBySpd(const Game_UnitCommand& aLeft, const Game_UnitCommand& aRight);
+
 
 	// アクセサ
 	void SetOwner(Game_BattleUnit* p){ pOwner = p; };
@@ -48,6 +39,11 @@ public:
 	void SetActionType(BYTE t){ actionType = t; };
 	void SetTargetType(BYTE t){ targetType = t; };
 	void SetUsed(){ isUsed = true; };
+
+	Game_BattleUnit* GetOwner(){ return pOwner; };
+	Game_BattleUnit* GetTarget(){ return pTarget; };
+	BYTE GetActionType(){ return actionType; };
+	BYTE GetTargetType(){ return targetType; };
 
 	bool IsEmpty() const{ return !isUsed; };
 

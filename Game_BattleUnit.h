@@ -4,9 +4,46 @@
 #include <Windows.h>
 #include "Static_BattleUnit.h"
 
+class Game_BattleState;
+
+// 関数AddStateの戻り値。
+#define ADDSTATE_SUCCEED		0	// 普通にステートになった
+#define ADDSTATE_ALREADY_ADDED	1	// 既にそのステートだった
+#define ADDSTATE_MULTIPLIED		2	// かさねがけになった
+
+// ステートを表すクラス。
+// メンバ変数はステートID一つのみだが、
+// 並べ替える必要性からクラスにしている。
+
+class Game_BattleState{
+public:
+	// メンバ
+	WORD	refID;
+	// ターン数
+	int		turn;
+	// 重ねがけ回数
+	int		level;
+	// コンストラクタ
+	Game_BattleState(){
+		refID = 0;
+		turn = 0;
+		level = 0;
+	}
+
+	// 並べ替え用の関数
+	// ステートの並べ替えを行う関数。
+	// aLeftをaRightよりも前に出したい場合にtrueを返す。
+
+	// 処理の順番で並べ替え
+	static bool SortByCalc(const Game_BattleState& aLeft, const Game_BattleState& aRight);
+
+	// 描画優先度の順番で並べ替え
+	static bool SortByDraw(const Game_BattleState& aLeft, const Game_BattleState& aRight);
+
+};
+
 // 戦闘キャラを扱うクラス。
 // 敵味方共にこのクラスから派生する。
-
 class Game_BattleUnit{
 protected:
 	TCHAR		name[BATTLEUNIT_NAME_BYTES];	// 名前
@@ -14,6 +51,9 @@ protected:
 	BYTE		attr;							// 属性
 	bool		isFront;						// 前に出ているか否か
 	BYTE		position;						// 前列・後列における位置
+
+	// 現在受けているステートのリスト
+	Game_BattleState	stateArray[BATTLEUNIT_STATE_MAX];
 public:
 	Game_BattleUnit();
 
@@ -54,18 +94,51 @@ public:
 	bool GetFront(){ return isFront; };
 	BYTE GetPosition(){ return position; };
 
-	
-
 	int GetRawParam(BYTE index);			// 補正なしのパラメータを取得する。
 	int GetCalcParam(BYTE index);			// 補正ありのパラメータを取得する。
 
+	// 現在のステートの数を返す。
+	// 内部で、ステートを処理の優先度順に並べ替える。
+	int GetStateNum();
+
+	// ステートを優先度順に並べ替える。
+	void SortStateByCalc();
+
+	// ステートを描画順序順に並べ替える。
+	void SortStateByDraw();
+
+	// 参照番号のステートを追加する。
+	// 戻り値 : ステート付加の結果。
+	//			定数群ADDSTATE_xxxを参照。
+	BYTE AddState(WORD refID);
+	
+	// 参照番号のステートに罹患している場合、それを解除する。
+	// sort : trueを指定するとステート解除後にソートを行う。
+	void RemoveState(WORD refID, bool sort=true);
+
+	// ステートのターン経過を処理する。
+	// 一括してターン終了時に行う。
+	void UpdateStateTurn();
+
+	// 指定したrefIDのステートを保持しているかどうかを返す。
+	// 見つかった場合は配列のインデックス、
+	// 見つからなかった場合は-1を返す。
+	int CheckIsState(WORD stateRefID);
 
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
 
+	// 戦闘中、このキャラがコマンドを選択可能かを返す。
+	// 戦闘不能などの時はfalseを返す。
+	bool CanAct();
+
 	// 戦闘中、このキャラが攻撃のターゲットになるかどうかを返す。
 	// 戦闘不能などの時はfalseを返す。
 	bool CanTarget();
+
+	// 指定したダメージを与える。
+	// HPが負になったらfalseを返す。
+	bool Damage(int damage);
 };
 
 #endif // GAME_BATTLEUNIT_H

@@ -101,7 +101,7 @@ void BWindow_FocusedEnemy::DrawContent() const{
 void BWindow_FocusedEnemy::DrawCntEnemy(Game_BattleEnemy* p) const {
 	int tmpX=0, tmpY=0;
 	tmpX = p->GetDrawX();
-	tmpY = p->GetDrawY();
+	tmpY = p->GetDrawY()+20;
 	DrawBox(
 		tmpX-5, tmpY-5,
 		tmpX+5, tmpY+5,

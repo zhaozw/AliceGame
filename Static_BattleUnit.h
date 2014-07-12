@@ -22,6 +22,9 @@
 
 #define BATTLEUNIT_PARAM_ERROR			-9999	// 変な値にアクセスした時の戻り値
 
+// ステートに関して
+#define BATTLEUNIT_STATE_MAX			16		// 同時にかかるステートの最大数
+
 // 行動の種類に関する定数
 #define ACTIONTYPE_ERROR		0	// 読み込みエラー
 #define ACTIONTYPE_NONE			1	// 何もしない

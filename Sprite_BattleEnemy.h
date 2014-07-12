@@ -31,6 +31,10 @@ public:
 
 	// •`‰æ
 	virtual void Draw() const;
+
+	// HPƒQ[ƒW‚Ì•`‰æ
+	// x, y‚Í’†SˆÊ’u
+	virtual void DrawHPGauge(int x, int y) const;
 };
 
 

@@ -5,6 +5,7 @@
 
 bool Scene_Battle::SetCommand(Game_UnitCommand cmd){
 	if(commandIndex >= MAX_UNITCOMMAND) return false;
+	cmd.SetUsed();
 	commands[commandIndex] = cmd;
 	commandIndex++;
 	return true;
@@ -52,4 +53,64 @@ void Scene_Battle::ClearCommands(){
 		commands[n].Reset();
 	}
 	commandIndex = 0;
+}
+
+int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent,
+	int param){
+		int from = 0;		// UŒ‚‘¤‚Ìƒpƒ‰ƒ[ƒ^
+		int to = 0;			// Žó‚¯Žè‘¤‚Ìƒpƒ‰ƒ[ƒ^
+		float rate = 1.0;	// ”{—¦
+		float fix = 0.0;	// ’è”
+		float gRate = 1.0;	// ’è”‚àŠÜ‚ß‚½”{—¦
+		int damage;			// ŒvŽZŒ‹‰Ê
+		bool canMinus = false;	// •‰”‚ð”F‚ß‚é‚©”Û‚©
+		switch(param){
+		case CALCDAMAGE_ATTACK:
+			from	= pAttacker->GetAtk();
+			to		= pOpponent->GetDef();
+			rate	= GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			break;
+		}
+		damage = (int)(gRate*(rate*(from-to)+fix));
+		if(canMinus){
+			return min(DAMAGE_MAX, damage);
+		}else{
+			return min(DAMAGE_MAX, max(0, damage));
+		}
+}
+
+float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
+	switch(attackerAttr){
+	case DOLL_ATTR_SUN:
+		switch(opponentAttr){
+		case DOLL_ATTR_MOON:
+			return ATTRRATE_STRONG;
+			break;
+		case DOLL_ATTR_STAR:
+			return ATTRRATE_WEAK;
+			break;
+		}
+		break;
+	case DOLL_ATTR_MOON:
+		switch(opponentAttr){
+		case DOLL_ATTR_STAR:
+			return ATTRRATE_STRONG;
+			break;
+		case DOLL_ATTR_SUN:
+			return ATTRRATE_WEAK;
+			break;
+		}
+		break;
+	case DOLL_ATTR_STAR:
+		switch(opponentAttr){
+		case DOLL_ATTR_SUN:
+			return ATTRRATE_STRONG;
+			break;
+		case DOLL_ATTR_MOON:
+			return ATTRRATE_WEAK;
+			break;
+		}
+		break;
+	}
+	return 1.0;
 }
