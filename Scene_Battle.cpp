@@ -290,7 +290,8 @@ bool Scene_Battle::CheckNextAction(){
 
 
 bool Scene_Battle::ExecuteAction(){
-	Game_BattleAction nextAction;
+	Game_BattleAction	nextAction;
+	Game_UnitCommand	unitCommand;
 	switch(phaze){
 	case BEFORE_BATTLE:
 		// すぐさま次のフェイズに移行する。
@@ -328,10 +329,54 @@ bool Scene_Battle::ExecuteAction(){
 		return false;
 		break;
 	case BATTLE_DO:
+		// この場所に来る条件としては、
+		// 次のアクションスタックを解釈する時と、
+		// アクションスタックが空になって、次のコマンドのフェイズの解釈に進む場合、
+		// 一つのコマンドの処理が終わって次のコマンドに進む場合、
+		// そして全てのコマンドの処理が終わった場合がある。
+		// 最後の場合のみBATTLE_DOフェイズの終了判定となる。
+		// 条件分岐としては、
+		// 1.アクションスタックがある場合
+		//   (コマンドの解釈により追加される)
+		//   →とりあえず全てのアクションスタックを処理する
+		// 2.アクションスタックがない場合
+		//   (順番に処理していって無くなった場合)
+		//   →コマンドのフェイズを一つ進める。
+		// 3.コマンドのフェイズが最後まで行ったとき（②とも重なる）
+		//   次のコマンドの解釈に進む。
+		// 4.全てのコマンドの解釈が終わった場合
+		//   BATTLE_DOを終了する。
+
 		// アクションスタックの内容を順に実行する。
 		nextAction = actionStack.Pop();
-		if(nextAction.IsEmpty()){
-			return false;
+		if(nextAction.IsEmpty()){ // 条件2
+			// コマンドリストの内容を順に実行する。
+			// 各コマンドごとに、行動前、実際の行動、行動後、とフェイズに分かれる。
+			// それぞれのフェイズにおいてアクションスタックはリセットされている。
+			if(commandPhaze == COMMANDPHAZE_NOPHAZE){
+				// コマンドの処理が終わった場合(条件3)
+				// 次のコマンドのインデックスを取得
+				commandIndex++;
+				unitCommand = commands[commandIndex];
+				commandPhaze = COMMANDPHAZE_FIRSTPHAZE;
+				// 次のコマンドがない場合は終了する(条件4)
+				if(unitCommand.IsEmpty()){
+					commandPhaze = COMMANDPHAZE_NOPHAZE;
+					return false;
+				}
+				// コマンドを解釈してアクションスタックに追加
+				InterpretCommand(&unitCommand, commandPhaze);
+			}else if(commandPhaze != COMMANDPHAZE_LASTPHAZE){
+				// フェイズが途中(次にまだフェイズがある)の場合
+				commandPhaze++;
+				// コマンドを解釈してアクションスタックに追加
+				InterpretCommand(&unitCommand, commandPhaze);
+				break; // 解釈は行わずにbreakする
+			}else{
+				// 最終フェイズの解釈を終えた場合(条件3→コマンド処理終了へ)
+				// コマンドの解釈は行わずに次のコマンドへ
+				commandPhaze = COMMANDPHAZE_NOPHAZE;
+			}
 		}
 		InterpretAction(&nextAction);
 		break;
@@ -376,9 +421,6 @@ void Scene_Battle::NextPhaze(){
 
 	// アクションスタックの解放
 	actionStack.ClearAll();
-
-	// コマンドの解放
-	ClearCommands();
 
 	// 変化後のphaze値でswitch分岐
 	switch(phaze){
@@ -458,7 +500,10 @@ void Scene_Battle::SetupDollsCommand(){
 	// コマンド入力を促すウィンドウを開く
 	// 最初にインクリメントが行われて0になるので-1から始める。
 	currentIndex = -1;
-
+	// コマンドが入る。
+	commandIndex = 0;
+	// コマンドの配列をクリアする。
+	ClearCommands();
 }
 
 void Scene_Battle::SetupEnemiesCommand(){
@@ -473,6 +518,10 @@ void Scene_Battle::SetupBeforeTurn(){
 }
 
 void Scene_Battle::SetupBattleDo(){
+	// 最初に処理するコマンドにインデックスを合わせる
+	// 最初にインクリメントが行われて0になるので-1から始める。
+	commandIndex = -1;
+	commandPhaze = COMMANDPHAZE_NOPHAZE;
 }
 
 

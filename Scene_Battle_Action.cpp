@@ -19,7 +19,43 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 		break;
 	}
 	return true;
+
 }
+
+bool Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
+	switch(phaze){
+	case COMMANDPHAZE_NOPHAZE:
+		return InterpretCommand_NoPhaze(pCmd);
+		break;
+	case COMMANDPHAZE_PRE_ACTION:
+		return InterpretCommand_NoPhaze(pCmd);
+		break;
+	case COMMANDPHAZE_ACTION:
+		return InterpretCommand_NoPhaze(pCmd);
+		break;
+	case COMMANDPHAZE_POST_ACTION:
+		return InterpretCommand_NoPhaze(pCmd);
+		break;
+	}
+	return false;
+}
+
+bool Scene_Battle::InterpretCommand_NoPhaze(Game_UnitCommand* pCmd){
+	return true;
+}
+
+bool Scene_Battle::InterpretCommand_Pre_Action(Game_UnitCommand* pCmd){
+	return true;
+}
+
+bool Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
+	return true;
+}
+
+bool Scene_Battle::InterpretCommand_Post_Action(Game_UnitCommand* pCmd){
+	return true;
+}
+
 
 bool Scene_Battle::Action_CallEnemyName(){
 	// それぞれの敵についてメッセージウィンドウに内容を送る

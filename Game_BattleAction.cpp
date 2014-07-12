@@ -53,7 +53,7 @@ bool Game_BattleActionStack::Push(Game_BattleAction action){
 Game_BattleAction Game_BattleActionStack::Pop(){
 	Game_BattleAction result;
 	if(cntIndex <= 0 || cntIndex > MAX_BATTLEACTIONSTACK){
-		// 内容をそのまま代入？
+		// エラー
 		result = data[0];
 	}else{
 		cntIndex--;
@@ -62,6 +62,19 @@ Game_BattleAction Game_BattleActionStack::Pop(){
 	}
 	return result;
 }
+
+Game_BattleAction Game_BattleActionStack::Pop_NoRemove(){
+	Game_BattleAction result;
+	if(cntIndex <= 0 || cntIndex > MAX_BATTLEACTIONSTACK){
+		// エラー
+		result = data[0];
+	}else{
+		// インデックスをずらさずにデータを取り出す
+		result = data[cntIndex];
+	}
+	return result;
+}
+
 
 void Game_BattleActionStack::ClearAll(){
 	for(int n=0; n<=MAX_BATTLEACTIONSTACK; n++){

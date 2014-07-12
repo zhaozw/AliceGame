@@ -5,7 +5,8 @@
 
 // コンストラクタ
 Game_UnitCommand::Game_UnitCommand() : 
-pOwner(NULL), pTarget(NULL), actionType(ACTIONTYPE_NONE), targetType(ACTIONTARGET_NONE){
+pOwner(NULL), pTarget(NULL), actionType(ACTIONTYPE_NONE), targetType(ACTIONTARGET_NONE),
+isUsed(false){
 
 }
 
@@ -14,4 +15,5 @@ void Game_UnitCommand::Reset(){
 	pTarget = NULL;
 	actionType = ACTIONTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
+	isUsed = false;
 }

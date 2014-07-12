@@ -73,7 +73,7 @@ public:
 // 0番目の要素には、エラーが起きたときに返す値を常に保持しておく。
 
 // スタックの最大数。
-#define MAX_BATTLEACTIONSTACK	20
+#define MAX_BATTLEACTIONSTACK	32
 
 class Game_BattleActionStack{
 private:
@@ -97,6 +97,10 @@ public:
 	// 具体的には、Game_BattleActionクラスの実体を返す。
 	// データが無い場合やインデックスがおかしい場合には0番目の要素を返す。
 	Game_BattleAction Pop();
+
+	// データを一つ取り出すが、インデックスはずらさない。
+	// データが無い場合やインデックスがおかしい場合には0番目の要素を返す。
+	Game_BattleAction Pop_NoRemove();
 
 	// データへのポインタを渡し、インデックスをずらす。
 	// 戻り値は、成功したらtrue、失敗したらfalseになる。

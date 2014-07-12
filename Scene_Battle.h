@@ -71,10 +71,15 @@ private:
 	int									enemiesNum;	// 敵ユニットの最大数（戦闘不能者含む）
 	// 攻撃コマンドの配列
 	Game_UnitCommand					commands[MAX_UNITCOMMAND];
+	// DOLL_COMMAND及びENEMY_COMMAND時
 	// 現在何番目のコマンドまで入っているか。
+	// DO_BATTLE時
+	// 現在処理しているコマンドのインデックス。
 	int									commandIndex;
 	// 現在のインデックス（コマンド選択時など）
 	int									currentIndex;
+	// 現在のGame_UnitCommandを処理するフェイズ
+	int									commandPhaze;
 	// アクションのスタック
 	Game_BattleActionStack				actionStack;
 	// メッセージウィンドウ
@@ -227,6 +232,24 @@ public:
 	// Scene_Battle_Action.cppに記述する。
 	bool InterpretAction(Game_BattleAction* pAction);
 	bool Action_CallEnemyName();
+
+	//=========================================
+	// Game_BattleActionの内容の処理。
+	// Scene_Battle_Action.cppに記述する。
+
+	// commandPhaze :
+	// 例えば通常攻撃にせよ、
+	// 実際の攻撃前に行われる判定（防御をしているキャラクターの防御力補正とか）や
+	// 攻撃後に行われる判定（次の攻撃のみパワーアップのステートなど）がある。
+	// 一つのUnitCommandの解釈を、いくつかのフェイズごとに管理するための
+	// パラメータ。Static_Battle.h内のCOMMANDPHAZE_xxx定数群で定義される。
+	// 
+	bool InterpretCommand(Game_UnitCommand* pCmd, int commandPhaze=COMMANDPHAZE_NOPHAZE);
+	// commandPhazeによって分岐する
+	bool InterpretCommand_NoPhaze(Game_UnitCommand* pCmd);
+	bool InterpretCommand_Pre_Action(Game_UnitCommand* pCmd);
+	bool InterpretCommand_Action(Game_UnitCommand* pCmd);
+	bool InterpretCommand_Post_Action(Game_UnitCommand* pCmd);
 
 	//=========================================
 	// 戦闘中の諸演算
