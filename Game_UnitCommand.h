@@ -47,6 +47,10 @@ public:
 
 	bool IsEmpty() const{ return !isUsed; };
 
+	// 「何もしない」コマンドにする。
+	// ターゲットが消滅した場合など。
+	void SetEmpty();
+
 };
 
 #endif GAME_UNITCOMMAND_H

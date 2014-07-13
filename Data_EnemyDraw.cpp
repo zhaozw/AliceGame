@@ -77,6 +77,9 @@ int Data_EnemyDraw::GetImgHandleByRefID(WORD refID){
 	case ENEMYDRAW_ELF:
 		return g_image.enemy.elf;
 		break;
+	case ENEMYDRAW_FIREELF:
+		return g_image.enemy.elf;
+		break;
 	default:
 		break;
 	}

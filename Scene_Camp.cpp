@@ -186,8 +186,7 @@ void Scene_Camp::Draw(){
 			infoString[infoIndex-1], GetColor(255, 255, 255),
 			g_font.hInfo);
 	}
-	ResetDrawARGB();
-
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	DrawReserveFade();
 }
 

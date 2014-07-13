@@ -5,7 +5,8 @@
 #include "VectorList.h"
 
 // refIDがどの敵に対応するかの定数リスト
-#define		ENEMYDRAW_ELF	1
+#define		ENEMYDRAW_ELF			1
+#define		ENEMYDRAW_FIREELF		2
 
 
 // 敵グラフィックの描画位置と描画ハンドルを保持するクラス。

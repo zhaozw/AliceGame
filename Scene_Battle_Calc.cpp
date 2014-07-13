@@ -2,6 +2,9 @@
 
 #include "Scene_Battle.h"
 #include <algorithm>
+#include "Data_StateMessage.h"
+
+extern Data_StateMessage d_stateMessage;
 
 bool Scene_Battle::SetCommand(Game_UnitCommand cmd){
 	if(commandIndex >= MAX_UNITCOMMAND) return false;
@@ -71,6 +74,12 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			rate	= GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
 			break;
 		}
+		// 自分のステートによるダメージの補正
+		if(pOpponent->IsState(STATE_GUARD)){
+			// 防御
+			rate *= 0.5;
+		}
+
 		damage = (int)(gRate*(rate*(from-to)+fix));
 		if(canMinus){
 			return min(DAMAGE_MAX, damage);
@@ -79,38 +88,87 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		}
 }
 
-float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
+BYTE Scene_Battle::GetAttrAffinity(BYTE attackerAttr, BYTE opponentAttr){
 	switch(attackerAttr){
 	case DOLL_ATTR_SUN:
 		switch(opponentAttr){
 		case DOLL_ATTR_MOON:
-			return ATTRRATE_STRONG;
+			return ATTRAFFINITY_STRONG;
 			break;
 		case DOLL_ATTR_STAR:
-			return ATTRRATE_WEAK;
+			return ATTRAFFINITY_WEAK;
 			break;
 		}
 		break;
 	case DOLL_ATTR_MOON:
 		switch(opponentAttr){
 		case DOLL_ATTR_STAR:
-			return ATTRRATE_STRONG;
+			return ATTRAFFINITY_STRONG;
 			break;
 		case DOLL_ATTR_SUN:
-			return ATTRRATE_WEAK;
+			return ATTRAFFINITY_WEAK;
 			break;
 		}
 		break;
 	case DOLL_ATTR_STAR:
 		switch(opponentAttr){
 		case DOLL_ATTR_SUN:
-			return ATTRRATE_STRONG;
+			return ATTRAFFINITY_STRONG;
 			break;
 		case DOLL_ATTR_MOON:
-			return ATTRRATE_WEAK;
+			return ATTRAFFINITY_WEAK;
 			break;
 		}
 		break;
 	}
+	return ATTRAFFINITY_EVEN;
+}
+
+float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
+	switch(GetAttrAffinity(attackerAttr, opponentAttr)){
+	case ATTRAFFINITY_EVEN:
+		return 1.0;
+		break;
+	case ATTRAFFINITY_STRONG:
+		return ATTRRATE_STRONG;
+		break;
+	case ATTRAFFINITY_WEAK:
+		return ATTRRATE_WEAK;
+		break;
+	}
 	return 1.0;
+}
+
+BYTE Scene_Battle::AddStateToUnit(
+	Game_BattleUnit* pUnit, WORD stateRefID, bool showMessage){
+		TCHAR buf[WND_MSG_STOCKLENGTH];
+		BYTE result;
+		if(pUnit == NULL){
+			return ADDSTATE_ERROR;
+		}
+		// ステートの適用
+		result = pUnit->AddState(stateRefID);
+		// メッセージの追加
+		if(showMessage){
+			switch(result){
+			case ADDSTATE_SUCCEED:
+			case ADDSTATE_MULTIPLIED:
+				// ステートになったときのメッセージを取得
+				d_stateMessage.GetStateMessage(
+					buf, stateRefID,
+					STATEMESSAGE_INDEX_DOLL_ADDED, pUnit);
+				// メッセージに追加
+				AddStockMessage(buf);
+				break;
+			}
+		}
+		return result;
+}
+
+void Scene_Battle::UpdateStateTurn(){
+	for(int n=0; n<MAX_BATTLEDOLL; n++){
+		if(dolls[n].GetIsUsed()){
+			dolls[n].UpdateStateTurn();
+		}
+	}
 }

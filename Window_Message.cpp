@@ -96,9 +96,11 @@ bool Window_Message_DrawLine::Import(LPTSTR buf, int strLen){
 	return true;
 }
 
-void Window_Message_DrawLine::DrawContent(int hFont, int fontWidth, int x, int y, int count) const{
+void Window_Message_DrawLine::DrawContent(int hFont, int fontWidth,
+	int x, int y, int count) const{
 	// ˆês•ª‚Ì“à—e‚ğ•`‰æ‚·‚éB
 	int strLength = (count == -1 ? GetStrLength() : count);
+	strLength = min(WND_MSG_DRAWLENGTH, strLength);
 	int tmpDrawX = x;
 	for(int n=0; n<strLength; n++){
 		DrawStringToHandle(tmpDrawX, y, chars[n].character, 

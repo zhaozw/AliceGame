@@ -99,6 +99,7 @@
     <ClCompile Include="Data_EnemyGroup.cpp" />
     <ClCompile Include="Data_EnemyParam.cpp" />
     <ClCompile Include="Data_EnemySprite.cpp" />
+    <ClCompile Include="Data_StateMessage.cpp" />
     <ClCompile Include="DXFont.cpp" />
     <ClCompile Include="DXInput.cpp" />
     <ClCompile Include="DXTimeCtrl.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Data_EnemyGroup.h" />
     <ClInclude Include="Data_EnemyParam.h" />
     <ClInclude Include="Data_EnemySprite.h" />
+    <ClInclude Include="Data_StateMessage.h" />
     <ClInclude Include="EnvData.h" />
     <ClInclude Include="Func_Windows.h" />
     <ClInclude Include="Game_BattleAction.h" />

@@ -10,6 +10,7 @@ extern	WindowSkins	g_wndSkins;
 
 BWindow_FocusedEnemy::BWindow_FocusedEnemy() : s_enemy(MAX_BATTLEENEMY, 0, false, true){
 	pScene = NULL;
+	pDoll = NULL;
 	pEnemy = NULL;
 	focusAll = false;
 }
@@ -29,6 +30,10 @@ void BWindow_FocusedEnemy::OnOpened(){
 	pEnemy = NULL;
 	s_enemy.index = 0;
 	CheckEnemyEnabled();
+	if(!SetDefaultIndex()){
+		// 選択にエラーが発生した
+		s_enemy.index = -1;
+	}
 	OnIndexChanged();
 }
 
@@ -41,6 +46,56 @@ void BWindow_FocusedEnemy::OnIndexChanged(){
 	}
 }
 
+bool BWindow_FocusedEnemy::SetDefaultIndex(){
+	Game_BattleEnemy* pTmpEnemy;
+	if(pScene == NULL) return false;
+	if(pDoll == NULL) return false;
+	// 番号の若い順に、属性で有利な敵にカーソルを合わせようとする。
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = pScene->GetEnemyPtr(n);
+		if(pTmpEnemy == NULL){
+			continue;
+		}
+		if(!pTmpEnemy->CanTarget()){
+			continue;
+		}
+		if(pScene->GetAttrAffinity(
+			pDoll->GetAttr(), pTmpEnemy->GetAttr()) == ATTRAFFINITY_STRONG){
+				s_enemy.index = n;
+				return true;
+		}
+	}
+	// 有利な敵がいなければ、相性が普通な敵にカーソルを合わせようとする。。
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = pScene->GetEnemyPtr(n);
+		if(pTmpEnemy == NULL){
+			continue;
+		}
+		if(!pTmpEnemy->CanTarget()){
+			continue;
+		}
+		if(pScene->GetAttrAffinity(
+			pDoll->GetAttr(), pTmpEnemy->GetAttr()) != ATTRAFFINITY_WEAK){
+				s_enemy.index = n;
+				return true;
+		}
+	}
+	// 選べる敵が居れば選ぶ
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = pScene->GetEnemyPtr(n);
+		if(pTmpEnemy == NULL){
+			continue;
+		}
+		if(!pTmpEnemy->CanTarget()){
+			continue;
+		}
+		s_enemy.index = n;
+		return true;
+	}
+	s_enemy.index = -1;
+	return false;
+}
+
 void BWindow_FocusedEnemy::CheckEnemyEnabled(){
 	Game_BattleEnemy* pEnemy = NULL;
 	if(pScene == NULL) return;
@@ -50,7 +105,14 @@ void BWindow_FocusedEnemy::CheckEnemyEnabled(){
 		}else{
 			pEnemy = NULL;
 		}
-		s_enemy.isActive[n] = (pEnemy != NULL);
+		// 選択可能かどうか
+		if(pEnemy == NULL){
+			s_enemy.isActive[n] = false;
+		}else if(!pEnemy->CanTarget()){
+			s_enemy.isActive[n] = false;
+		}else{
+			s_enemy.isActive[n] = true;
+		}
 	}
 	s_enemy.maxSize = MAX_BATTLEENEMY;
 }

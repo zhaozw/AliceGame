@@ -29,6 +29,9 @@ public:
 	//				falseの場合は最大HPをHPにコピーする。
 	bool SetParamFromReference(Game_AliceDoll_Essence* pDoll, bool useHP=true);
 
+	// このキャラが人形である場合はtrueを返す。
+	virtual bool IsDoll(){ return true; };
+
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
 };

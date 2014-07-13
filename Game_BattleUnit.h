@@ -10,6 +10,7 @@ class Game_BattleState;
 #define ADDSTATE_SUCCEED		0	// 普通にステートになった
 #define ADDSTATE_ALREADY_ADDED	1	// 既にそのステートだった
 #define ADDSTATE_MULTIPLIED		2	// かさねがけになった
+#define ADDSTATE_ERROR			99	// 何かおかしい
 
 // ステートを表すクラス。
 // メンバ変数はステートID一つのみだが、
@@ -51,6 +52,7 @@ protected:
 	BYTE		attr;							// 属性
 	bool		isFront;						// 前に出ているか否か
 	BYTE		position;						// 前列・後列における位置
+	bool		isUsed;							// 使用されているか
 
 	// 現在受けているステートのリスト
 	Game_BattleState	stateArray[BATTLEUNIT_STATE_MAX];
@@ -93,6 +95,9 @@ public:
 	BYTE GetAttr(){ return attr; };
 	bool GetFront(){ return isFront; };
 	BYTE GetPosition(){ return position; };
+	void SetIsUsed(bool b){ isUsed = b; };
+	bool IsUsed(){ return isUsed; };
+	bool GetIsUsed(){ return IsUsed(); };
 
 	int GetRawParam(BYTE index);			// 補正なしのパラメータを取得する。
 	int GetCalcParam(BYTE index);			// 補正ありのパラメータを取得する。
@@ -124,6 +129,7 @@ public:
 	// 見つかった場合は配列のインデックス、
 	// 見つからなかった場合は-1を返す。
 	int CheckIsState(WORD stateRefID);
+	bool IsState(WORD stateRefID){ return CheckIsState(stateRefID)!=-1; };
 
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
@@ -136,9 +142,22 @@ public:
 	// 戦闘不能などの時はfalseを返す。
 	bool CanTarget();
 
+	// このキャラが戦闘不能の場合はtrueを返す。
+	bool IsDead();
+
+	// このキャラが人形である場合はtrueを返す。
+	virtual bool IsDoll(){ return false; };
+
 	// 指定したダメージを与える。
 	// HPが負になったらfalseを返す。
 	bool Damage(int damage);
+
+	// 戦闘不能になるかどうかを判定する。
+	// HPが0以下で、かつまだ戦闘不能ステートが適用されていない場合、
+	// trueを返す。
+	// trueを返した場合、Scene_Battleクラス経由で戦闘不能ステートが
+	// 付加され、またメッセージでそのことが通知される。
+	bool CheckDie();
 };
 
 #endif // GAME_BATTLEUNIT_H

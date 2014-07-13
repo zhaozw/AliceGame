@@ -336,6 +336,9 @@
     <ClCompile Include="Data_BattleState.cpp">
       <Filter>ソース ファイル\Source_Data</Filter>
     </ClCompile>
+    <ClCompile Include="Data_StateMessage.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -524,9 +527,6 @@
     <ClInclude Include="Window_Message.h">
       <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
     </ClInclude>
-    <ClInclude Include="Window_BattleMessage.h">
-      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
-    </ClInclude>
     <ClInclude Include="BWindow_AliceCommand.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
     </ClInclude>
@@ -553,6 +553,12 @@
     </ClInclude>
     <ClInclude Include="Data_BattleState.h">
       <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_StateMessage.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_BattleMessage.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

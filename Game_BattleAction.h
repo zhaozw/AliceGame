@@ -19,7 +19,10 @@ public:
 		TYPE_DAMAGE,		// キャラ一体がダメージを受ける。
 							// paramがダメージ数値。演算は前もって行う。
 		TYPE_CALLENEMYNAME,	// 戦闘開始時、敵の名前を列挙する。
+		TYPE_CALLVICTORY,	// 勝利時メッセージ。
+		TYPE_CALLLOSE,		// 敗北時メッセージ。
 		TYPE_ASSERTATTACK,	// 「○○の攻撃！」を表示する
+		TYPE_ASSERTGUARD,	// 「○○は身を守っている！」を表示する
 		TYPE_UNDIFINED,
 	};
 private:
@@ -35,7 +38,6 @@ private:
 	DWORD				flags;
 	// 各種パラメータ。
 	int					param;
-
 public:
 	// コンストラクタ
 	Game_BattleAction();

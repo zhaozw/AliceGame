@@ -2,6 +2,7 @@
 #define BWINDOW_FOCUSEDENEMY_H
 
 #include "Window_Base.h"
+#include "Game_BattleDoll.h"
 #include "Game_BattleEnemy.h"
 #include "Selectable.h"
 
@@ -20,6 +21,8 @@ protected:
 	Selectable				s_enemy;
 	// バトルシーンへの参照
 	Scene_Battle*			pScene;
+	// このウィンドウを保持している人形
+	Game_BattleDoll*		pDoll;
 	// 現在参照している敵キャラ
 	Game_BattleEnemy*		pEnemy;
 	// 敵全体にフォーカスした状態
@@ -34,6 +37,11 @@ public:
 	// (名前ウィンドウの出し方は全てほぼ同じ)
 	void MySetup(Scene_Battle* _pScene);
 
+	// 
+	void SetDoll(Game_BattleDoll* _pDoll){
+		pDoll = _pDoll;
+	}
+
 	// 開いた時の挙動
 	virtual void OnOpened();
 
@@ -43,6 +51,10 @@ public:
 	// インデックス値が変わったとき、
 	// 位置及び表示内容の更新を行う。
 	void OnIndexChanged();
+
+	// 選択肢のインデックスを指定する。
+	// 選択できる敵がいない場合、falseを返す。
+	bool SetDefaultIndex();
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。

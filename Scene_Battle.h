@@ -45,15 +45,7 @@ public:
 		BATTLE_DO,			// 戦闘
 		AFTER_TURN,			// ターン終了時
 		POST_BATTLE,		// 戦闘終了
-	};
-
-	// 戦闘のサブフェイズを記録する。
-	enum SUBPHAZE{
-		ASSERT_ACTION,		// 行動の宣言
-		BEFORE_ACTION,		// 行動を適用する前
-		PERFORM_ACTION,		// 行動の適用
-		AFTER_ACTION,		// 行動の適用後
-		CHECK_ACTION,		// 行動の結果バトラーが変化する状態の確認
+		END_BATTLE,			// シーン終了(即座にフェードアウトしてシーン移動)
 	};
 
 private:
@@ -61,7 +53,8 @@ private:
 	WORD								enemyGroup;
 	// 現在の状況を表す
 	enum BATTLEPHAZE					phaze;
-	enum SUBPHAZE						subPhaze;
+	// 戦闘の結果を表す
+	BYTE								battleResult;
 	// 味方・敵ユニットは通常の配列で表現する
 	// 味方ユニットの配列
 	Game_BattleDoll						dolls[MAX_BATTLEDOLL];
@@ -70,7 +63,7 @@ private:
 	Game_BattleEnemy					enemies[MAX_BATTLEENEMY];
 	int									enemiesNum;	// 敵ユニットの最大数（戦闘不能者含む）
 	// 攻撃コマンドの配列
-	Game_UnitCommand					commands[MAX_UNITCOMMAND];
+	Game_UnitCommand					commands[MAX_UNITCOMMAND+1];
 	// DOLL_COMMAND及びENEMY_COMMAND時
 	// 現在何番目のコマンドまで入っているか。
 	// DO_BATTLE時
@@ -132,6 +125,10 @@ public:
 	// 次のフェイズに移行する。
 	void NextPhaze();
 
+	// シーンを終了する。
+	// どのシーンに移動するかは様々な変数によって決める。
+	int GetNextScene();
+
 	// 次のフェイズに移行した際の処理。
 	// 関数NextPhazeから実行される。
 	// 各フェイズごとに実行するアクションをセットする。
@@ -143,6 +140,7 @@ public:
 	void SetupBeforeTurn();		// ターン開始時。ステートの判定など。
 	void SetupBattleDo();		// 戦闘。
 	void SetupAfterTurn();		// ターン終了時。ステートの判定など。
+	void SetupPostBattle();		// 戦闘終了時。battleResultの内容によって分岐。
 
 
 	// 必要なオブジェクト群のアップデートを行う。
@@ -150,6 +148,9 @@ public:
 	
 	// 人形の配列が変わった際に、人形スプライトに人形を割り当て直す。
 	bool AttachDollPtrToSprite();
+
+	// 戦闘が終わっていないかを判断する。
+	bool CheckBattleResult();
 
 	//=========================================
 	// アクセサ関連
@@ -160,13 +161,21 @@ public:
 	// 人形のポインタを取得する。
 	Game_BattleDoll*	GetDollPtr(int index){
 		if(index < 0 || index >= MAX_BATTLEDOLL) return NULL;
-		return &dolls[index];
+		if(dolls[index].GetIsUsed()){
+			return &dolls[index];
+		}else{
+			return NULL;
+		}
 	}
 
 	// 敵キャラのポインタを取得する。
 	Game_BattleEnemy*	GetEnemyPtr(int index){
 		if(index < 0 || index >= MAX_BATTLEENEMY) return NULL;
-		return &enemies[index];
+		if(enemies[index].GetIsUsed()){
+			return &enemies[index];
+		}else{
+			return NULL;
+		}
 	}
 
 	// 前列のi番目に居る人形が、Game_BattleDollの配列の中では何番目かを取得する。
@@ -192,6 +201,11 @@ public:
 	BYTE	OpenFocusedEnemyWindow();
 	int		GetFocusedEnemyIndex(){ return w_focusedEnemy.GetSelectIndex(); };
 	BWindow_FocusedEnemy*	GetWndFocusedEnemyPtr(){ return &w_focusedEnemy; };
+
+	// メッセージウィンドウへのメッセージの追加。
+	bool AddStockMessage(LPTSTR str){
+		return w_battleMsg.AddStockMsg(str, strlen(str));
+	}
 
 	//=========================================
 	// 外部データの呼び出し・データ連係関連
@@ -234,7 +248,10 @@ public:
 
 	bool Action_Damage(Game_BattleAction* pAction);
 	bool Action_CallEnemyName();
+	bool Action_CallVictory();
+	bool Action_CallLose();
 	bool Action_AssertAttack(Game_BattleAction* pAction);
+	bool Action_AssertGuard(Game_BattleAction* pAction);
 
 	//=========================================
 	// Game_UnitCommandの内容の処理。
@@ -247,14 +264,23 @@ public:
 	// 一つのUnitCommandの解釈を、いくつかのフェイズごとに管理するための
 	// パラメータ。Static_Battle.h内のCOMMANDPHAZE_xxx定数群で定義される。
 	// 
-	bool InterpretCommand(Game_UnitCommand* pCmd, int commandPhaze=COMMANDPHAZE_NOPHAZE);
+	char InterpretCommand(Game_UnitCommand* pCmd, int commandPhaze=COMMANDPHAZE_NOPHAZE);
 	// commandPhazeによって分岐する
-	bool InterpretCommand_NoPhaze(Game_UnitCommand* pCmd);
-	bool InterpretCommand_Assert(Game_UnitCommand* pCmd);
-	bool InterpretCommand_Pre_Action(Game_UnitCommand* pCmd);
-	bool InterpretCommand_Action(Game_UnitCommand* pCmd);
-	bool InterpretCommand_Check_Death(Game_UnitCommand* pCmd);
-	bool InterpretCommand_Post_Action(Game_UnitCommand* pCmd);
+	// 戻り値 :
+	// -1 : エラー
+	// 0 : 何も処理を行わなかった/コマンド実行を待つ必要がない（即座に次のフェイズへ）
+	// 1 : 処理を行った（コマンド実行を待つ）
+	// 何か処理を行った場合はtrueを、
+	// 何も処理を行わなかった場合はfalseを返す。
+	char InterpretCommand_NoPhaze(Game_UnitCommand* pCmd);
+	char InterpretCommand_Start_Turn(Game_UnitCommand* pCmd);
+	char InterpretCommand_Fix_Command(Game_UnitCommand* pCmd);
+	char InterpretCommand_Fix_Target(Game_UnitCommand* pCmd);
+	char InterpretCommand_Assert(Game_UnitCommand* pCmd);
+	char InterpretCommand_Pre_Action(Game_UnitCommand* pCmd);
+	char InterpretCommand_Action(Game_UnitCommand* pCmd);
+	char InterpretCommand_Check_Death(Game_UnitCommand* pCmd);
+	char InterpretCommand_Post_Action(Game_UnitCommand* pCmd);
 
 	//=========================================
 	// 戦闘中の諸演算
@@ -280,9 +306,24 @@ public:
 	// オプションを指定することで、通常攻撃以外のダメージ計算にも対応する。
 	int CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent, int param);
 
-	// 属性ダメージの倍率を計算する。
-	float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr);
+	// ある属性に対してある属性が有利か不利かを返す。
+	// 0 : 普通
+	// 1 : 有利
+	// 2 : 不利
+	BYTE GetAttrAffinity(BYTE attackerAttr, BYTE opponentAttr);
 
+	// 属性ダメージの倍率を計算する。
+	float GetAttrRate(BYTE attackerAttr, BYTE opponentAttr);
+
+	// ユニットにステートを割り当てる。
+	// pUnit		: 割り当てるユニット
+	// stateRefID	: ステートのID
+	// showMessage	: メッセージを表示するか否か
+	BYTE AddStateToUnit(Game_BattleUnit* pUnit, WORD stateRefID, bool showMessage=true);
+
+	// ステートのターン経過を処理する。
+	// 一括してターン終了時に行う。
+	void UpdateStateTurn();
 
 	//=========================================
 	// 描画

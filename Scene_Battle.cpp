@@ -15,7 +15,6 @@ extern KeyConfig	g_key;
 
 Scene_Battle::Scene_Battle():Scene_Base(){
 	phaze = PRE_BATTLE;
-	subPhaze = ASSERT_ACTION;
 	enemyGroup = 0;
 	dollsNum = 0;
 	enemiesNum = 0;
@@ -25,7 +24,7 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 	Scene_Base::Initialize(fSkipFrame);
 	// 各変数の初期化
 	phaze = BEFORE_BATTLE;
-	subPhaze = ASSERT_ACTION;
+	battleResult = BATTLERESULT_NONE;
 	enemyGroup = g_temp.enemyGroup;
 	// 敵と味方の初期化
 	for(int n=0; n<MAX_BATTLEDOLL; n++){
@@ -70,19 +69,22 @@ bool Scene_Battle::Terminate(){
 
 int Scene_Battle::Update(){
 	bool result = true;
+	// ウィンドウやスプライトなどのアップデートを行う。
+	UpdateObjects();
 	// 次のアクションに移行する条件が満たされているかどうかの判定
 	if(CheckNextAction()){
 		// 次のアクションを実行する
 		result = ExecuteAction();
-
 		// 次のフェイズに移行する
 		if(!result){
 			NextPhaze();
 		}	
 	}
-	// ウィンドウやスプライトなどのアップデートを行う。
-	UpdateObjects();
 
+	// 戦闘終了の判断
+	if(phaze == END_BATTLE){
+		ReserveScene(GetNextScene(), 60);
+	}
 	return SCENE_NONE;
 
 }
@@ -94,6 +96,41 @@ void Scene_Battle::UpdateObjects(){
 	w_dollCommand.UpdateA();
 	w_selectEnemy.UpdateA();
 	w_focusedEnemy.UpdateA();
+}
+
+bool Scene_Battle::CheckBattleResult(){
+	Game_BattleUnit* pUnit;
+	bool skip;
+	// 人形が全員戦闘不能の場合
+	skip = false;
+	for(int n=0; (n<MAX_BATTLEDOLL && !skip); n++){
+		pUnit = (Game_BattleUnit*)GetDollPtr(n);
+		if(pUnit != NULL){
+			if(!pUnit->IsDead()){
+				skip = true;
+			}
+		}
+	}
+	if(!skip){
+		battleResult = BATTLERESULT_LOSE;
+		return true;
+	}
+
+	// 敵が全員戦闘不能の場合
+	skip = false;
+	for(int n=0; (n<MAX_BATTLEENEMY && !skip); n++){
+		pUnit = (Game_BattleUnit*)GetEnemyPtr(n);
+		if(pUnit != NULL){
+			if(!pUnit->IsDead()){
+				skip = true;
+			}
+		}
+	}
+	if(!skip){
+		battleResult = BATTLERESULT_VICTORY;
+		return true;
+	}
+	return false;
 }
 
 bool Scene_Battle::AttachDollPtrToSprite(){
@@ -112,6 +149,7 @@ bool Scene_Battle::AttachDollPtrToSprite(){
 	return result;
 }
 
+
 void Scene_Battle::Draw(){
 	// スプライトの描画
 	DrawDollsSprite();
@@ -124,6 +162,9 @@ void Scene_Battle::Draw(){
 	w_selectEnemy.Draw();
 	w_focusedEnemy.Draw();
 
+	// フェードの描画
+	ResetDrawARGB();
+	DrawReserveFade();
 }
 
 bool Scene_Battle::SetupWindow(){
@@ -196,7 +237,7 @@ Game_BattleDoll* Scene_Battle::GetRandomDollPtr(){
 }
 
 Game_BattleEnemy* Scene_Battle::GetRandomEnemyPtr(){
-	Game_BattleEnemy* pEnemies[NUM_BATTLEDOLL_FRONT];
+	Game_BattleEnemy* pEnemies[MAX_BATTLEENEMY];
 	Game_BattleEnemy* pTmpEnemy = NULL;
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
 		pEnemies[n] = NULL;
@@ -264,7 +305,10 @@ bool Scene_Battle::CheckNextAction(){
 		}
 		break;
 	case ENEMIES_COMMAND:
-		// 即座に次へ
+		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
+		if(!w_battleMsg.IsReady()){
+			return false;
+		}
 		return true;
 		break;
 	case BEFORE_TURN:
@@ -279,7 +323,18 @@ bool Scene_Battle::CheckNextAction(){
 		return true;
 		break;
 	case AFTER_TURN:
-		// 今の所特に処理はなし
+		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
+		// ステートの判定を行う。
+		if(!w_battleMsg.IsReady()){
+			return false;
+		}
+		return true;
+		break;
+	case POST_BATTLE:
+		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
+		if(!w_battleMsg.IsReady()){
+			return false;
+		}
 		return true;
 		break;
 	}
@@ -289,7 +344,8 @@ bool Scene_Battle::CheckNextAction(){
 
 bool Scene_Battle::ExecuteAction(){
 	Game_BattleAction	nextAction;
-	Game_UnitCommand	unitCommand;
+	Game_UnitCommand*	unitCommand;		// コピーでなく参照を使用する
+	bool				loop = false;
 	switch(phaze){
 	case BEFORE_BATTLE:
 		// すぐさま次のフェイズに移行する。
@@ -324,7 +380,30 @@ bool Scene_Battle::ExecuteAction(){
 		return false;
 		break;
 	case BEFORE_TURN:
-		return false;
+		// アクションスタックの内容を順に実行する。
+		nextAction = actionStack.Pop();
+		if(nextAction.IsEmpty()){ // 条件2
+			do{
+				// 永遠ループの防止(ループして戻ってきた時)
+				loop = false;
+				// コマンドリストの内容を順に実行する。
+				// それぞれのコマンドにおいてアクションスタックはリセットされている。
+				// 次のコマンドのインデックスを取得
+				commandIndex++;
+				unitCommand = &commands[commandIndex];
+				// 次のコマンドがない場合は終了する(条件4)
+				if(unitCommand->IsEmpty()){
+					return false;
+				}
+				// コマンドを解釈してアクションスタックに追加
+				if(InterpretCommand(unitCommand, COMMANDPHAZE_START_TURN) == 0){
+					// 何も処理を行わなかった場合
+					loop = true;
+				}
+			}while(loop);
+		}else{
+			InterpretAction(&nextAction);
+		}
 		break;
 	case BATTLE_DO:
 		// この場所に来る条件としては、
@@ -340,48 +419,79 @@ bool Scene_Battle::ExecuteAction(){
 		// 2.アクションスタックがない場合
 		//   (順番に処理していって無くなった場合)
 		//   →コマンドのフェイズを一つ進める。
+		//     何も処理がない場合はループする。
 		// 3.コマンドのフェイズが最後まで行ったとき（②とも重なる）
 		//   次のコマンドの解釈に進む。
+		// 　コマンドのフェイズが最後でない場合、かつ
+		//   何も処理がない場合はループする。
 		// 4.全てのコマンドの解釈が終わった場合
 		//   BATTLE_DOを終了する。
 
 		// アクションスタックの内容を順に実行する。
 		nextAction = actionStack.Pop();
 		if(nextAction.IsEmpty()){ // 条件2
-			// コマンドリストの内容を順に実行する。
-			// 各コマンドごとに、行動前、実際の行動、行動後、とフェイズに分かれる。
-			// それぞれのフェイズにおいてアクションスタックはリセットされている。
-			if(commandPhaze == COMMANDPHAZE_NOPHAZE){
-				// コマンドの処理が終わった場合(条件3)
-				// 次のコマンドのインデックスを取得
-				commandIndex++;
-				unitCommand = commands[commandIndex];
-				commandPhaze = COMMANDPHAZE_FIRSTPHAZE;
-				// 次のコマンドがない場合は終了する(条件4)
-				if(unitCommand.IsEmpty()){
+			do{
+				// 永遠ループの防止(ループして戻ってきた時)
+				loop = false;
+				// コマンドリストの内容を順に実行する。
+				// 各コマンドごとに、行動前、実際の行動、行動後、とフェイズに分かれる。
+				// それぞれのフェイズにおいてアクションスタックはリセットされている。
+				if(commandPhaze == COMMANDPHAZE_NOPHAZE){
+					// コマンドの処理が終わった場合(条件3)
+					// 次のコマンドのインデックスを取得
+					commandIndex++;
+					unitCommand = &commands[commandIndex];
+					commandPhaze = COMMANDPHAZE_FIRSTPHAZE;
+					// 次のコマンドがない場合は終了する(条件4)
+					if(unitCommand->IsEmpty()){
+						commandPhaze = COMMANDPHAZE_NOPHAZE;
+						return false;
+					}
+					// コマンドを解釈してアクションスタックに追加
+					if(InterpretCommand(unitCommand, commandPhaze) == 0){
+						// 何も処理を行わなかった場合
+						loop = true;
+					}
+				}else if(commandPhaze != COMMANDPHAZE_LASTPHAZE){
+					// コマンドを解釈してアクションスタックに追加
+					unitCommand = &commands[commandIndex];
+					// フェイズが途中(次にまだフェイズがある)の場合
+					commandPhaze++;
+					// コマンドを解釈してアクションスタックに追加
+					if(InterpretCommand(unitCommand, commandPhaze) == 0){
+						// 何も処理を行わなかった場合
+						loop = true;
+					}
+					// break; // 解釈は行わずにbreakする
+				}else{
+					// 最終フェイズの解釈を終えた場合(条件3→コマンド処理終了へ)
+					// コマンドの解釈は行わずに次のコマンドへ
 					commandPhaze = COMMANDPHAZE_NOPHAZE;
-					return false;
+					if(CheckBattleResult()){
+						// 戦闘の結果が決した場合は
+						// すぐさま次のフェイズ(POST_BATTLE)へ
+						return false;
+					}
 				}
-				// コマンドを解釈してアクションスタックに追加
-				InterpretCommand(&unitCommand, commandPhaze);
-			}else if(commandPhaze != COMMANDPHAZE_LASTPHAZE){
-				// コマンドを解釈してアクションスタックに追加
-				unitCommand = commands[commandIndex];
-				// フェイズが途中(次にまだフェイズがある)の場合
-				commandPhaze++;
-				InterpretCommand(&unitCommand, commandPhaze);
-				break; // 解釈は行わずにbreakする
-			}else{
-				// 最終フェイズの解釈を終えた場合(条件3→コマンド処理終了へ)
-				// コマンドの解釈は行わずに次のコマンドへ
-				commandPhaze = COMMANDPHAZE_NOPHAZE;
-			}
+			}while(loop);
 		}else{
 			InterpretAction(&nextAction);
 		}
 		break;
 	case AFTER_TURN:
 		return false;
+		break;
+	case POST_BATTLE:
+		// アクションスタックの内容を順に実行する。
+		nextAction = actionStack.Pop();
+		if(nextAction.IsEmpty()){
+			return false;
+		}
+		InterpretAction(&nextAction);
+		break;
+	case END_BATTLE:
+		// そこから動かない
+		return true;
 		break;
 	}
 	return true;
@@ -412,10 +522,17 @@ void Scene_Battle::NextPhaze(){
 		phaze = BATTLE_DO;
 		break;
 	case BATTLE_DO:
-		phaze = AFTER_TURN;
+		if(battleResult == BATTLERESULT_NONE){
+			phaze = AFTER_TURN;
+		}else{
+			phaze = POST_BATTLE;
+		}
 		break;
 	case AFTER_TURN:
 		phaze = ALICE_COMMAND;
+		break;
+	case POST_BATTLE:
+		phaze = END_BATTLE;
 		break;
 	}
 
@@ -450,7 +567,18 @@ void Scene_Battle::NextPhaze(){
 	case AFTER_TURN:
 		SetupAfterTurn();
 		break;
+	case POST_BATTLE:
+		SetupPostBattle();
+		break;
+	case END_BATTLE:
+		// 即座にシーン移動
+		break;
 	}
+}
+
+int Scene_Battle::GetNextScene(){
+	// 体験版
+	return SCENE_TESTBATTLE;
 }
 
 void Scene_Battle::SetupPreBattle(){
@@ -485,6 +613,7 @@ void Scene_Battle::SetupAliceCommandDo(){
 	case ALICE_COMMAND_SPECIAL:
 		break;
 	case ALICE_COMMAND_ESCAPE:
+		/*
 		// ダミーのコメントを入力
 		action.SetType(Game_BattleAction::TYPE_CALLENEMYNAME);
 		action.SetActor(NULL);
@@ -492,6 +621,7 @@ void Scene_Battle::SetupAliceCommandDo(){
 		action.SetFlags(0x00000000);
 		action.SetParam(0);
 		actionStack.Push(action);
+		*/
 		break;
 	}
 }
@@ -515,6 +645,8 @@ void Scene_Battle::SetupEnemiesCommand(){
 
 void Scene_Battle::SetupBeforeTurn(){
 	// 各キャラクターのステートなどを判定
+	commandIndex = -1;
+	commandPhaze = COMMANDPHAZE_START_TURN;
 }
 
 void Scene_Battle::SetupBattleDo(){
@@ -526,4 +658,34 @@ void Scene_Battle::SetupBattleDo(){
 
 
 void Scene_Battle::SetupAfterTurn(){
+	// 本来はここに置くものではない
+	UpdateStateTurn();
+}
+
+void Scene_Battle::SetupPostBattle(){
+	Game_BattleAction action;
+	// コマンドの解放
+	ClearCommands();
+	// アクションスタックの解放
+	actionStack.ClearAll();
+	switch(battleResult){
+	case BATTLERESULT_VICTORY:
+		action.SetType(Game_BattleAction::TYPE_CALLVICTORY);
+		action.SetActor(NULL);
+		action.SetOpponent(NULL);
+		action.SetFlags(0x00000000);
+		action.SetParam(0);
+		actionStack.Push(action);
+		ExecuteAction(); // 最初の1フレームでIDLEにならないように
+		break;
+	case BATTLERESULT_LOSE:
+		action.SetType(Game_BattleAction::TYPE_CALLLOSE);
+		action.SetActor(NULL);
+		action.SetOpponent(NULL);
+		action.SetFlags(0x00000000);
+		action.SetParam(0);
+		actionStack.Push(action);
+		ExecuteAction(); // 最初の1フレームでIDLEにならないように
+		break;
+	}
 }

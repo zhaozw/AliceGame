@@ -32,3 +32,10 @@ void Game_UnitCommand::Reset(){
 	targetType = ACTIONTARGET_NONE;
 	isUsed = false;
 }
+
+void Game_UnitCommand::SetEmpty(){
+	// pOwner‚ÆisUsed‚ÍŽc‚µ‚Ä‚¨‚­
+	pTarget = NULL;
+	actionType = ACTIONTYPE_NONE;
+	targetType = ACTIONTARGET_NONE;
+}

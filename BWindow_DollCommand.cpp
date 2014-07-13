@@ -43,6 +43,8 @@ void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll){
 	pDoll->GetName(buf, BATTLEUNIT_NAME_BYTES);
 	MySetup(pScene);
 	SetTitle(buf);
+	select.index = 0;
+	commandIndex = 0;
 	Open();
 }
 
@@ -53,7 +55,6 @@ void BWindow_DollCommand::Refresh(){
 }
 
 void BWindow_DollCommand::Update(){
-	Window_Selectable::Update();
 	switch(state){
 	case UPDATING:
 		if(select.CheckKey() == SELECT2D_CHOOSE){
@@ -61,8 +62,9 @@ void BWindow_DollCommand::Update(){
 			case BWND_DOLLCOMMAND_ATTACK:
 				// 攻撃相手選択ウィンドウを開く
 				commandIndex = BWND_DOLLCOMMAND_ATTACK;
-				OpenChildWindow((Window_Base*)pScene->GetWndFocusedEnemyPtr(), true);
 				pScene->GetWndFocusedEnemyPtr()->SetFocusAll(false);
+				pScene->GetWndFocusedEnemyPtr()->SetDoll(pActor);
+				OpenChildWindow((Window_Base*)pScene->GetWndFocusedEnemyPtr(), true);
 				break;
 			case BWND_DOLLCOMMAND_SKILL:
 				/*
@@ -83,6 +85,7 @@ void BWindow_DollCommand::Update(){
 		state = UPDATING;
 		break;
 	}
+	Window_Selectable::Update();
 }
 
 void BWindow_DollCommand::OnChildIsClosed(){

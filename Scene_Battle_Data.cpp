@@ -94,6 +94,9 @@ bool Scene_Battle::LoadPresetDolls(int defaultID){
 		// 名前だけは別でコピー
 		dolls[n].SetName(tmpName, strlen(tmpName));
 
+		// 使用されている
+		dolls[n].SetIsUsed(true);
+
 		// 人形の数を指定。
 		dollsNum = n+1;
 	}
@@ -157,5 +160,6 @@ bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY)
 	enemies[index].SetFront(true);
 	enemies[index].SetPosition(index);
 	enemies[index].SetSelfTurn();
+	enemies[index].SetIsUsed(true);
 	return true;
 }

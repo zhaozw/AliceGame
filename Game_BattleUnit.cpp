@@ -13,11 +13,20 @@ bool Game_BattleState::SortByCalc(
 	const Game_BattleState& aLeft, const Game_BattleState& aRight){
 		Data_BattleState_Each* pState;
 		WORD left=0, right=0;
+		if(aLeft.refID == 0){
+			return false;
+		}else if(aRight.refID == 0){
+			return true;
+		}
+		/*
+		// 同値の場合はfalseを返さなければならず、
+		// この場合はエラーが発生する
 		if(aRight.refID == 0){
 			return true;
 		}else if(aLeft.refID == 0){
 			return false;
 		}
+		*/
 		pState = d_battleState.GetBattleState(aRight.refID);
 		if(pState == NULL){
 			return true;
@@ -28,17 +37,17 @@ bool Game_BattleState::SortByCalc(
 			return false;
 		}
 		left = pState->GetCalcOrder();
-		return left > right;
+		return (left > right);
 }
 
 bool Game_BattleState::SortByDraw(
 	const Game_BattleState& aLeft, const Game_BattleState& aRight){
 		Data_BattleState_Each* pState;
 		WORD left=0, right=0;
-		if(aRight.refID == 0){
-			return true;
-		}else if(aLeft.refID == 0){
+		if(aLeft.refID == 0){
 			return false;
+		}else if(aRight.refID == 0){
+			return true;
 		}
 		pState = d_battleState.GetBattleState(aRight.refID);
 		if(pState == NULL){
@@ -50,7 +59,7 @@ bool Game_BattleState::SortByDraw(
 			return false;
 		}
 		left = pState->GetDrawOrder();
-		return left > right;
+		return (left > right);
 }
 
 
@@ -66,6 +75,7 @@ void Game_BattleUnit::Reset(int n){
 	attr = DOLL_ATTR_NONE;
 	isFront = true;
 	position = n;
+	isUsed = false;
 
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
 		stateArray[n].refID = 0;
@@ -73,6 +83,7 @@ void Game_BattleUnit::Reset(int n){
 }
 
 bool Game_BattleUnit::CanAct(){
+	if(!isUsed) return false;
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
 		if(d_battleState.CheckFlagOfState(stateArray[n].refID, 
 			STATE_FLAG_CANNOT_ACT)){
@@ -86,6 +97,7 @@ bool Game_BattleUnit::CanAct(){
 }
 
 bool Game_BattleUnit::CanTarget(){
+	if(!isUsed) return false;
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
 		if(d_battleState.CheckFlagOfState(stateArray[n].refID, 
 			STATE_FLAG_CANNOT_TARGET)){
@@ -96,6 +108,11 @@ bool Game_BattleUnit::CanTarget(){
 		}
 	}
 	return true;
+}
+
+bool Game_BattleUnit::IsDead(){
+	if(!isUsed) return false;
+	return (CheckIsState(STATE_DEATH) != -1);
 }
 
 int Game_BattleUnit::GetRawParam(BYTE index){
@@ -113,7 +130,14 @@ int Game_BattleUnit::GetCalcParam(BYTE index){
 }
 
 int Game_BattleUnit::GetStateNum(){
-	return 0;
+	// 有効なステートの数を返す。
+	SortStateByCalc();
+	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
+		if(stateArray[n].refID == 0){
+			return n;
+		}
+	}
+	return BATTLEUNIT_STATE_MAX;
 }
 
 // ステートを優先度順に並べ替える。
@@ -215,4 +239,14 @@ bool Game_BattleUnit::Damage(int d){
 		return false;
 	}
 	return true;
+}
+
+bool Game_BattleUnit::CheckDie(){
+	// 既に戦闘不能か否か
+	if(CheckIsState(STATE_DEATH) != -1) return false;
+	// HPが0以下の時は戦闘不能を適用
+	if(param[BATTLEUNIT_PARAM_HP] <= 0){
+		return true;
+	}
+	return false;
 }

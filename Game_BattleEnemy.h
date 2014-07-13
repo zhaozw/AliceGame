@@ -38,6 +38,8 @@ public:
 	void	SetSelfTurn(); // selfTurn値をランダムにセットする
 	void	SetActPattern(ENEMYACTIONPATTERN* pPtn){ pActPattern = pPtn; };
 	ENEMYACTIONPATTERN* GetActPattern(){ return pActPattern; };
+	// このキャラが人形である場合はtrueを返す。
+	virtual bool IsDoll(){ return false; };
 
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
