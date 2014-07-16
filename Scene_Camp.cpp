@@ -140,7 +140,7 @@ int Scene_Camp::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_Camp::Draw(){
+void Scene_Camp::Draw() const{
 	int w; // •`‰æ‚·‚é•¶š‚Ì•
 
 	// ƒƒjƒ…[‚Ì•¶š

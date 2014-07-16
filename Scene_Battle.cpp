@@ -8,10 +8,13 @@
 #include "DXInput.h"
 #include "KeyConfig.h"
 
+#include "MyTask_InfoEffect.h"
+
 extern TempData		g_temp;
 extern DXFont		g_font;
 extern DXInput		g_input;
 extern KeyConfig	g_key;
+extern MyGroup*		gMyTask_InfoEffect;
 
 Scene_Battle::Scene_Battle():Scene_Base(){
 	phaze = PRE_BATTLE;
@@ -58,6 +61,9 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 	if(!SetupSprite()){
 		return false;
 	}
+
+	// タスクグループの初期化
+	gMyTask_InfoEffect->DeleteAllTask();
 	return true;
 
 }
@@ -81,6 +87,14 @@ int Scene_Battle::Update(){
 		}	
 	}
 
+	// タスクを発生させるテスト
+	if(sceneTime % 120 == 60){
+		MyTask* pTask = gMyTask_InfoEffect->Call();
+		if(pTask!=NULL){
+			new (pTask) MyTask_InfoEffect(GetRand(200), GetRand(200), 0, 0, 0);
+		}
+	}
+
 	// 戦闘終了の判断
 	if(phaze == END_BATTLE){
 		ReserveScene(GetNextScene(), 60);
@@ -92,10 +106,14 @@ int Scene_Battle::Update(){
 void Scene_Battle::UpdateObjects(){
 	// バトルメッセージウィンドウのアップデート
 	w_battleMsg.UpdateA();
+	// 各コマンドウィンドウのアップデート
 	w_aliceCommand.UpdateA();
 	w_dollCommand.UpdateA();
 	w_selectEnemy.UpdateA();
 	w_focusedEnemy.UpdateA();
+
+	// エフェクトのアップデート
+	Update_MyTask_InfoEffect();
 }
 
 bool Scene_Battle::CheckBattleResult(){
@@ -150,7 +168,7 @@ bool Scene_Battle::AttachDollPtrToSprite(){
 }
 
 
-void Scene_Battle::Draw(){
+void Scene_Battle::Draw() const{
 	// スプライトの描画
 	DrawDollsSprite();
 	DrawEnemiesSprite();
@@ -161,6 +179,9 @@ void Scene_Battle::Draw(){
 	w_dollCommand.Draw();
 	w_selectEnemy.Draw();
 	w_focusedEnemy.Draw();
+
+	// エフェクトの描画
+	Draw_MyTask_InfoEffect();
 
 	// フェードの描画
 	ResetDrawARGB();

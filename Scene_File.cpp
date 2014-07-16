@@ -186,7 +186,7 @@ int Scene_File::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_File::Draw(){
+void Scene_File::Draw() const{
 	// ï`âÊâ¬î\îÕàÕÇÃê›íË
 	SetDrawArea(
 		0, DRAW_FILE_BASEY-5,
@@ -282,7 +282,7 @@ void Scene_File::DrawEmptyFile(int x, int y, BYTE index,
 			g_font.hInfo, 0, 0);
 }
 
-void Scene_File::DrawSelectedFile(int x, int y, BYTE index){
+void Scene_File::DrawSelectedFile(int x, int y, BYTE index) const{
 	DrawBox(x, y, x+DRAW_SELECTED_WIDTH, y+DRAW_SELECTED_HEIGHT,
 		GetColor(255, 255, 255), 0);
 }

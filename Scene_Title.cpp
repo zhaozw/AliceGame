@@ -66,7 +66,7 @@ int Scene_Title::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_Title::Draw(){
+void Scene_Title::Draw() const{
 	TCHAR menuString[MAX_TITLE_MENU][64] = {
 		_T("‚Í‚¶‚ß‚©‚ç"),
 		_T("‚Â‚Ã‚«‚©‚ç"),

@@ -69,7 +69,7 @@ int Scene_DollBirth::Update(){
 
 }
 
-void Scene_DollBirth::Draw(){
+void Scene_DollBirth::Draw() const{
 	float exRate = 0.7;
 	switch(state){
 	case SCNSTATE_DOLLBIRTH_DOLLAPPEAR:

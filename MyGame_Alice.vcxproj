@@ -116,6 +116,7 @@
     <ClCompile Include="Game_BattleUnit.cpp" />
     <ClCompile Include="Game_DollList.cpp" />
     <ClCompile Include="Game_FileHeader.cpp" />
+    <ClCompile Include="MyTask_BaseEffect.cpp" />
     <ClCompile Include="Game_UnitCommand.cpp" />
     <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -124,6 +125,8 @@
     <ClCompile Include="MyFiles.cpp" />
     <ClCompile Include="MyTask.cpp" />
     <ClCompile Include="MyTaskList.cpp" />
+    <ClCompile Include="MyTask_InfoEffect.cpp" />
+    <ClCompile Include="MyTask_ObjectEffect.cpp" />
     <ClCompile Include="MyTask_Sample.cpp" />
     <ClCompile Include="Player_Sample.cpp" />
     <ClCompile Include="Scene_Base.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="Sprite_Base.cpp" />
     <ClCompile Include="Sprite_BattleDoll.cpp" />
     <ClCompile Include="Sprite_BattleEnemy.cpp" />
+    <ClCompile Include="Sprite_Base_Morph.cpp" />
     <ClCompile Include="TempData.cpp" />
     <ClCompile Include="WindowSkin.cpp" />
     <ClCompile Include="WindowSkin_AttachImage.cpp" />
@@ -179,6 +183,9 @@
     <ClInclude Include="Game_BattleEnemy.h" />
     <ClInclude Include="Game_BattleUnit.h" />
     <ClInclude Include="Game_DollList.h" />
+    <ClInclude Include="MyTask_BaseEffect.h" />
+    <ClInclude Include="MyTask_InfoEffect.h" />
+    <ClInclude Include="MyTask_ObjectEffect.h" />
     <ClInclude Include="Game_UnitCommand.h" />
     <ClInclude Include="Scene_Battle.h" />
     <ClInclude Include="Scene_TestBattle.h" />

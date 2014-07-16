@@ -55,7 +55,7 @@ public:
 	// 計算処理
 	virtual int Update()=0;
 	// 描画処理
-	virtual void Draw()=0;
+	virtual void Draw() const =0;
 	
 	// 次シーンの予約
 	void ReserveScene(int sceneID, int count=1){
@@ -107,8 +107,8 @@ public:
 		}
 	};
 	// アクセサ
-	int GetAnimeCount(){ return animeCount; };
-	int GetAnimeTime(){ return animeTime; };
+	int GetAnimeCount() const{ return animeCount; };
+	int GetAnimeTime() const{ return animeTime; };
 	int GetAnimeEnded(){ return anime == SCNANIME_NONE; };
 };
 

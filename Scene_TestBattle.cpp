@@ -40,7 +40,7 @@ int Scene_TestBattle::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_TestBattle::Draw(){
+void Scene_TestBattle::Draw() const{
 	TCHAR	battleTitle[MAX_TESTBATTLE][128] = {
 		_T("テスト"), 
 		_T("テスト"), 

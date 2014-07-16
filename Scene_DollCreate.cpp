@@ -146,7 +146,7 @@ int Scene_DollCreate::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_DollCreate::Draw(){
+void Scene_DollCreate::Draw() const{
 	for(int g=0; g<DOLL_GROUP_NUM; g++){
 		DrawEachGroup(50+0, 30+(EACHGROUP_HEIGHT+EACHGROUP_MARGIN)*g, g+1,
 			s_group.index == g);
@@ -181,7 +181,7 @@ void Scene_DollCreate::Draw(){
 	DrawAccount();
 }
 
-void Scene_DollCreate::DrawEachGroup(int x, int y, BYTE group, bool focused){
+void Scene_DollCreate::DrawEachGroup(int x, int y, BYTE group, bool focused) const{
 	int n=0;
 	DrawBox(x, y, x+EACHGROUP_WIDTH, y+EACHGROUP_HEIGHT,
 		focused ? GetColor(255, 255, 255) : GetColor(64, 64, 64), 0);
@@ -210,7 +210,7 @@ void Scene_DollCreate::DrawEachGroup(int x, int y, BYTE group, bool focused){
 	}
 }
 
-void Scene_DollCreate::DrawAttrStones(){
+void Scene_DollCreate::DrawAttrStones() const{
 	for(int n=0; n<DOLL_ATTRSTONE_CREATE; n++){
 		DrawAttrStone(
 			DRAW_DOLL_CENTER_X + 100*(n-1),
@@ -218,11 +218,11 @@ void Scene_DollCreate::DrawAttrStones(){
 	}
 }
 
-void Scene_DollCreate::DrawAttrStoneFocus(int x, int y){
+void Scene_DollCreate::DrawAttrStoneFocus(int x, int y) const{
 	DrawBox(x, y, x+3*SIZE_ATTRICON, y+NUMBER_I_HEIGHT, GetColor(255,255,255), 0);
 }
 
-void Scene_DollCreate::DrawAccount(){
+void Scene_DollCreate::DrawAccount() const{
 	const TCHAR acc[][128] = {
 		_T("作成する人形の種類を選択して下さい"),
 		_T("人形に使用する宝石のかけらを3つ選んで下さい"),

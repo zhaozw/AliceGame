@@ -54,7 +54,7 @@ public:
 	// 更新処理
 	virtual int Update();
 	// 描画処理
-	virtual void Draw();
+	virtual void Draw() const;
 
 	// 基準位置を指定してセーブファイルの内容を描画する
 	void DrawSaveFile(int x, int y, BYTE index,
@@ -63,7 +63,7 @@ public:
 	void DrawEmptyFile(int x, int y, BYTE index,
 		bool isActive, bool canSelect) const;
 	// 基準位置を指定して詳細なファイルの内容を描画する
-	void DrawSelectedFile(int x, int y, BYTE index);
+	void DrawSelectedFile(int x, int y, BYTE index) const;
 
 };
 

@@ -26,7 +26,7 @@ public:
 	// XVˆ—
 	virtual int Update();
 	// •`‰æˆ—
-	virtual void Draw();
+	virtual void Draw() const;
 
 };
 

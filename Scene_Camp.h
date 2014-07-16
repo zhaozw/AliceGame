@@ -56,7 +56,7 @@ public:
 	// XVˆ—
 	virtual int Update();
 	// •`‰æˆ—
-	virtual void Draw();
+	virtual void Draw() const;
 
 	// ‰æ–Ê‰º‚Éî•ñ‚ğ—¬‚·B
 	void SetInfo(BYTE index){

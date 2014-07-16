@@ -33,6 +33,6 @@ bool Player_Sample::Update(){
 	return true;
 }
 
-void Player_Sample::Draw(){
+void Player_Sample::Draw() const{
 	DrawBox(x-2, y-2, x+2, y+2, GetColor(0, 255, 255), 1);
 }

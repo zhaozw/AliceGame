@@ -62,7 +62,7 @@ int Scene_Sample::Update(){
 	return SCENE_NONE;
 }
 
-void Scene_Sample::Draw(){
+void Scene_Sample::Draw() const{
 	// “¾“_‚Ì•`‰æ
 	DrawBox(0, WND_HEIGHT-20, g_dat.score, WND_HEIGHT-15, GetColor(132, 132, 132), 1);
 

@@ -73,9 +73,6 @@
     <Filter Include="ヘッダー ファイル\Header_System\Header_Utility">
       <UniqueIdentifier>{352f07ef-fe70-4598-8d86-cab88f5a394b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Header_System\Header_Tool">
-      <UniqueIdentifier>{dffacc7e-91b2-4bea-80ed-2dd4ec2f4343}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Header_System\Header_Resource">
       <UniqueIdentifier>{f00e4ee4-fd0e-4c28-b5bc-68a981fdb329}</UniqueIdentifier>
     </Filter>
@@ -120,6 +117,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Header_Battle\BHeader_Sprite">
       <UniqueIdentifier>{99f865f6-98b1-467d-a540-94e0197b3a0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Header_System\Header_Tool">
+      <UniqueIdentifier>{dffacc7e-91b2-4bea-80ed-2dd4ec2f4343}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -338,6 +338,18 @@
     </ClCompile>
     <ClCompile Include="Data_StateMessage.cpp">
       <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_InfoEffect.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_BaseEffect.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_ObjectEffect.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite_Base_Morph.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -559,6 +571,15 @@
     </ClInclude>
     <ClInclude Include="Window_BattleMessage.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask_InfoEffect.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask_BaseEffect.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask_ObjectEffect.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ class Player_Sample{
 public:
 	Player_Sample();
 	bool Update();
-	void Draw();
+	void Draw() const;
 
 	float GetX(){ return x; };
 	float GetY(){ return y; };

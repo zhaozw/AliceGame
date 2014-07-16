@@ -60,6 +60,8 @@
 // Œã‚ÅÁ‚·
 #include "GlobalData.h"
 
+
+
 // ƒOƒ[ƒoƒ‹•Ï”‚ÌéŒ¾
 Image		g_image;
 Sound		g_sound;

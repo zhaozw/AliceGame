@@ -100,7 +100,7 @@ public:
 	// 更新処理
 	virtual int Update();
 	// 描画処理
-	virtual void Draw();
+	virtual void Draw() const;
 
 	//=========================================
 	// シーン全体の制御

@@ -41,20 +41,20 @@ public:
 	// 更新処理
 	virtual int Update();
 	// 描画処理
-	virtual void Draw();
+	virtual void Draw() const;
 
 
 	// 各タイプについての情報を描画する。
-	void DrawEachGroup(int x, int y, BYTE group, bool focused);
+	void DrawEachGroup(int x, int y, BYTE group, bool focused) const;
 
 	// 各stateの説明を描画する。
-	void DrawAccount();
+	void DrawAccount() const;
 	
 	// 属性の宝石を描画する。
-	void DrawAttrStones();
+	void DrawAttrStones() const;
 
 	// 宝石選択時の枠を描画する。
-	void DrawAttrStoneFocus(int x, int y);
+	void DrawAttrStoneFocus(int x, int y) const;
 
 	// 属性の宝石のセットをリセットする。
 	void ResetAttrStones();

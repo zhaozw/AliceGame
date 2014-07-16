@@ -5,6 +5,7 @@
 
 // 使用しているタスクのヘッダファイルを列挙
 #include "MyTask_Sample.h"
+#include "MyTask_InfoEffect.h"
 
 // 特殊なファイル。
 // 使用するMyGroupへのポインタ(グローバル変数)を宣言する。
@@ -15,12 +16,14 @@
 // MyTask_Sampleクラス
 // 削除して構わない。
 MyGroup* gMyTask_Sample;
+// 情報系のエフェクトを表示するクラス。
+MyGroup* gMyTask_InfoEffect;
 
 bool Create_MyTaskList(){
 	// MyTask_Sampleクラス
 	// 削除して構わない。
 	gMyTask_Sample = NEW MyGroup(sizeof(MyTask_Sample), 20);
-
+	gMyTask_InfoEffect = NEW MyGroup(sizeof(MyTask_InfoEffect), 100);
 	return true;
 }
 
@@ -29,6 +32,8 @@ bool Release_MyTaskList(){
 	// MyTask_Sampleクラス
 	// 削除して構わない(上とセットで削除すること！)
 	if(!ReleaseMyTaskGroup(gMyTask_Sample)) isOK = false;
+	
+	if(!ReleaseMyTaskGroup(gMyTask_InfoEffect)) isOK = false;
 
 	// 
 	return isOK;
