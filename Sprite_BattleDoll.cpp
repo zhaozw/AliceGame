@@ -17,10 +17,12 @@ Sprite_BattleDoll::Sprite_BattleDoll(){
 	height		=	SPRITE_BATTLEDOLL_HEIGHT;
 }
 
-void Sprite_BattleDoll::Update(){
-}
-
 #define BATTLEDOLL_HPGAUGE_HEIGHT	12
+
+void Sprite_BattleDoll::Update(){
+	// 
+	Sprite_Base::Update();
+}
 
 void Sprite_BattleDoll::Draw() const{
 	TCHAR	hpStr[16];

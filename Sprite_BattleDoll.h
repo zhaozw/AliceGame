@@ -45,6 +45,8 @@ public:
 	};
 	// 人形へのポインタを渡す
 	void SetDollPtr(Game_BattleDoll* p){ pDoll = p; enabled = true; };
+	// 人形へのポインタを返す
+	Game_BattleDoll*  GetDollPtr(){ return (enabled ? pDoll : NULL); };
 	// ポインタを外す
 	void ResetDollPtr(){ pDoll = NULL; enabled = false; };
 

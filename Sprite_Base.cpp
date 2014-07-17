@@ -25,11 +25,10 @@ void Sprite_Base::Update(){
 	// 時間を進める
 	if(GetMorphing()){
 		morphCount++;
-		if(morphCount >= morphCount){
+		if(morphCount > morphTime){
 			ResetMorph();
 		}
 	}
-
 	// 各morphごとの更新
 	UpdateMorph();
 }

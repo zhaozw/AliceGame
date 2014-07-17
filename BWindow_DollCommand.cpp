@@ -4,6 +4,7 @@
 #include "WindowSkin.h"
 #include "DXFont.h"
 #include "Scene_Battle.h"
+#include "Sprite_BattleDoll.h"
 
 extern WindowSkins			g_wndSkins;
 extern DXFont				g_font;
@@ -162,4 +163,13 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 		break;
 	}
 	return true;
+}
+
+BYTE BWindow_DollCommand::Close(bool force, bool sudden){
+	Sprite_BattleDoll* pSprite=NULL;
+	if(pScene != NULL){
+		pSprite = pScene->GetDollSprite(pActor);
+		pSprite->SetMorphID(SPMORPH_DISACTIVATE, true);
+	}
+	return Window_Base::Close();
 }

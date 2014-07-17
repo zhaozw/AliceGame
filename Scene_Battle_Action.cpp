@@ -2,6 +2,10 @@
 
 #include "Scene_Battle.h"
 #include <string.h>
+#include "MyTask_InfoEffect.h"
+#include "Static_InfoEffect.h"
+
+extern MyGroup* gMyTask_InfoEffect;
 
 bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	if(pAction == NULL){ // アクションが不適切な場合
@@ -38,6 +42,9 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 }
 
 bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
+	Sprite_Base* pSprite = NULL;
+	MyTask* pTask = NULL;
+	int x=0, y=0;
 	// ダメージをメッセージウィンドウに表示する
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	TCHAR nameBuf[BATTLEUNIT_NAME_BYTES];
@@ -54,6 +61,32 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	AddStockMessage(buf);
 	// ダメージを適用する
 	pAction->GetOpponent()->Damage(pAction->GetParam());
+	// ダメージの数値を表示する
+	if(pAction->GetOpponent()->IsDoll()){
+	}else{
+		// 位置を取得
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pTask = gMyTask_InfoEffect->Call();
+			if(pTask!=NULL){
+				new (pTask) MyTask_InfoEffect(
+					pSprite->GetIX(), pSprite->GetIY(),
+					INFO_DAMAGENUM_ENEMY, pAction->GetParam(), 0);
+			}
+		}
+	}
+	// スプライトに対する処理を行う
+	if(pAction->GetOpponent()->IsDoll()){
+	}else{
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_BLINK, false, 8);
+		}
+	}
+
+	
 	return true;
 }
 

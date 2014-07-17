@@ -189,6 +189,15 @@ public:
 	// 敵キャラ一体のポインタをランダムで返す。
 	Game_BattleEnemy*	GetRandomEnemyPtr();
 
+	// 人形へのポインタを渡すと、
+	// その人形のスプライトのポインタを返す。
+	Sprite_BattleDoll* GetDollSprite(Game_BattleDoll* dollPtr);
+
+	// 敵へのポインタを渡すと、
+	// その敵のスプライトのポインタを返す。
+	Sprite_BattleEnemy* GetEnemySprite(Game_BattleEnemy* enemyPtr);
+
+
 
 
 	// 各種ウィンドウを開く。

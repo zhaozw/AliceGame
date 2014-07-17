@@ -126,6 +126,7 @@
     <ClCompile Include="MyTask.cpp" />
     <ClCompile Include="MyTaskList.cpp" />
     <ClCompile Include="MyTask_InfoEffect.cpp" />
+    <ClCompile Include="MyTask_InfoEffect_Draw.cpp" />
     <ClCompile Include="MyTask_ObjectEffect.cpp" />
     <ClCompile Include="MyTask_Sample.cpp" />
     <ClCompile Include="Player_Sample.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Static_BattleUnit.h" />
     <ClInclude Include="Static_CompileMode.h" />
     <ClInclude Include="Static_Game.h" />
+    <ClInclude Include="Static_InfoEffect.h" />
     <ClInclude Include="TempData.h" />
     <ClInclude Include="VectorList.h" />
     <ClInclude Include="WindowSkin.h" />

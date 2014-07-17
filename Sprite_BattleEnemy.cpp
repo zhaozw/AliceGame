@@ -19,6 +19,8 @@ Sprite_BattleEnemy::Sprite_BattleEnemy(){
 	cx = cy = 0;
 	baseExRate = 0;
 	hImg = 0;
+	enabled = false;
+	visible = false;
 }
 
 bool Sprite_BattleEnemy::AttachBattleEnemy(Game_BattleEnemy* _pEnemy){
@@ -31,6 +33,9 @@ bool Sprite_BattleEnemy::AttachBattleEnemy(Game_BattleEnemy* _pEnemy){
 	UpdateRefID();
 	// 描画位置をセットする
 	SetPos((float)pEnemy->GetDrawX(), (float)pEnemy->GetDrawY());
+	// 有効に
+	enabled = true;
+	visible = true;
 	return true;
 }
 
@@ -60,16 +65,26 @@ void Sprite_BattleEnemy::Update(){
 	if(pEnemy->GetDataID() != refID){
 		UpdateRefID();
 	}
+
+	Sprite_Base::Update();
 }
 
 void Sprite_BattleEnemy::Draw() const{
 	if(refID == 0) return;
 	if(hImg == 0) return;
 	if(pEnemy == NULL) return;
-	// 本体の描画
-	DrawRotaGraph2F(GetX(), GetY(), cx, cy, baseExRate, 0, hImg, 1, 0);
-	// HPの描画
-	DrawHPGauge((int)GetX(), (int)GetY());
+	// 透明度
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, param.opacity);
+	if(visible){
+		// 表示状態の判定
+		if(!param.hide){
+			// 本体の描画
+			DrawRotaGraph2F(GetX(), GetY(), cx, cy, baseExRate, 0, hImg, 1, 0);
+		}
+		// HPの描画
+		DrawHPGauge((int)GetX(), (int)GetY());
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
 
 #define BATTLEENEMY_HPGAUGE_WIDTH	120

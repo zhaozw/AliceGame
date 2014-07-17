@@ -62,6 +62,9 @@ public:
 	// Scene_Battleクラスのアクションスタックに内容を追加する。
 	bool SetCommandAndClose();
 
+	// ウィンドウを閉じる関数の上書き
+	virtual BYTE Close(bool force=false, bool sudden=false);
+
 };
 
 

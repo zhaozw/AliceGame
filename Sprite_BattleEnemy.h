@@ -15,12 +15,16 @@ private:
 	float	cx, cy;	
 	float	baseExRate;	// 基本的な表示倍率
 	int		hImg;		// 画像のハンドル
+	bool	enabled;	// 有効なスプライトか否か
 public:
 	// コンストラクタ
 	Sprite_BattleEnemy();
 
 	// 敵の情報を元に割り当て
 	bool	AttachBattleEnemy(Game_BattleEnemy* _pEnemy);
+
+	// 人形へのポインタを返す
+	Game_BattleEnemy* GetEnemyPtr(){ return (enabled ? pEnemy : NULL); };
 
 	// 敵のrefIDが変わった時に描画を変更する。
 	// Update内から自動で呼び出される。

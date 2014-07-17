@@ -9,6 +9,8 @@
 #include "KeyConfig.h"
 
 #include "MyTask_InfoEffect.h"
+#include "Game_BattleUnit.h"
+#include "Game_BattleDoll.h"
 
 extern TempData		g_temp;
 extern DXFont		g_font;
@@ -88,12 +90,14 @@ int Scene_Battle::Update(){
 	}
 
 	// タスクを発生させるテスト
+	/*
 	if(sceneTime % 120 == 60){
 		MyTask* pTask = gMyTask_InfoEffect->Call();
 		if(pTask!=NULL){
 			new (pTask) MyTask_InfoEffect(GetRand(200), GetRand(200), 0, 0, 0);
 		}
 	}
+	*/
 
 	// 戦闘終了の判断
 	if(phaze == END_BATTLE){
@@ -114,6 +118,14 @@ void Scene_Battle::UpdateObjects(){
 
 	// エフェクトのアップデート
 	Update_MyTask_InfoEffect();
+
+	// スプライトのアップデート
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		s_dolls[n].Update();
+	}
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		s_enemies[n].Update();
+	}
 }
 
 bool Scene_Battle::CheckBattleResult(){
@@ -277,12 +289,37 @@ Game_BattleEnemy* Scene_Battle::GetRandomEnemyPtr(){
 	return pEnemies[GetRand(index-1)];
 }
 
+Sprite_BattleDoll* Scene_Battle::GetDollSprite(Game_BattleDoll* pDoll){
+	if(pDoll == NULL) return NULL;
+	Game_BattleDoll* refDoll = NULL;
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		refDoll = s_dolls[n].GetDollPtr();
+		if(refDoll == pDoll){
+			return &s_dolls[n];
+		}
+	}
+	return NULL;
+}
+
+Sprite_BattleEnemy* Scene_Battle::GetEnemySprite(Game_BattleEnemy* pEnemy){
+	if(pEnemy == NULL) return NULL;
+	Game_BattleEnemy* refEnemy = NULL;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		refEnemy = s_enemies[n].GetEnemyPtr();
+		if(refEnemy == pEnemy){
+			return &s_enemies[n];
+		}
+	}
+	return NULL;
+}
 
 BYTE Scene_Battle::OpenSelectEnemyWindow(){
 	return w_selectEnemy.Open();
 }
 
 bool Scene_Battle::CheckNextAction(){
+	Game_BattleDoll* pDoll = NULL;
+	Game_BattleEnemy* pEnemy = NULL;
 	switch(phaze){
 	case BEFORE_BATTLE:
 		// すぐさま次のフェイズに移行する
@@ -319,8 +356,14 @@ bool Scene_Battle::CheckNextAction(){
 				return true;
 			}else{
 				// 戦闘可能な人形についてコマンド選択画面を開く
-				if(GetDollPtr(GetFrontIndex(currentIndex))->CanTarget()){
-					w_dollCommand.OpenWithActor(GetDollPtr(GetFrontIndex(currentIndex)));
+				if(GetDollPtr(GetFrontIndex(currentIndex))->CanAct()){
+					pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+					// ウィンドウを開く
+					w_dollCommand.OpenWithActor(pDoll);
+					// スプライトを前に出す
+					if(GetDollSprite(pDoll)){
+						GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
+					}
 				}
 			}
 		}

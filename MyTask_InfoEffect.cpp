@@ -33,8 +33,18 @@ bool MyTask_InfoEffect::Update(){
 	return MyTask_BaseEffect::Update();
 }
 
-void MyTask_InfoEffect::Draw() const{
-	DrawCircle(x, y, 30, GetColor(255, 0, 0), 1);
+void MyTask_InfoEffect::SetLifeTime(){
+	switch(typeID){
+	case INFO_DAMAGENUM_ENEMY:
+		lifeTime = INFO_DAMAGENUM_ENEMY_LIFETIME;
+		break;
+	case INFO_DAMAGENUM_DOLL:
+		lifeTime = INFO_DAMAGENUM_DOLL_LIFETIME;
+		break;
+	default:
+		lifeTime = 0;
+		break;
+	}
 }
 
 

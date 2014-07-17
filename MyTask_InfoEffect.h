@@ -2,6 +2,7 @@
 #define MYTASK_INFOEEFECT_H
 
 #include "MyTask_ObjectEffect.h"
+#include "Static_InfoEffect.h"
 
 //===============================================
 // 情報系のエフェクト。
@@ -35,6 +36,10 @@ public:
 	// 独自の更新及び描画メソッド
 	virtual bool Update();
 	virtual void Draw() const;
+
+protected:
+	// typeID値に応じたlifeTimeを設定する。
+	void SetLifeTime();
 };
 
 void Update_MyTask_InfoEffect();
