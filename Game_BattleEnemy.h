@@ -6,6 +6,7 @@
 
 #include "Data_EnemyParam.h"
 #include "Game_BattleUnit.h"
+#include "Game_UnitCommand.h"
 
 class Data_EnemyParam_Each;
 
@@ -16,12 +17,11 @@ private:
 	int			selfTurn;			// 敵毎に異なるターン数。戦闘行動の選択に使用する。
 	int			drawX;				// 描画位置
 	int			drawY;
-	ENEMYACTIONPATTERN*		pActPattern;	// 行動パターンへの参照(データベース)
 public: 
 	// コンストラクタ
 	Game_BattleEnemy();
-	// 行動を選択し、行動リストに付け加える。
-	bool ChooseAction();
+	// 行動を選択し、Game_UnitCommandクラスの変数として返す。
+	Game_UnitCommand GetAction();
 	// 描画位置をセットする。
 	void SetDrawPos(int x, int y){ drawX = x; drawY = y; };
 	// データベースであるData_EnemyParamクラスからデータを取り込む。
@@ -36,13 +36,17 @@ public:
 	int		GetSelfTurn(){ return selfTurn; };
 	void	SetSelfTurn(int turn){ selfTurn = turn; };
 	void	SetSelfTurn(); // selfTurn値をランダムにセットする
-	void	SetActPattern(ENEMYACTIONPATTERN* pPtn){ pActPattern = pPtn; };
-	ENEMYACTIONPATTERN* GetActPattern(){ return pActPattern; };
+
 	// このキャラが人形である場合はtrueを返す。
 	virtual bool IsDoll(){ return false; };
 
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
+
+	// データベースを参照し、この敵が取る行動のうち
+	// インデックス値で示した行動を取得する。
+	// 有効な行動でない場合はNULLを返す。
+	ENEMYACTIONPATTERN*		GetActionPatternPtr(int index);
 };
 
 #endif // GAME_BATTLEENEMY_H

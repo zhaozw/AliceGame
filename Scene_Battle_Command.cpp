@@ -216,6 +216,15 @@ char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 		actionStack.Push(action);
 		return 1;
 		break;
+	case ACTIONTYPE_SKILL:
+		action.Clear();
+		action.SetActor(pCmd->GetOwner());
+		action.SetOpponent(pCmd->GetTarget());
+		action.SetParam(pCmd->GetSkillID());
+		action.SetType(Game_BattleAction::TYPE_ASSERTSKILL);
+		actionStack.Push(action);
+		return 1;
+		break;
 	case ACTIONTYPE_GUARD:
 		action.Clear();
 		action.SetActor(pCmd->GetOwner());

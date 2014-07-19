@@ -154,8 +154,6 @@ bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY)
 	enemies[index].SetDrawPos(drawX, drawY);
 	// 経験値
 	enemies[index].SetExp(pEnemyParam->GetExp());
-	// 行動パターン
-	enemies[index].SetActPattern(pEnemyParam->GetActPatternPtr());
 	// その他固定値
 	enemies[index].SetFront(true);
 	enemies[index].SetPosition(index);

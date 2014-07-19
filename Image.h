@@ -35,6 +35,7 @@ typedef struct Image_Chars{
 typedef struct Image_Illust{
 	int doll_group[DOLL_TYPE_MAX];
 	int doll[DOLL_TYPE_MAX][DOLL_ATTR_NUM];
+	int doll_dummy[2];
 }IMAGE_ILLUST;
 
 // “GƒLƒƒƒ‰‚Ì‰æ‘œ‚ğ•Û‚·‚éB

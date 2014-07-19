@@ -215,6 +215,9 @@ bool Scene_Battle::SetupSprite(){
 	for(int i=0; i<NUM_BATTLEDOLL_FRONT; i++){
 		s_dolls[i].SetPosition(i);
 		s_dolls[i].SetVisible(true);
+		if(!s_dolls[i].SetupDrawScreen()){
+			return false;
+		}
 	}
 	if(!AttachDollPtrToSprite()) return false;
 	// 敵スプライト
@@ -320,6 +323,7 @@ BYTE Scene_Battle::OpenSelectEnemyWindow(){
 bool Scene_Battle::CheckNextAction(){
 	Game_BattleDoll* pDoll = NULL;
 	Game_BattleEnemy* pEnemy = NULL;
+	bool flag=false;
 	switch(phaze){
 	case BEFORE_BATTLE:
 		// すぐさま次のフェイズに移行する
@@ -349,21 +353,46 @@ bool Scene_Battle::CheckNextAction(){
 		// ウィンドウが閉じていて、かつインデックスが
 		// 終了状態であれば次へ
 		while(w_dollCommand.GetState() == Window_Base::CLOSED){
-			// 現在何番目の人形のコマンドを選択しているか(最初は0)
-			currentIndex++;
-			// 全ての人形のコマンドを終えたら次へ
-			if(currentIndex >= NUM_BATTLEDOLL_FRONT){
-				return true;
+			if(w_dollCommand.GetCommandIndex() != -1){
+				// 現在何番目の人形のコマンドを選択しているか(最初は0)
+				currentIndex++;
+				// 全ての人形のコマンドを終えたら次へ
+				if(currentIndex >= NUM_BATTLEDOLL_FRONT){
+					return true;
+				}else{
+					// 戦闘可能な人形についてコマンド選択画面を開く
+					if(GetDollPtr(GetFrontIndex(currentIndex))->CanAct()){
+						pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+						// ウィンドウを開く
+						w_dollCommand.OpenWithActor(pDoll,
+							GetCommandWindowIsCancelable(currentIndex));
+						// スプライトを前に出す
+						if(GetDollSprite(pDoll)){
+							GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
+						}
+					}
+				}
 			}else{
+				// キャンセルした場合
+				currentIndex--;
 				// 戦闘可能な人形についてコマンド選択画面を開く
 				if(GetDollPtr(GetFrontIndex(currentIndex))->CanAct()){
 					pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+					// コマンドを一つリセットする
+					RemoveOneCommand();
 					// ウィンドウを開く
-					w_dollCommand.OpenWithActor(pDoll);
+					w_dollCommand.OpenWithActor(pDoll,
+						GetCommandWindowIsCancelable(currentIndex));
 					// スプライトを前に出す
 					if(GetDollSprite(pDoll)){
 						GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
 					}
+				}
+				// 何かエラーがあった場合
+				if(currentIndex < 0){
+					currentIndex = -1;
+					// ウィンドウの異常を元に戻す
+					w_dollCommand.Refresh();
 				}
 			}
 		}

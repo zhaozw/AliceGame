@@ -162,6 +162,9 @@ bool Image::Load_Illust(){
 		}
 	}
 
+	// ダミー人形イラストの読み込み
+	LoadDivGraph(_T("img\\doll_dummy.png"), 2, 2, 1, 512, 512, illust.doll_dummy);
+
 	return true;
 }
 

@@ -21,6 +21,10 @@
 // 正確には、この状態になった瞬間一回消え、その後また出てくる。
 // param値 = 消えるフレーム数
 #define		SPMORPH_BLINK			4
+// 一度だけ点滅する。
+// 正確には、この状態になった瞬間一回消え、その後また出てくる。
+// param値 = 消えるフレーム数
+#define		SPMORPH_DAMAGE_DOLL		5
 
 
 // param.effectに指定される定数群
@@ -170,7 +174,7 @@ protected:
 	int	GetMorphCount() const{ return morphCount; };
 	int GetMorphTime() const{ return morphTime; };
 	float GetMorphRate() const{ return (float)morphCount/morphTime; };
-	float GetMorphRestRate() const{ return (1.0 - GetMorphRate()); };
+	float GetMorphRestRate() const{ return (1.0f - GetMorphRate()); };
 
 
 

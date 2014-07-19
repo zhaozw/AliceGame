@@ -75,6 +75,16 @@ int	Data_EnemyParam_Each::GetActionPattern(int index, int paramIndex){
 	return 0;
 }
 
+ENEMYACTIONPATTERN* Data_EnemyParam_Each::GetActionPatternPtr(int index){
+	if(index < 0 || index >= MAX_ACTIONPATTERN){
+		return NULL;
+	}
+	if(actionPtn[index].priority == 0){
+		return NULL;
+	}
+	return &actionPtn[index];
+}
+
 void Data_EnemyParam_Each::SetActConditionPattern(
 	int index, int conditionIndex, int type){
 	actionPtn[index].conditionType[conditionIndex] = type;

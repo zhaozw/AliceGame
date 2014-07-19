@@ -22,6 +22,7 @@ public:
 		TYPE_CALLVICTORY,	// 勝利時メッセージ。
 		TYPE_CALLLOSE,		// 敗北時メッセージ。
 		TYPE_ASSERTATTACK,	// 「○○の攻撃！」を表示する
+		TYPE_ASSERTSKILL,	// 各スキルを宣言する
 		TYPE_ASSERTGUARD,	// 「○○は身を守っている！」を表示する
 		TYPE_UNDIFINED,
 	};

@@ -1,5 +1,5 @@
 #ifndef MYTASK_OBJECTEFFECT_H
-#define MYTASK_TOBJECTEEFECT_H
+#define MYTASK_OBJECTEFFECT_H
 
 #include "MyTask_BaseEffect.h"
 

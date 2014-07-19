@@ -7,7 +7,7 @@
 Game_UnitCommand::Game_UnitCommand() : 
 pOwner(NULL), pTarget(NULL), actionType(ACTIONTYPE_NONE), targetType(ACTIONTARGET_NONE),
 isUsed(false){
-
+	Reset();
 }
 
 bool Game_UnitCommand::SortBySpd(
@@ -31,6 +31,7 @@ void Game_UnitCommand::Reset(){
 	actionType = ACTIONTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
 	isUsed = false;
+	skillID = -1;
 }
 
 void Game_UnitCommand::SetEmpty(){

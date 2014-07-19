@@ -38,7 +38,7 @@ void BWindow_DollCommand::MySetup(Scene_Battle* _pScene){
 	Refresh();
 }
 
-void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll){
+void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll, bool _cancelable){
 	TCHAR buf[BATTLEUNIT_NAME_BYTES];
 	pActor = pDoll;
 	pDoll->GetName(buf, BATTLEUNIT_NAME_BYTES);
@@ -46,6 +46,7 @@ void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll){
 	SetTitle(buf);
 	select.index = 0;
 	commandIndex = 0;
+	cancelable = _cancelable;
 	Open();
 }
 
@@ -58,7 +59,8 @@ void BWindow_DollCommand::Refresh(){
 void BWindow_DollCommand::Update(){
 	switch(state){
 	case UPDATING:
-		if(select.CheckKey() == SELECT2D_CHOOSE){
+		switch(select.CheckKey()){
+		case SELECT2D_CHOOSE:
 			switch(GetSelectIndex()){
 			case BWND_DOLLCOMMAND_ATTACK:
 				// 攻撃相手選択ウィンドウを開く
@@ -79,6 +81,14 @@ void BWindow_DollCommand::Update(){
 				SetCommandAndClose();
 				break;
 			}
+			break;
+		case SELECT2D_CANCEL:
+			if(cancelable){
+				// 前の人形に戻る。
+				commandIndex = -1;
+				SetCommandAndClose();
+			}					
+			break;
 		}
 		break;
 	case SUSPENDED:
@@ -159,6 +169,12 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 		cmd.SetTargetType(ACTIONTARGET_NONE);
 		pScene->SetCommand(cmd);
 		state = Window_Base::IDLE;
+		Close();
+		break;
+	case -1:
+		cmd.Reset();
+		state = Window_Base::IDLE;
+		// キャンセルの場合、何もせずに閉じる
 		Close();
 		break;
 	}

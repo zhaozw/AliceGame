@@ -7,7 +7,7 @@
 
 // 味方に対するダメージ表示
 #define INFO_DAMAGENUM_DOLL				2
-#define INFO_DAMAGENUM_DOLL_LIFETIME	30
+#define INFO_DAMAGENUM_DOLL_LIFETIME	36
 
 
 

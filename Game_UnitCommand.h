@@ -18,6 +18,7 @@ private:
 	BYTE						targetType;	// ターゲットのタイプ。
 											// Static_BattleUnit.hに記述される定数。
 	bool						isUsed;		// コマンドにデータが入っているか
+	WORD						skillID;	// スキルのID。
 public:
 	// コンストラクタ
 	Game_UnitCommand();
@@ -38,12 +39,15 @@ public:
 	void SetTarget(Game_BattleUnit* p){ pTarget = p; };
 	void SetActionType(BYTE t){ actionType = t; };
 	void SetTargetType(BYTE t){ targetType = t; };
+	void SetSkillID(WORD i){ skillID = i; };
 	void SetUsed(){ isUsed = true; };
+	
 
 	Game_BattleUnit* GetOwner(){ return pOwner; };
 	Game_BattleUnit* GetTarget(){ return pTarget; };
 	BYTE GetActionType(){ return actionType; };
 	BYTE GetTargetType(){ return targetType; };
+	WORD GetSkillID(){ return skillID; };
 
 	bool IsEmpty() const{ return !isUsed; };
 

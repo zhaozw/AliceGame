@@ -29,6 +29,8 @@ private:
 	int			subIndex;
 	// 選択したターゲットのインデックスを保持する
 	int			targetIndex;
+	// キャンセル可能か否か
+	bool		cancelable;
 public:
 	// コンストラクタ
 	BWindow_DollCommand();
@@ -47,7 +49,7 @@ public:
 	void MySetup(Scene_Battle* _pScene);
 
 	// 実行者を指定してウィンドウを開く
-	void OpenWithActor(Game_BattleDoll* pDoll);
+	void OpenWithActor(Game_BattleDoll* pDoll, bool cancelable);
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。

@@ -4,6 +4,9 @@
 #include <string.h>
 #include "MyTask_InfoEffect.h"
 #include "Static_InfoEffect.h"
+#include "Data_SkillInfo.h"
+
+extern Data_SkillInfo d_skillInfo;
 
 extern MyGroup* gMyTask_InfoEffect;
 
@@ -27,6 +30,9 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	case Game_BattleAction::TYPE_ASSERTATTACK:
 		Action_AssertAttack(pAction);
 		break;
+	case Game_BattleAction::TYPE_ASSERTSKILL:
+		Action_AssertSkill(pAction);
+		break;
 	case Game_BattleAction::TYPE_ASSERTGUARD:
 		Action_AssertGuard(pAction);
 		break;
@@ -43,6 +49,7 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 
 bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	Sprite_Base* pSprite = NULL;
+	Sprite_BattleDoll* pDoll = NULL;
 	MyTask* pTask = NULL;
 	int x=0, y=0;
 	// ダメージをメッセージウィンドウに表示する
@@ -63,6 +70,18 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	pAction->GetOpponent()->Damage(pAction->GetParam());
 	// ダメージの数値を表示する
 	if(pAction->GetOpponent()->IsDoll()){
+		// 位置を取得
+		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pTask = gMyTask_InfoEffect->Call();
+			pDoll = (Sprite_BattleDoll*)pSprite;
+			if(pTask!=NULL){
+				new (pTask) MyTask_InfoEffect(
+					pDoll->GetDollX(), pDoll->GetDollY()+40,
+					INFO_DAMAGENUM_DOLL, pAction->GetParam(), 0);
+			}
+		}
 	}else{
 		// 位置を取得
 		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
@@ -78,6 +97,11 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	}
 	// スプライトに対する処理を行う
 	if(pAction->GetOpponent()->IsDoll()){
+		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_DAMAGE_DOLL, false, 8);
+		}
 	}else{
 		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
 		if(pSprite != NULL){
@@ -129,6 +153,14 @@ bool Scene_Battle::Action_AssertAttack(Game_BattleAction* pAction){
 	// 名前の体裁を整える
 	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, nameBuf);
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("の攻撃！"));
+	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	return true;
+}
+
+bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
+	// メッセージウィンドウに内容を送る
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	d_skillInfo.GetAssertMessage(buf, pAction->GetParam(), pAction->GetActor());
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
 	return true;
 }

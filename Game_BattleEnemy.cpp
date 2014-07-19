@@ -5,6 +5,8 @@
 #include "Game_BattleEnemy.h"
 #include "Data_EnemyParam.h"
 
+extern Data_EnemyParam	d_enemyParam;
+
 Game_BattleEnemy::Game_BattleEnemy() : Game_BattleUnit(){
 	Reset();
 }
@@ -19,7 +21,6 @@ void Game_BattleEnemy::Reset(int n){
 	selfTurn = 0;
 	drawX = 0;
 	drawY = 0;
-	pActPattern = NULL;
 }
 
 void Game_BattleEnemy::LoadFromData(Data_EnemyParam_Each* pData){
@@ -39,8 +40,12 @@ void Game_BattleEnemy::LoadFromData(Data_EnemyParam_Each* pData){
 	}
 }
 
-
-bool Game_BattleEnemy::ChooseAction(){
-	// 行動選択時は毎回データベースを参照する。
-	return true;
+ENEMYACTIONPATTERN*	Game_BattleEnemy::GetActionPatternPtr(int index){
+	Data_EnemyParam_Each* pEnemyParam = NULL;
+	pEnemyParam = d_enemyParam.GetEnemyParam(dataID);
+	if(pEnemyParam != NULL){
+		return pEnemyParam->GetActionPatternPtr(index);
+	}
+	return NULL;
 }
+

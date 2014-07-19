@@ -354,6 +354,15 @@
     <ClCompile Include="MyTask_InfoEffect_Draw.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
     </ClCompile>
+    <ClCompile Include="Data_SkillInfo.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_ParticleEffect.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTask_ParticleEffect_Draw.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -584,7 +593,19 @@
     <ClInclude Include="MyTask_ObjectEffect.h">
       <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
     </ClInclude>
+    <ClInclude Include="Static_Skill.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Static</Filter>
+    </ClInclude>
     <ClInclude Include="Static_InfoEffect.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_SkillInfo.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_ParticleEffect.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTask_ParticleEffect.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
     </ClInclude>
   </ItemGroup>

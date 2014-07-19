@@ -30,7 +30,7 @@
 #define TARGETTYPE_ENEMY_ALL		4	// 敵全体
 #define TARGETTYPE_SELF				5	// 自分
 #define TARGETTYPE_DOLL_HP_MIN		6	// HPの最も少ない人形一体
-#define TARGETTYPE_DOLL_HP_MIN2	7	7	// 最大HPに対するHPの比が最も少ない人形一体
+#define TARGETTYPE_DOLL_HP_MIN2		7	// 最大HPに対するHPの比が最も少ない人形一体
 #define TARGETTYPE_ENEMY_HP_MIN		8	// HPの最も少ない敵一体
 #define TARGETTYPE_ENEMY_HP_MIN2	9	// 最大HPに対するHPの比が最も少ない敵一体
 
@@ -48,7 +48,13 @@
 
 // 常時行う。
 // 漏れを防ぐため、必ずこの条件を持つ行動を1つ以上持っているべき。
-#define CONDITIONTYPE_ALWAYS	0 
+#define CONDITIONTYPE_ALWAYS		0 
+// 行動を行うHPの最大値を規定する。
+// param[0] : HPが(x)%以上の時は行わない。
+#define CONDITIONTYPE_MAX_HP_RATE		1
+// 行動を行うHPの最大値を規定する。
+// param[0] : HPが(x)%以下の時は行わない。
+#define CONDITIONTYPE_MIN_HP_RATE		2
 
 // ターンによる。
 // [0][1] : 戦闘が始まってからのターン数を[0]で割った時の値が[1]であれば行う。
@@ -75,7 +81,8 @@ typedef struct EnemyActionPattern{
 	WORD		actionType;			// 行動の種類。
 	DWORD		skillID;			// 行動が特技である場合、特技ID
 	BYTE		targetType;			// 行動の対象の種類
-	WORD		priority;			// 行動の優先度
+	WORD		priority;			// 行動の優先度。これが0であるということは
+									// 行動が指定されていないということも意味する。
 	// その行動を選択する条件のタイプ
 	WORD		conditionType[MAX_CONDITION];
 	// 条件に関連するパラメータ
@@ -155,6 +162,7 @@ public:
 	// 行動パターンをインデックスで指定
 	void	SetActionPattern(int index, int paramIndex, int value);
 	int		GetActionPattern(int index, int paramIndex);
+	ENEMYACTIONPATTERN*	GetActionPatternPtr(int index);
 	// 行動パターンを直接指定
 	void	SetActionType(int index, WORD type){ actionPtn[index].actionType = type; };
 	void	SetActionSkillID(int index, DWORD skillID){

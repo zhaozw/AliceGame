@@ -260,6 +260,7 @@ public:
 	bool Action_CallVictory();
 	bool Action_CallLose();
 	bool Action_AssertAttack(Game_BattleAction* pAction);
+	bool Action_AssertSkill(Game_BattleAction* pAction);
 	bool Action_AssertGuard(Game_BattleAction* pAction);
 
 	//=========================================
@@ -298,12 +299,30 @@ public:
 	// コマンドを追加する。
 	bool SetCommand(Game_UnitCommand cmd);
 	
+	// コマンドを一つ取り除く。
+	bool RemoveOneCommand();
+
 	// 敵のコマンドを自動で追加する。
 	// 内部でSetEnemyCommandを使用する。
 	bool SetEnemyCommands();
 
+	// 現在アクティブなコマンドウィンドウをキャンセル出来るかを取得する。
+	bool GetCommandWindowIsCancelable(int currentIndex);
+
 	// ポインタを使用し、敵のコマンドを算出する。
 	Game_UnitCommand GetEnemyCommand(Game_BattleEnemy* pEnemy);
+
+	// 指定した敵のあるコマンドの優先順位を返す。
+	// (インデックスに相当するコマンドが存在しない場合、
+	//  また、行動条件を満たさない場合は0を返す。)
+	int GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index);
+
+	// 全ての行動の中で最大の優先度を持つ行動の優先度の値を返す。
+	int GetEnemyCommandMaxPriority(Game_BattleEnemy* pEnemy);
+
+	// 指定した敵のあるコマンドから
+	// 実行するコマンドを作成する。
+	Game_UnitCommand MakeEnemyCommand(Game_BattleEnemy* pEnemy, int index);
 
 	// 戦闘行動のソートを行う。
 	bool SortUnitCommands();

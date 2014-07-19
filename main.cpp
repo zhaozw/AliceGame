@@ -56,6 +56,7 @@
 #include "Data_EnemyDraw.h"
 #include "Data_BattleState.h"
 #include "Data_StateMessage.h"
+#include "Data_SkillInfo.h"
 
 // 後で消す
 #include "GlobalData.h"
@@ -93,6 +94,7 @@ Data_EnemyGroup		d_enemyGroup;
 Data_EnemyDraw		d_enemyDraw;
 Data_BattleState	d_battleState;
 Data_StateMessage	d_stateMessage;
+Data_SkillInfo		d_skillInfo;
 
 int			hDrawWindow;	// 描画用画面のハンドル。
 							// 描画内容はここに描画したものを
@@ -402,6 +404,14 @@ bool WinMain_LoadResource(){
 	if(!d_stateMessage.Load()){
 #ifdef MYGAME_USE_WARN_ERROR
 		MessageBox(NULL, TEXT("ステートメッセージ群の読み込みに失敗しました。"),
+		TEXT("エラー"), MB_OK|MB_ICONWARNING);
+#endif // MYGAME_USE_WARN_INIERROR		
+		return false;
+	}
+
+	if(!d_skillInfo.Load()){
+#ifdef MYGAME_USE_WARN_ERROR
+		MessageBox(NULL, TEXT("スキルメッセージ群の読み込みに失敗しました。"),
 		TEXT("エラー"), MB_OK|MB_ICONWARNING);
 #endif // MYGAME_USE_WARN_INIERROR		
 		return false;

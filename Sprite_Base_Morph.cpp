@@ -3,8 +3,10 @@
 #include "Sprite_Base.h"
 #include "Func_Math.h"
 
-#define SPMORPH_ACTIVATE_TIME	12
-#define SPMORPH_ACTIVATE_VY		20
+#define SPMORPH_ACTIVATE_TIME			12
+#define SPMORPH_ACTIVATE_VY				20
+#define SPMORPH_DAMAGE_DOLL_TIME		30
+#define SPMORPH_DAMAGE_DOLL_SKIPTIME	15
 
 
 bool Sprite_Base::SetMorphID(BYTE id, bool force, int p){
@@ -34,6 +36,10 @@ bool Sprite_Base::SetMorphID(BYTE id, bool force, int p){
 		morphSkipTime = p;
 		morphTime = p;
 		param.param = p;
+		break;
+	case SPMORPH_DAMAGE_DOLL:
+		morphSkipTime = SPMORPH_DAMAGE_DOLL_SKIPTIME;
+		morphTime = SPMORPH_DAMAGE_DOLL_TIME;
 		break;
 	}
 

@@ -33,10 +33,14 @@
 #define ACTIONTYPE_SKILL		4	// 特技
 
 // 行動のターゲットに関する定数
-#define ACTIONTARGET_NONE		0	// ターゲットなし
-#define ACTIONTARGET_DOLL_ONE	1	// 人形一体
-#define ACTIONTARGET_DOLL_ALL	2	// 人形全体
-#define ACTIONTARGET_ENEMY_ONE	3	// 敵一体
-#define ACTIONTARGET_ENEMY_ALL	4	// 敵全体
+#define ACTIONTARGET_NONE			0	// ターゲットなし
+#define ACTIONTARGET_DOLL_ONE		1	// 人形一体
+#define ACTIONTARGET_DOLL_ALL		2	// 人形全体
+#define ACTIONTARGET_ENEMY_ONE		3	// 敵一体
+#define ACTIONTARGET_ENEMY_ALL		4	// 敵全体
+#define ACTIONTARGET_TEAM_ONE		5	// 味方一体(人形なら人形、敵なら敵)
+#define ACTIONTARGET_TEAM_ALL		6	// 味方全体
+#define ACTIONTARGET_OPPONENT_ONE	7	// 相手一体
+#define ACTIONTARGET_OPPONENT_ALL	8	// 相手全体
 
 #endif // STATIC_BATTLEUNIT_H

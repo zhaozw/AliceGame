@@ -99,6 +99,7 @@
     <ClCompile Include="Data_EnemyGroup.cpp" />
     <ClCompile Include="Data_EnemyParam.cpp" />
     <ClCompile Include="Data_EnemySprite.cpp" />
+    <ClCompile Include="Data_SkillInfo.cpp" />
     <ClCompile Include="Data_StateMessage.cpp" />
     <ClCompile Include="DXFont.cpp" />
     <ClCompile Include="DXInput.cpp" />
@@ -128,6 +129,8 @@
     <ClCompile Include="MyTask_InfoEffect.cpp" />
     <ClCompile Include="MyTask_InfoEffect_Draw.cpp" />
     <ClCompile Include="MyTask_ObjectEffect.cpp" />
+    <ClCompile Include="MyTask_ParticleEffect.cpp" />
+    <ClCompile Include="MyTask_ParticleEffect_Draw.cpp" />
     <ClCompile Include="MyTask_Sample.cpp" />
     <ClCompile Include="Player_Sample.cpp" />
     <ClCompile Include="Scene_Base.cpp" />
@@ -176,6 +179,7 @@
     <ClInclude Include="Data_EnemyGroup.h" />
     <ClInclude Include="Data_EnemyParam.h" />
     <ClInclude Include="Data_EnemySprite.h" />
+    <ClInclude Include="Data_SkillInfo.h" />
     <ClInclude Include="Data_StateMessage.h" />
     <ClInclude Include="EnvData.h" />
     <ClInclude Include="Func_Windows.h" />
@@ -188,6 +192,7 @@
     <ClInclude Include="MyTask_InfoEffect.h" />
     <ClInclude Include="MyTask_ObjectEffect.h" />
     <ClInclude Include="Game_UnitCommand.h" />
+    <ClInclude Include="MyTask_ParticleEffect.h" />
     <ClInclude Include="Scene_Battle.h" />
     <ClInclude Include="Scene_TestBattle.h" />
     <ClInclude Include="Selectable2D.h" />
@@ -232,6 +237,8 @@
     <ClInclude Include="Static_CompileMode.h" />
     <ClInclude Include="Static_Game.h" />
     <ClInclude Include="Static_InfoEffect.h" />
+    <ClInclude Include="Static_ParticleEffect.h" />
+    <ClInclude Include="Static_Skill.h" />
     <ClInclude Include="TempData.h" />
     <ClInclude Include="VectorList.h" />
     <ClInclude Include="WindowSkin.h" />
