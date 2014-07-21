@@ -239,6 +239,7 @@
     <ClInclude Include="Static_InfoEffect.h" />
     <ClInclude Include="Static_ParticleEffect.h" />
     <ClInclude Include="Static_Skill.h" />
+    <ClInclude Include="Static_Sprite.h" />
     <ClInclude Include="TempData.h" />
     <ClInclude Include="VectorList.h" />
     <ClInclude Include="WindowSkin.h" />

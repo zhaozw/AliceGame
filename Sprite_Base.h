@@ -3,32 +3,7 @@
 
 #include <Windows.h>
 
-// 主に戦闘画面のスプライトを表示するクラス。
- 
-// morphIDに指定される定数群
-// 動作なし。動き終わった後は自動的にこれになる。
-#define		SPMORPH_NONE			0
-// 消滅する。
-// このアクションの終了後、visible値がfalseになる。
-#define		SPMORPH_DISAPPEAR		1
-// 選択された状態になる。
-// SPMORPH_DISACTIVATEとセットで使う。
-#define		SPMORPH_ACTIVATE		2
-// 選択状態を解除する。
-// SPMORPH_ACTIVATEの後で実行する。
-#define		SPMORPH_DISACTIVATE		3
-// 一度だけ点滅する。
-// 正確には、この状態になった瞬間一回消え、その後また出てくる。
-// param値 = 消えるフレーム数
-#define		SPMORPH_BLINK			4
-// 一度だけ点滅する。
-// 正確には、この状態になった瞬間一回消え、その後また出てくる。
-// param値 = 消えるフレーム数
-#define		SPMORPH_DAMAGE_DOLL		5
-
-
-// param.effectに指定される定数群
-#define		SPEFFECT_NONE			0
+#include "Static_Sprite.h"
 
 // スプライトの考え方
 // スプライト＝動いたり回転したりする画像の板。

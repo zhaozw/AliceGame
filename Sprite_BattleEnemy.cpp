@@ -79,7 +79,10 @@ void Sprite_BattleEnemy::Draw() const{
 		// •\¦ó‘Ô‚Ì”»’è
 		if(!param.hide){
 			// –{‘Ì‚Ì•`‰æ
-			DrawRotaGraph2F(GetX(), GetY(), cx, cy, baseExRate, 0, hImg, 1, 0);
+			DrawRotaGraph3F(
+				GetX(), GetY(), cx, cy,
+				baseExRate*param.xScale, baseExRate*param.yScale,
+				hImg, 1, 0);
 		}
 		// HP‚Ì•`‰æ
 		DrawHPGauge((int)GetX(), (int)GetY());

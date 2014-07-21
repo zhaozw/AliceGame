@@ -608,5 +608,8 @@
     <ClInclude Include="MyTask_ParticleEffect.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
     </ClInclude>
+    <ClInclude Include="Static_Sprite.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Static</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
