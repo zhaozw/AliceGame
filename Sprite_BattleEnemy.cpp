@@ -81,7 +81,7 @@ void Sprite_BattleEnemy::Draw() const{
 			// –{‘Ì‚Ì•`‰æ
 			DrawRotaGraph3F(
 				GetX(), GetY(), cx, cy,
-				baseExRate*param.xScale, baseExRate*param.yScale,
+				baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
 				hImg, 1, 0);
 		}
 		// HP‚Ì•`‰æ
