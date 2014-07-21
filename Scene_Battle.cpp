@@ -89,12 +89,14 @@ int Scene_Battle::Update(){
 		}	
 	}
 
-	// タスクを発生させるテスト
 	/*
+	//##########################################
+	// タスクを発生させるテスト
 	if(sceneTime % 120 == 60){
 		MyTask* pTask = gMyTask_InfoEffect->Call();
 		if(pTask!=NULL){
-			new (pTask) MyTask_InfoEffect(GetRand(200), GetRand(200), 0, 0, 0);
+			new (pTask) MyTask_InfoEffect(
+			GetRand(200), GetRand(200), 0, 0, 0);
 		}
 	}
 	*/
