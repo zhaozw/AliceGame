@@ -13,6 +13,7 @@
 // スキルの列挙
 #define SKILL_WAIT				0	// 様子を見ている
 #define SKILL_ALLRANGE			1	// 全体攻撃
+#define SKILL_LOADOFF_ATTACK	2	// 先制攻撃
 
 
 #endif // STATIC_SKILL_H

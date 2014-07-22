@@ -23,6 +23,7 @@ void Game_BattleEnemy::Reset(int n){
 	drawY = 0;
 }
 
+
 void Game_BattleEnemy::LoadFromData(Data_EnemyParam_Each* pData){
 	// ƒf[ƒ^ID‚ÌŽæ“¾
 	dataID = pData->GetRefID();

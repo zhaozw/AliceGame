@@ -170,7 +170,7 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 				reader.Read();
 				// 一行目
 				tmpEnemy.SetActionPattern(i, 0,
-					(WORD)reader.GetIntValue(0, 0));
+					GetActionTypeFromChar(reader.GetCharacter(0)));
 				tmpEnemy.SetActionPattern(i, 1,
 					(DWORD)reader.GetIntValue(1, 0));
 				tmpEnemy.SetActionPattern(i, 2,
@@ -202,6 +202,25 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 	}
 	return true;
 }
+
+WORD Data_EnemyParam::GetActionTypeFromChar(TCHAR c){
+	switch(c){
+	case 'A':
+		return ACTIONTYPE_ATTACK;
+		break;
+	case 'S':
+		return ACTIONTYPE_SKILL;
+		break;
+	case 'G':
+		return ACTIONTYPE_GUARD;
+		break;
+	case 'W':
+	default:
+		return ACTIONTYPE_NONE;
+		break;
+	}
+}
+
 
 Data_EnemyParam_Each* Data_EnemyParam::GetEnemyParam(WORD _refID){
 	// データベースを参照し、指定するrefIDを持っているものを返す。

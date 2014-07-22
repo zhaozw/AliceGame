@@ -41,7 +41,8 @@ public:
 		ALICE_COMMAND_DO,	// アリスのコマンドを実行
 		DOLLS_COMMAND,		// 人形のコマンドを選択
 		ENEMIES_COMMAND,	// 敵のコマンドを選択（即座に終了する）
-		BEFORE_TURN,		// ターンの最初
+		BEFORE_SORT,		// 素早さソートの前に各コマンドの判定を行う
+		AFTER_SORT,			// ターンの最初（ソートの後）
 		BATTLE_DO,			// 戦闘
 		AFTER_TURN,			// ターン終了時
 		POST_BATTLE,		// 戦闘終了
@@ -137,7 +138,8 @@ public:
 	void SetupAliceCommandDo(); // アリスのコマンドを実行する
 	void SetupDollsCommand();	// 人形のコマンドウィンドウを開く 
 	void SetupEnemiesCommand();	// 敵のコマンドを決定する。(即座に終わる)
-	void SetupBeforeTurn();		// ターン開始時。ステートの判定など。
+	void SetupBeforeSort();		// ソート前のコマンド判定を行う。
+	void SetupAfterSort();		// ソート後、ターン開始時。ステートの判定など。
 	void SetupBattleDo();		// 戦闘。
 	void SetupAfterTurn();		// ターン終了時。ステートの判定など。
 	void SetupPostBattle();		// 戦闘終了時。battleResultの内容によって分岐。
@@ -283,7 +285,8 @@ public:
 	// 何か処理を行った場合はtrueを、
 	// 何も処理を行わなかった場合はfalseを返す。
 	char InterpretCommand_NoPhaze(Game_UnitCommand* pCmd);
-	char InterpretCommand_Start_Turn(Game_UnitCommand* pCmd);
+	char InterpretCommand_Before_Sort(Game_UnitCommand* pCmd);
+	char InterpretCommand_After_Sort(Game_UnitCommand* pCmd);
 	char InterpretCommand_Fix_Command(Game_UnitCommand* pCmd);
 	char InterpretCommand_Fix_Target(Game_UnitCommand* pCmd);
 	char InterpretCommand_Assert(Game_UnitCommand* pCmd);
@@ -347,7 +350,9 @@ public:
 	// pUnit		: 割り当てるユニット
 	// stateRefID	: ステートのID
 	// showMessage	: メッセージを表示するか否か
-	BYTE AddStateToUnit(Game_BattleUnit* pUnit, WORD stateRefID, bool showMessage=true);
+	// level		: ステートレベル
+	BYTE AddStateToUnit(Game_BattleUnit* pUnit, WORD stateRefID,
+		bool showMessage=true, int level=1);
 
 	// ステートのターン経過を処理する。
 	// 一括してターン終了時に行う。

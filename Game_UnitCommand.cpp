@@ -20,8 +20,8 @@ bool Game_UnitCommand::SortBySpd(
 	}
 	// ‚±‚±‚Ü‚Å‚ÅA‚Ç‚¿‚ç‚©‚Ìs“®‚ª‹ó‚Ìê‡‚Ífalse‚©true‚ð•Ô‚µ‚½
 	// Œã‚Í‘f‘‚³“¯Žm‚ð”äŠr
-	int a = aLeft.pOwner->GetSpd();
-	int b = aRight.pOwner->GetSpd();
+	int a = aLeft.pOwner->GetAmendedSpd();
+	int b = aRight.pOwner->GetAmendedSpd();
 	return  a>b;
 };
 

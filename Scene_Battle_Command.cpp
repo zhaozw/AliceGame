@@ -3,6 +3,7 @@
 #include "Scene_Battle.h"
 #include "Game_BattleAction.h"
 #include "Data_BattleState.h"
+#include "Static_Skill.h"
 
 char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
 	if(pCmd == NULL) return -1;
@@ -10,6 +11,12 @@ char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
 	switch(phaze){
 	case COMMANDPHAZE_NOPHAZE:
 		return InterpretCommand_NoPhaze(pCmd);
+		break;
+	case COMMANDPHAZE_BEFORE_SORT:
+		return InterpretCommand_Before_Sort(pCmd);
+		break;
+	case COMMANDPHAZE_AFTER_SORT:
+		return InterpretCommand_After_Sort(pCmd);
 		break;
 	case COMMANDPHAZE_FIX_COMMAND:
 		return InterpretCommand_Fix_Command(pCmd);
@@ -32,9 +39,6 @@ char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
 	case COMMANDPHAZE_POST_ACTION:
 		return InterpretCommand_Post_Action(pCmd);
 		break;
-	case COMMANDPHAZE_START_TURN:
-		return InterpretCommand_Start_Turn(pCmd);
-		break;
 	}
 	return false;
 }
@@ -55,7 +59,34 @@ char Scene_Battle::InterpretCommand_NoPhaze(Game_UnitCommand* pCmd){
 	return 0;
 }
 
-char Scene_Battle::InterpretCommand_Start_Turn(Game_UnitCommand* pCmd){
+char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
+	// 基本的に自分に属性を付加する系のコマンド
+	Game_BattleAction action;
+	if(pCmd == NULL) return false;
+	switch(pCmd->GetActionType()){
+	case ACTIONTYPE_NONE:
+		break;
+	case ACTIONTYPE_ATTACK:
+		break;
+	case ACTIONTYPE_GUARD:
+		break;
+	case ACTIONTYPE_SKILL:
+		switch(pCmd->GetSkillID()){
+		case SKILL_LOADOFF_ATTACK:
+			// 先制攻撃。
+			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
+			break;
+		}
+		break;
+	case ACTIONTYPE_ERROR:
+		return -1;
+		break;
+	}
+	return 0;
+}
+
+
+char Scene_Battle::InterpretCommand_After_Sort(Game_UnitCommand* pCmd){
 	// 基本的に自分に属性を付加する系のコマンド
 	Game_BattleAction action;
 	if(pCmd == NULL) return false;
@@ -132,6 +163,12 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 	case ACTIONTYPE_ATTACK:
 		fixType = FIXTARGET_DIE_CHANGE;
 		break;
+	case ACTIONTYPE_SKILL:
+		switch(pCmd->GetSkillID()){
+		case SKILL_LOADOFF_ATTACK:
+			fixType = FIXTARGET_DIE_CHANGE;
+			break;
+		}
 	case ACTIONTYPE_ERROR:
 		return -1;
 		break;
@@ -279,6 +316,21 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		break;
 	case ACTIONTYPE_GUARD:
 		// 宣言のみで何も行わない
+		break;
+	case ACTIONTYPE_SKILL:
+		switch(pCmd->GetSkillID()){
+		case SKILL_LOADOFF_ATTACK:
+			// 通常攻撃と同様のダメージ判定
+			action.Clear();
+			action.SetActor(pOwner);
+			action.SetOpponent(pTarget);
+			action.SetType(Game_BattleAction::TYPE_DAMAGE);
+			action.ClearFlag();
+			action.SetParam(CalcDamage(pOwner, pTarget, CALCDAMAGE_ATTACK));
+			actionStack.Push(action);
+			return 1;
+			break;
+		}
 		break;
 	case ACTIONTYPE_ERROR:
 		return -1;

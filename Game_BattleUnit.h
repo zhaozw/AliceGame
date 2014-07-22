@@ -115,7 +115,7 @@ public:
 	// 参照番号のステートを追加する。
 	// 戻り値 : ステート付加の結果。
 	//			定数群ADDSTATE_xxxを参照。
-	BYTE AddState(WORD refID);
+	BYTE AddState(WORD refID, int level=1);
 	
 	// 参照番号のステートに罹患している場合、それを解除する。
 	// sort : trueを指定するとステート解除後にソートを行う。
@@ -129,6 +129,10 @@ public:
 	// 見つかった場合は配列のインデックス、
 	// 見つからなかった場合は-1を返す。
 	int CheckIsState(WORD stateRefID);
+	
+	// 指定したrefIDのステートのレベルを返す。
+	// そのステートになっていない場合は0を返す。
+	int	CheckStateLevel(WORD stateRefID);
 	bool IsState(WORD stateRefID){ return CheckIsState(stateRefID)!=-1; };
 
 	// 全てのパラメータをリセットする。
@@ -158,6 +162,10 @@ public:
 	// trueを返した場合、Scene_Battleクラス経由で戦闘不能ステートが
 	// 付加され、またメッセージでそのことが通知される。
 	bool CheckDie();
+
+	// 戦闘行動のソート時の素早さを取得する。
+	// 素早さだけでなく、「先制」「後攻」ステートの素早さ補正も行う。
+	int GetAmendedSpd();
 };
 
 #endif // GAME_BATTLEUNIT_H

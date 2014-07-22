@@ -406,7 +406,14 @@ bool Scene_Battle::CheckNextAction(){
 		}
 		return true;
 		break;
-	case BEFORE_TURN:
+	case BEFORE_SORT:
+		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
+		if(!w_battleMsg.IsReady()){
+			return false;
+		}
+		return true;
+		break;
+	case AFTER_SORT:
 		// 今の所特に処理はなし
 		return true;
 		break;
@@ -474,7 +481,7 @@ bool Scene_Battle::ExecuteAction(){
 		// すぐさま次のフェイズに移行する。
 		return false;
 		break;
-	case BEFORE_TURN:
+	case BEFORE_SORT:
 		// アクションスタックの内容を順に実行する。
 		nextAction = actionStack.Pop();
 		if(nextAction.IsEmpty()){ // 条件2
@@ -491,7 +498,33 @@ bool Scene_Battle::ExecuteAction(){
 					return false;
 				}
 				// コマンドを解釈してアクションスタックに追加
-				if(InterpretCommand(unitCommand, COMMANDPHAZE_START_TURN) == 0){
+				if(InterpretCommand(unitCommand, COMMANDPHAZE_BEFORE_SORT) == 0){
+					// 何も処理を行わなかった場合
+					loop = true;
+				}
+			}while(loop);
+		}else{
+			InterpretAction(&nextAction);
+		}
+		break;
+	case AFTER_SORT:
+		// アクションスタックの内容を順に実行する。
+		nextAction = actionStack.Pop();
+		if(nextAction.IsEmpty()){ // 条件2
+			do{
+				// 永遠ループの防止(ループして戻ってきた時)
+				loop = false;
+				// コマンドリストの内容を順に実行する。
+				// それぞれのコマンドにおいてアクションスタックはリセットされている。
+				// 次のコマンドのインデックスを取得
+				commandIndex++;
+				unitCommand = &commands[commandIndex];
+				// 次のコマンドがない場合は終了する(条件4)
+				if(unitCommand->IsEmpty()){
+					return false;
+				}
+				// コマンドを解釈してアクションスタックに追加
+				if(InterpretCommand(unitCommand, COMMANDPHAZE_AFTER_SORT) == 0){
 					// 何も処理を行わなかった場合
 					loop = true;
 				}
@@ -611,9 +644,12 @@ void Scene_Battle::NextPhaze(){
 		phaze = ENEMIES_COMMAND;
 		break;
 	case ENEMIES_COMMAND:
-		phaze = BEFORE_TURN;
+		phaze = BEFORE_SORT;
 		break;
-	case BEFORE_TURN:
+	case BEFORE_SORT:
+		phaze = AFTER_SORT;
+		break;
+	case AFTER_SORT:
 		phaze = BATTLE_DO;
 		break;
 	case BATTLE_DO:
@@ -653,8 +689,11 @@ void Scene_Battle::NextPhaze(){
 	case ENEMIES_COMMAND:
 		SetupEnemiesCommand();
 		break;
-	case BEFORE_TURN:
-		SetupBeforeTurn();
+	case BEFORE_SORT:
+		SetupBeforeSort();
+		break;
+	case AFTER_SORT:
+		SetupAfterSort();
 		break;
 	case BATTLE_DO:
 		SetupBattleDo();
@@ -734,14 +773,20 @@ void Scene_Battle::SetupDollsCommand(){
 void Scene_Battle::SetupEnemiesCommand(){
 	// 各敵キャラのコマンドをセットする
 	SetEnemyCommands();
-	// コマンドリストをシャッフルする
-	SortUnitCommands();
 }
 
-void Scene_Battle::SetupBeforeTurn(){
+void Scene_Battle::SetupBeforeSort(){
 	// 各キャラクターのステートなどを判定
 	commandIndex = -1;
-	commandPhaze = COMMANDPHAZE_START_TURN;
+	commandPhaze = COMMANDPHAZE_BEFORE_SORT;
+}
+
+void Scene_Battle::SetupAfterSort(){
+	// コマンドリストをシャッフルする
+	SortUnitCommands();
+	// 各キャラクターのステートなどを判定
+	commandIndex = -1;
+	commandPhaze = COMMANDPHAZE_AFTER_SORT;
 }
 
 void Scene_Battle::SetupBattleDo(){

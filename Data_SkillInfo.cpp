@@ -63,6 +63,12 @@ bool Data_SkillInfo::SetSkillData(){
 	assertMessages[SKILL_ALLRANGE].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚ÌUŒ‚I"));
 
+	// æ§UŒ‚
+	strcpy_s(skillName[SKILL_LOADOFF_ATTACK], MAX_SKILL_BYTES-1, _T("æ§UŒ‚"));
+	targetType[SKILL_LOADOFF_ATTACK] = ACTIONTARGET_OPPONENT_ONE;
+	assertMessages[SKILL_LOADOFF_ATTACK].SetSkillMessage(
+		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í•—‚Ì‚æ‚¤‚É‘f‘‚­UŒ‚‚µ‚½I"));
+
 	return true;
 }
 

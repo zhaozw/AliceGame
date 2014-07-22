@@ -198,6 +198,14 @@ public:
 	bool Load();
 	bool LoadDataFromCsv();
 
+	// 文字からアクションタイプに変換する。
+	// A : 攻撃
+	// S : 特技
+	// G : 防御
+	// W, エラー : 何もしない
+	WORD GetActionTypeFromChar(TCHAR c);
+
+
 	// 敵パラメータへのポインタを取得する。
 	// データベースを参照し、指定するrefIDを持っているものを返す。
 	// 該当するものがない場合はNULLを返す。

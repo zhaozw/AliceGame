@@ -153,20 +153,20 @@ void Game_BattleUnit::SortStateByDraw(){
 }
 
 // 参照番号のステートを追加する。
-BYTE Game_BattleUnit::AddState(WORD refID){
+BYTE Game_BattleUnit::AddState(WORD refID, int level){
 	int n=-1;
 	n = CheckIsState(refID);
 	if(n == -1){
 		n = GetStateNum();
 		stateArray[n].refID = refID;
 		stateArray[n].turn = 0;
-		stateArray[n].level = 1;
+		stateArray[n].level = level;
 		SortStateByCalc();
 		return ADDSTATE_SUCCEED;
 	}else{
 		// 重ねがけ可能かどうか
 		if(d_battleState.CheckFlagOfState(refID, STATE_FLAG_CAN_MULTIPLE)){
-			stateArray[n].level++;
+			stateArray[n].level += level;
 			return ADDSTATE_MULTIPLIED;
 		}else{
 			// 既にそのステートになっている
@@ -209,6 +209,15 @@ int Game_BattleUnit::CheckIsState(WORD stateRefID){
 	return -1;
 }
 
+int Game_BattleUnit::CheckStateLevel(WORD stateRefID){
+	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
+		if(stateArray[n].refID == stateRefID){
+			return stateArray[n].level;
+		}
+	}
+	return 0;
+}
+
 bool Game_BattleUnit::SetName(LPTSTR _name, int nameLength){
 	// if(nameLength == -1) nameLength = strlen(name);
 	// if(nameLength > BATTLEUNIT_NAME_BYTES-1) return false;
@@ -249,4 +258,10 @@ bool Game_BattleUnit::CheckDie(){
 		return true;
 	}
 	return false;
+}
+
+int Game_BattleUnit::GetAmendedSpd(){
+	return 5000 + GetSpd() 
+		+ CheckStateLevel(STATE_SUBSPD_UP)*1000 
+		- CheckStateLevel(STATE_SUBSPD_DOWN)*1000; 
 }

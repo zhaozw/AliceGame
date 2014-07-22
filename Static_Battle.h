@@ -27,14 +27,18 @@
 
 #define COMMANDPHAZE_NOPHAZE		0	// 戦闘行動以外で使用する。
 										// actionPhazeを使用しない場合の値
-#define COMMANDPHAZE_FIX_COMMAND	1	// 何より先に、正しく行動できるかを判定する
-#define COMMANDPHAZE_FIX_TARGET		2	// 行動の宣言より前に、ターゲットの確定を行う
-#define COMMANDPHAZE_ASSERT			3	// 行動宣言時に行う判定。
-#define COMMANDPHAZE_PRE_ACTION		4	// 行動前に行う判定。
-#define COMMANDPHAZE_ACTION			5	// 行動時に行う判定。
-#define COMMANDPHAZE_CHECK_DEATH	6	// 行動後にはとりあえず死亡判定。
-#define COMMANDPHAZE_POST_ACTION	7	// 行動後に行う判定。
-#define COMMANDPHAZE_START_TURN		8	// ターンの最初に行う判定。
+#define COMMANDPHAZE_BEFORE_SORT	1	// コマンドを素早さ順に入れ替える前。
+										// 基本的に、素早さを補正する以外の
+										// 行為は行わない。
+#define COMMANDPHAZE_AFTER_SORT		2	// 素早さ順に入れ替えた後に行う。
+										// 自分へのステート付加など。
+#define COMMANDPHAZE_FIX_COMMAND	10	// 何より先に、正しく行動できるかを判定する
+#define COMMANDPHAZE_FIX_TARGET		11	// 行動の宣言より前に、ターゲットの確定を行う
+#define COMMANDPHAZE_ASSERT			12	// 行動宣言時に行う判定。
+#define COMMANDPHAZE_PRE_ACTION		13	// 行動前に行う判定。
+#define COMMANDPHAZE_ACTION			14	// 行動時に行う判定。
+#define COMMANDPHAZE_CHECK_DEATH	15	// 行動後にはとりあえず死亡判定。
+#define COMMANDPHAZE_POST_ACTION	16	// 行動後に行う判定。
 
 #define COMMANDPHAZE_ERROR			-1	// エラー
 #define COMMANDPHAZE_FIRSTPHAZE		(COMMANDPHAZE_FIX_COMMAND)

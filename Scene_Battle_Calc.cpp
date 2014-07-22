@@ -209,8 +209,8 @@ Game_UnitCommand Scene_Battle::MakeEnemyCommand(Game_BattleEnemy* pEnemy, int in
 	return cmd;
 }
 
-
 bool Scene_Battle::SortUnitCommands(){
+	// ソートを行う
 	std::sort(commands, commands+MAX_UNITCOMMAND, Game_UnitCommand::SortBySpd);
 	return true;
 }
@@ -304,7 +304,8 @@ float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
 }
 
 BYTE Scene_Battle::AddStateToUnit(
-	Game_BattleUnit* pUnit, WORD stateRefID, bool showMessage){
+	Game_BattleUnit* pUnit, WORD stateRefID,
+	bool showMessage, int level){
 		TCHAR buf[WND_MSG_STOCKLENGTH];
 		BYTE result;
 		if(pUnit == NULL){
