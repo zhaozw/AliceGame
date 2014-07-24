@@ -192,7 +192,7 @@ public:
 	Window_Message();
 
 	// 内容のセットアップ
-	void Setup(WindowSkin* pSkin, int _x, int _y, int _w, int _h, int _px, int _py, bool _visible);
+	void Setup(WindowSkin* pSkin, WINDOWAREA _frameArea, int _px, int _py, bool _visible);
 	
 	// 内容を全てクリア(Setup時、コンストラクタ時に使用)
 	void ResetAll();

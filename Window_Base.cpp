@@ -4,13 +4,12 @@
 #include <DxLib.h>
 
 
-Window_Base::Window_Base(){
+Window_Base::Window_Base() : frameArea(), contentArea(){
 	// ‘S‚Ä‚Ìƒƒ“ƒo‚Ì‰Šú‰»
 	Initialize();
 }
 
 void Window_Base::Initialize(){
-	x = y = width = height = padding_x = padding_y = 0;
 	state = CLOSED;
 	openLevel = 0;
 	visible = false;
@@ -20,18 +19,26 @@ void Window_Base::Initialize(){
 	haveChild = false;
 }
 
-bool Window_Base::Setup(WindowSkin* pSkin, int _x, int _y, int _w, int _h, int _px, int _py, bool _visible){
-	x = _x;
-	y = _y;
-	width = _w;
-	height = _h;
-	padding_x = _px;
-	padding_y = _py;
-	visible = _visible;
-	AttachSkin(pSkin);
-	SetContentSize();
-	haveChild = false;
-	return true;
+bool Window_Base::Setup(WindowSkin* pSkin,
+	WINDOWAREA _frameArea, int _px, int _py,
+	bool _visible){
+		frameArea = _frameArea;
+		SetContentSizeByMargin(_px, _py);
+		visible = _visible;
+		AttachSkin(pSkin);
+		haveChild = false;
+		return true;
+}
+
+bool Window_Base::Setup(WindowSkin* pSkin,
+	WINDOWAREA _frameArea, WINDOWAREA _contentArea,
+	bool _visible){
+		frameArea = _frameArea;
+		contentArea = _contentArea;
+		visible = _visible;
+		AttachSkin(pSkin);
+		haveChild = false;
+		return true;
 }
 
 BYTE Window_Base::Open(bool force, bool sudden){
@@ -198,7 +205,9 @@ void Window_Base::DrawFrame() const{
 		return;
 	}
 	// Ž©g‚Ìî•ñ‚ð“n‚µ‚Ä•`‰æ‚µ‚Ä‚à‚ç‚¤
-	pSkin->Draw(x, y, width, height, openLevel);
+	pSkin->Draw(
+		frameArea.x, frameArea.y,
+		frameArea.w, frameArea.h, openLevel);
 }
 
 void Window_Base::DrawContent() const{
@@ -218,13 +227,13 @@ int Window_Base::GetOpenTime() const{
 void Window_Base::SetPositionH(int pos, BYTE align){
 	switch(align){
 	case ALIGN_LEFT:
-		x = pos;
+		frameArea.x = pos;
 		break;
 	case ALIGN_CENTER:
-		x = pos - width/2;
+		frameArea.x = pos - frameArea.w/2;
 		break;
 	case ALIGN_RIGHT:
-		x = pos - width;
+		frameArea.x = pos - frameArea.w;
 		break;
 	}
 }
@@ -232,13 +241,13 @@ void Window_Base::SetPositionH(int pos, BYTE align){
 void Window_Base::SetPositionV(int pos, BYTE align){
 	switch(align){
 	case ALIGN_LEFT:
-		y = pos;
+		frameArea.y = pos;
 		break;
 	case ALIGN_CENTER:
-		y = pos - height/2;
+		frameArea.y = pos - frameArea.h/2;
 		break;
 	case ALIGN_RIGHT:
-		y = pos - height;
+		frameArea.y = pos - frameArea.h;
 		break;
 	}
 }

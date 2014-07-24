@@ -14,9 +14,10 @@ Window_DollStatus::Window_DollStatus() : Window_Text(){
 };
 
 bool Window_DollStatus::Setup(int _x, int _y){
-	Window_Base::Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE], _x, _y, 
-		WND_DOLLSTATUS_WIDTH, WND_DOLLSTATUS_HEIGHT,
-		WND_DOLLSTATUS_PX, WND_DOLLSTATUS_PY,
+	WINDOWAREA frameArea(_x, _y, WND_DOLLSTATUS_WIDTH, WND_DOLLSTATUS_HEIGHT);
+	Window_Text::Setup(
+		&g_wndSkins.skin[WNDSKIN_SIMPLE],
+		frameArea, WND_DOLLSTATUS_PX, WND_DOLLSTATUS_PY,
 		false);
 	return true;
 }
@@ -39,7 +40,9 @@ void Window_DollStatus::DrawContent() const{
 	// –¼‘O‚Ì•`‰æ
 	if(GetActive()){
 		// Ží—Þ–¼‚Ì•`‰æ
-		DrawDollType(x+padding_x, y+padding_y,
+		DrawDollType(
+			frameArea.x + contentArea.x,
+			frameArea.y + contentArea.y,
 			pDoll->GetType(), GetColor(255,255,255));
 	}
 }

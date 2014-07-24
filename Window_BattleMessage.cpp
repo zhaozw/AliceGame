@@ -10,14 +10,17 @@ extern DXFont		g_font;
 extern WindowSkins	g_wndSkins;
 
 Window_BattleMessage::Window_BattleMessage() : Window_Message(){
+	Window_Message::Window_Message();
 	pParent = NULL;
 }
 
 void Window_BattleMessage::Setup(Scene_Battle* _pParent){
-	// 基本的なセットアップ
-	Window_Message::Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE],
+	WINDOWAREA frameArea(
 		WND_BATTLEMSG_X, WND_BATTLEMSG_Y,
-		WND_BATTLEMSG_WIDTH, WND_BATTLEMSG_HEIGHT,
+		WND_BATTLEMSG_WIDTH, WND_BATTLEMSG_HEIGHT);
+	// 基本的なセットアップ
+	Window_Message::Setup(
+		&g_wndSkins.skin[WNDSKIN_SIMPLE], frameArea,
 		WND_BATTLEMSG_PX, WND_BATTLEMSG_PY, true);
 	Window_Message::ResetAll();
 	// フォントと色の指定

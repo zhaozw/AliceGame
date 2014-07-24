@@ -63,6 +63,9 @@ public:
 	// ベタ打ち部分。
 	bool SetSkillData();
 
+	// スキル名を取得する。
+	bool GetSkillName(LPTSTR buf, WORD skillID);
+
 	// メッセージを取得する
 	bool GetAssertMessage(LPTSTR buf, WORD skillID, Game_BattleUnit* pUnit);
 

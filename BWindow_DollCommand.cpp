@@ -14,26 +14,20 @@ BWindow_DollCommand::BWindow_DollCommand(){
 }
 
 void BWindow_DollCommand::MySetup(Scene_Battle* _pScene){
+	WINDOWAREA	frameArea(
+		BWND_DOLLCOMMAND_X, BWND_DOLLCOMMAND_Y,
+		BWND_DOLLCOMMAND_W, BWND_DOLLCOMMAND_H);
+	WINDOWFONT	font(
+		g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4, ALIGN_CENTER);
 	Window_Selectable_Content content;
+	strcpy_s(content.data[0], WND_SELECTABLE_STRLENGTH-1, _T("攻撃"));
+	strcpy_s(content.data[1], WND_SELECTABLE_STRLENGTH-1, _T("特技"));
+	strcpy_s(content.data[2], WND_SELECTABLE_STRLENGTH-1, _T("防御"));
 	Window_Selectable::Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		BWND_DOLLCOMMAND_X, BWND_DOLLCOMMAND_Y,
-		content,
-		1,
-		g_font.hInfo,
-		FONTSIZE_INFO,
-		FONTSIZE_INFO+4,
-		true, true, ALIGN_CENTER);
+		frameArea, 16, 16, font, 100);
 	SetVisible(true);
-	SetContent(_T("攻撃"), 0);
-	SetContent(_T("特技"), 1);
-	SetContent(_T("防御"), 2);
-	SetAllColor(
-		GetColor(255, 255, 255),
-		GetColor(192, 192, 192),
-		GetColor(64, 64, 64));
 	// 内容を元にセットアップする
-	SetDefParam();
 	pScene = _pScene;
 	Refresh();
 }
@@ -70,10 +64,9 @@ void BWindow_DollCommand::Update(){
 				OpenChildWindow((Window_Base*)pScene->GetWndFocusedEnemyPtr(), true);
 				break;
 			case BWND_DOLLCOMMAND_SKILL:
-				/*
-				// スキル選択ウィンドウを開く
 				commandIndex = BWND_DOLLCOMMAND_SKILL;
-				*/
+				pScene->GetWndDollSkillPtr()->SetDoll(pActor);
+				OpenChildWindow((Window_Base*)pScene->GetWndDollSkillPtr(), false);
 				break;
 			case BWND_DOLLCOMMAND_GUARD:
 				// 防御コマンドを選択して終了

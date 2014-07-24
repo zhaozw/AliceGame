@@ -11,6 +11,7 @@
 #include "Window_BattleMessage.h"
 #include "BWindow_AliceCommand.h"
 #include "BWindow_DollCommand.h"
+#include "BWindow_DollSkill.h"
 #include "BWIndow_SelectEnemy.h"
 #include "BWindow_FocusedEnemy.h"
 #include "Sprite_BattleDoll.h"
@@ -82,6 +83,8 @@ private:
 	BWindow_AliceCommand				w_aliceCommand;
 	// 人形のコマンドウィンドウ
 	BWindow_DollCommand					w_dollCommand;
+	// 人形の特技リストウィンドウ
+	BWindow_DollSkill					w_dollSkill;
 	// 敵の選択ウィンドウ
 	BWindow_SelectEnemy					w_selectEnemy;
 	// 敵のフォーカスウィンドウ
@@ -212,6 +215,9 @@ public:
 	BYTE	OpenFocusedEnemyWindow();
 	int		GetFocusedEnemyIndex(){ return w_focusedEnemy.GetSelectIndex(); };
 	BWindow_FocusedEnemy*	GetWndFocusedEnemyPtr(){ return &w_focusedEnemy; };
+	BYTE	OpenDollSkillWindow();
+	int		GetDollSkillIndex(){ return w_dollSkill.GetSelectIndex(); };
+	BWindow_DollSkill*		GetWndDollSkillPtr(){ return &w_dollSkill; };
 
 	// メッセージウィンドウへのメッセージの追加。
 	bool AddStockMessage(LPTSTR str){

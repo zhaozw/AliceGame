@@ -17,11 +17,11 @@ public:
 
 	// 内容のセットアップを行う。
 	void Setup(
-		WindowSkin* _pSkin, int _x, int _y, 
-		int _hFont, int _fontSize,int _lineHeight,
-		bool _useTitle = false, BYTE _align = ALIGN_CENTER, bool horizontal = true);
-
-	// 
+		WindowSkin* _pSkin,
+		WINDOWAREA	_frameArea,
+		WINDOWAREA	_contentArea,
+		WINDOWFONT	_font,
+		bool horizontal = true);
 
 };
 

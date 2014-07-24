@@ -112,9 +112,11 @@ int Scene_Battle::Update(){
 void Scene_Battle::UpdateObjects(){
 	// バトルメッセージウィンドウのアップデート
 	w_battleMsg.UpdateA();
+
 	// 各コマンドウィンドウのアップデート
 	w_aliceCommand.UpdateA();
 	w_dollCommand.UpdateA();
+	w_dollSkill.UpdateA();
 	w_selectEnemy.UpdateA();
 	w_focusedEnemy.UpdateA();
 
@@ -191,6 +193,7 @@ void Scene_Battle::Draw() const{
 	w_battleMsg.Draw();
 	w_aliceCommand.Draw();
 	w_dollCommand.Draw();
+	w_dollSkill.Draw();
 	w_selectEnemy.Draw();
 	w_focusedEnemy.Draw();
 
@@ -207,6 +210,7 @@ bool Scene_Battle::SetupWindow(){
 	w_battleMsg.Setup(this);
 	w_aliceCommand.MySetup();
 	w_dollCommand.MySetup(this);
+	w_dollSkill.MySetup(this);
 	w_selectEnemy.MySetup(this);
 	w_focusedEnemy.MySetup(this);
 	return true;

@@ -72,6 +72,12 @@ bool Data_SkillInfo::SetSkillData(){
 	return true;
 }
 
+bool Data_SkillInfo::GetSkillName(LPTSTR buf, WORD skillID){
+	if(skillID == 0 || skillID >= MAX_SKILL) return false;
+	strcpy_s(buf, MAX_SKILL_BYTES-1, skillName[skillID]);
+	return true;
+}
+
 bool Data_SkillInfo::GetAssertMessage(LPTSTR buf, WORD skillID, Game_BattleUnit* pUnit){
 	bool result = true;
 	result = assertMessages[skillID].GetSkillMessage(buf, pUnit);

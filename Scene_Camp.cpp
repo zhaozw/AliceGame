@@ -37,20 +37,19 @@ bool Scene_Camp::Terminate(){
 }
 
 bool Scene_Camp::InitWindow(){
+	WINDOWAREA	frameArea(0, 0, 300, 300);
+	WINDOWAREA	contentArea(16, 16, 300-32, 300-32);
+	WINDOWFONT	font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4,
+		WINDOWFONT_DEFCOLOR, WINDOWFONT_DEFICOLOR, WINDOWFONT_DEFNCOLOR);
+		
 	// はい・いいえウィンドウの初期化
 	w_yesno.Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		0, 0, g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4,
-		true, ALIGN_CENTER);
-	w_yesno.SetTitle(_T("ゲームを終了しますか？"));
-	w_yesno.SetAllColor(
-		GetColor(255, 255, 255),
-		GetColor(192, 192, 192),
-		GetColor(64, 64, 64));
-	w_yesno.SetDefParam();
+		frameArea, contentArea, font,
+		true);
+	w_yesno.SetTitle(_T("ゲームを終了しますか？"), g_font.hInfo);
 	w_yesno.SetPositionH(WND_WIDTH/2);		// 画面中央に揃える
 	w_yesno.SetPositionV(WND_HEIGHT/2);
-	w_yesno.SetSelectIndex(WINDOW_YESNO_NO);	// デフォルトで「いいえ」
 	return true;
 }
 

@@ -7,16 +7,18 @@ Window_Yesno::Window_Yesno() : Window_Selectable(){
 }
 
 void Window_Yesno::Setup(
-	WindowSkin* _pSkin, int _x, int _y,
-	int _hFont, int _fontSize, int _lineHeight,
-	bool _useTitle, BYTE _align, bool horizontal){
+	WindowSkin* _pSkin,
+	WINDOWAREA	_frameArea,
+	WINDOWAREA	_contentArea,
+	WINDOWFONT	_font,
+	bool horizontal){
 		Window_Selectable_Content content;
-		Window_Selectable::Setup(_pSkin, _x, _y, content,
+		strcpy_s(content.data[WINDOW_YESNO_YES], WND_SELECTABLE_STRLENGTH-1, _T("はい"));
+		strcpy_s(content.data[WINDOW_YESNO_NO], WND_SELECTABLE_STRLENGTH-1, _T("いいえ"));
+		SetContent(content);
+		SetGridSize(
 			horizontal?2:1,
-			_hFont, _fontSize,
-			_lineHeight, false, _useTitle, _align); 
-		SetContent(_T("はい"), WINDOW_YESNO_YES);
-		SetContent(_T("いいえ"), WINDOW_YESNO_NO);
-		// この後場合によってはタイトルなどを設定した後SetDefParamを行って
-		// 内容との関連付けを行う。
+			horizontal?1:2);
+		Window_Selectable::Setup(pSkin, _frameArea, _contentArea, 
+			_font, _contentArea.w/(horizontal?2:1));
 }

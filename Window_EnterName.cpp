@@ -11,14 +11,15 @@ extern TempData				g_temp;
 extern DXFont				g_font;
 extern WindowSkins			g_wndSkins;
 
-Window_EnterName::Window_EnterName():s_chars(WINDOW_NAME_COLUMN, WINDOW_NAME_ROW){
+Window_EnterName::Window_EnterName() : Window_Base(), 
+	s_chars(WINDOW_NAME_COLUMN, WINDOW_NAME_ROW){
 
 }
 
 void Window_EnterName::MySetup(WORD _nameType){
-	Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE], 0, 0, 
-		WND_ENTERNAME_WIDTH, WND_ENTERNAME_HEIGHT, WND_ENTERNAME_PX, WND_ENTERNAME_PY,
-		true);
+	WINDOWAREA frameArea(0, 0, WND_ENTERNAME_WIDTH, WND_ENTERNAME_HEIGHT);
+	Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE],
+		frameArea, WND_ENTERNAME_PX, WND_ENTERNAME_PY, true);
 	nameType = _nameType;
 	page = 0;
 	SetPositionH(WND_WIDTH/2);		// ‰æ–Ê’†‰›‚É‘µ‚¦‚é
@@ -51,14 +52,14 @@ WORD Window_EnterName::GetNameIndex(int pos_x, int pos_y, BYTE page) const{
 }
 
 int Window_EnterName::GetDrawX(int pos_x, int pos_y) const{
-	int baseX = x+padding_x + pos_x*1.2*FONTSIZE_STR;
+	int baseX = frameArea.x + contentArea.x + pos_x*1.2*FONTSIZE_STR;
 	if(pos_x >= 5) baseX += 0.5*FONTSIZE_STR;
 	if(pos_x >= 10) baseX += 0.5*FONTSIZE_STR;
 	return baseX;
 }
 
 int Window_EnterName::GetDrawY(int pos_x, int pos_y) const{
-	int baseY = y+padding_y + 64 + pos_y*1.3*FONTSIZE_STR;
+	int baseY = frameArea.y + contentArea.y + 64 + pos_y*1.3*FONTSIZE_STR;
 	if(pos_y >= 5) baseY += 0.6*FONTSIZE_STR;
 	// if(pos_y >= 8) baseY += 0.6*FONTSIZE_STR;
 	return baseY;

@@ -363,6 +363,9 @@
     <ClCompile Include="MyTask_ParticleEffect_Draw.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
     </ClCompile>
+    <ClCompile Include="BWindow_DollSkill.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -610,6 +613,9 @@
     </ClInclude>
     <ClInclude Include="Static_Sprite.h">
       <Filter>ヘッダー ファイル\Header_System\Header_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="BWindow_DollSkill.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

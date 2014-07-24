@@ -11,28 +11,20 @@ extern DXFont				g_font;
 
 
 BWindow_SelectEnemy::BWindow_SelectEnemy(){
+	Window_Base::Window_Base();
 	pScene = NULL;
 }
 
 void BWindow_SelectEnemy::MySetup(Scene_Battle* _pScene){
+	WINDOWAREA	frameArea(
+		BWND_SELECTENEMY_X, BWND_SELECTENEMY_Y,
+		BWND_SELECTENEMY_W, BWND_SELECTENEMY_H);
+	WINDOWFONT	font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
 	Window_Selectable_Content content;
 	Window_Selectable::Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		BWND_SELECTENEMY_X, BWND_SELECTENEMY_Y,
-		content,
-		1,
-		g_font.hInfo,
-		FONTSIZE_INFO,
-		FONTSIZE_INFO+4,
-		false, false, ALIGN_LEFT);
+		frameArea, 16, 16, font, 100);
 	SetVisible(true);
-	SetAllColor(
-		GetColor(255, 255, 255),
-		GetColor(192, 192, 192),
-		GetColor(64, 64, 64));
-	// 内容を元にセットアップする
-	SetDefParam();
-
 	pScene = _pScene;
 	enemyNum = 0;
 }
@@ -69,7 +61,7 @@ void BWindow_SelectEnemy::OnOpened(){
 		}
 	}
 	// 入力された名前に合わせてウィンドウを広げる
-	SetDefParam(true);
+	// SetDefParam(true);
 }
 
 void BWindow_SelectEnemy::DrawContent() const{

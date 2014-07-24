@@ -231,9 +231,11 @@ Window_Message::Window_Message() : Window_Text(){
 	ResetAll();
 }
 
-void Window_Message::Setup(WindowSkin* pSkin, int _x, int _y, int _w, int _h, int _px, int _py, bool _visible){
+void Window_Message::Setup(
+	WindowSkin* pSkin, WINDOWAREA _frameArea,
+	int _px, int _py, bool _visible){
 	// èâä˙âª
-	Window_Base::Setup(pSkin, _x, _y, _w, _h, _px, _py, _visible);
+	Window_Base::Setup(pSkin, frameArea, _px, _py, _visible);
 	// âºÇÃíl
 	SetColor(GetColor(255, 255, 255));
 	SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
@@ -449,7 +451,8 @@ void Window_Message::DrawContent() const{
 
 void Window_Message::DrawLine(int dx, int dy, int historyCount) const{
 	// éwíËÇµÇΩàÍçsÇï`âÊÇ∑ÇÈ
-	drawMsg.DrawLine(hFont, fontWidth, x+dx, y+dy,
+	drawMsg.DrawLine(windowFont.hFont, fontWidth,
+		frameArea.x+dx, frameArea.y+dy,
 		(historyCount==0 ? linePos : -1), historyCount);
 }
 

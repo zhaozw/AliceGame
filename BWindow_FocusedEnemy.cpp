@@ -8,7 +8,7 @@
 
 extern	WindowSkins	g_wndSkins;
 
-BWindow_FocusedEnemy::BWindow_FocusedEnemy() : s_enemy(MAX_BATTLEENEMY, 0, false, true){
+BWindow_FocusedEnemy::BWindow_FocusedEnemy() : Window_Base(), s_enemy(MAX_BATTLEENEMY, 0, false, true){
 	pScene = NULL;
 	pDoll = NULL;
 	pEnemy = NULL;
@@ -16,12 +16,10 @@ BWindow_FocusedEnemy::BWindow_FocusedEnemy() : s_enemy(MAX_BATTLEENEMY, 0, false
 }
 
 void BWindow_FocusedEnemy::MySetup(Scene_Battle* _pScene){
+	WINDOWAREA frameArea(-100, -100, BWND_FOCUSEDENEMY_WIDTH, BWND_FOCUSEDENEMY_HEIGHT);
 	Window_Base::Setup(
 		&g_wndSkins.skin[WNDSKIN_NONE],
-		-100, -100, 
-		BWND_FOCUSEDENEMY_WIDTH,
-		BWND_FOCUSEDENEMY_HEIGHT, 
-		0, 0, true);
+		frameArea, 16, 16, true);
 	pScene = _pScene;
 }
 

@@ -11,9 +11,10 @@
 #define MAX_SKILL_SUBMESSAGE		128
 
 // スキルの列挙
-#define SKILL_WAIT				0	// 様子を見ている
-#define SKILL_ALLRANGE			1	// 全体攻撃
-#define SKILL_LOADOFF_ATTACK	2	// 先制攻撃
+#define SKILL_NONE				0	// 何もスキルがない状態
+#define SKILL_WAIT				1	// 様子を見ている
+#define SKILL_ALLRANGE			2	// 全体攻撃
+#define SKILL_LOADOFF_ATTACK	3	// 先制攻撃
 
 
 #endif // STATIC_SKILL_H
