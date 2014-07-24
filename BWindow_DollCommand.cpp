@@ -20,9 +20,10 @@ void BWindow_DollCommand::MySetup(Scene_Battle* _pScene){
 	WINDOWFONT	font(
 		g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4, ALIGN_CENTER);
 	Window_Selectable_Content content;
-	strcpy_s(content.data[0], WND_SELECTABLE_STRLENGTH-1, _T("çUåÇ"));
-	strcpy_s(content.data[1], WND_SELECTABLE_STRLENGTH-1, _T("ì¡ãZ"));
-	strcpy_s(content.data[2], WND_SELECTABLE_STRLENGTH-1, _T("ñhå‰"));
+	SetContent(_T("çUåÇ"), 0, true);
+	SetContent(_T("ì¡ãZ"), 1, true);
+	SetContent(_T("ñhå‰"), 2, true);
+	SetRowByContentSize(1);
 	Window_Selectable::Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, 16, 16, font, 100);

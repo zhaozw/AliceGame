@@ -19,13 +19,13 @@ void Window_Base::Initialize(){
 	haveChild = false;
 }
 
-bool Window_Base::Setup(WindowSkin* pSkin,
+bool Window_Base::Setup(WindowSkin* _pSkin,
 	WINDOWAREA _frameArea, int _px, int _py,
 	bool _visible){
+		AttachSkin(_pSkin);
 		frameArea = _frameArea;
 		SetContentSizeByMargin(_px, _py);
 		visible = _visible;
-		AttachSkin(pSkin);
 		haveChild = false;
 		return true;
 }

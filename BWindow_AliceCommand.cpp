@@ -17,10 +17,11 @@ void BWindow_AliceCommand::MySetup(){
 	WINDOWFONT	font(
 		g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4, ALIGN_LEFT);
 	Window_Selectable_Content content;
-	strcpy_s(content.data[0], WND_SELECTABLE_STRLENGTH-1, _T("戦う"));
-	strcpy_s(content.data[1], WND_SELECTABLE_STRLENGTH-1, _T("人形チェンジ"));
-	strcpy_s(content.data[2], WND_SELECTABLE_STRLENGTH-1, _T("アリスの特技"));
-	strcpy_s(content.data[3], WND_SELECTABLE_STRLENGTH-1, _T("逃げる"));
+	SetContent(_T("戦う"), 0, true);
+	SetContent(_T("人形チェンジ"), 1, true);
+	SetContent(_T("アリスの特技"), 2, true);
+	SetContent(_T("逃げる"), 3, true);
+	SetRowByContentSize(1);
 	Window_Selectable::Setup(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, 16, 16, font, 100);

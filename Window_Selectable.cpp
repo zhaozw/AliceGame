@@ -62,8 +62,9 @@ void Window_Selectable::SetRowByContentSize(int _column){
 	if(lastIndex == -1){
 		row = 1;
 	}else{
-		row = (lastIndex + (column-1)) / column;
+		row = (lastIndex + column) / column;
 	}
+	SetGridSize(column, row);
 }
 
 void Window_Selectable::CheckActiveSelect(){
@@ -79,7 +80,7 @@ void Window_Selectable::Setup(
 	WINDOWAREA _contentArea,
 	WINDOWFONT _font,
 	int _itemWidth){
-		Window_Text::Setup(pSkin, _frameArea, _contentArea, true);
+		Window_Text::Setup(_pSkin, _frameArea, _contentArea, true);
 		windowFont = _font;
 		item_width = _itemWidth;
 }
@@ -90,7 +91,7 @@ void Window_Selectable::Setup(
 	int _px, int _py,
 	WINDOWFONT _font,
 	int _itemWidth){
-		Window_Text::Setup(pSkin, _frameArea, _px, _py, true);
+		Window_Text::Setup(_pSkin, _frameArea, _px, _py, true);
 		windowFont = _font;
 		item_width = _itemWidth;
 }
@@ -100,7 +101,7 @@ void Window_Selectable::Setup_AutoMargin(
 	WINDOWAREA _frameArea,
 	int _px, int _py,
 	WINDOWFONT _font){
-		Window_Text::Setup(pSkin, _frameArea, _px, _py, true);
+		Window_Text::Setup(_pSkin, _frameArea, _px, _py, true);
 		windowFont = _font;
 		item_width = GetContentMaxDrawWidth();
 }
