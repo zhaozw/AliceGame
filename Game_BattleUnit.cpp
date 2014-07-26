@@ -250,6 +250,14 @@ bool Game_BattleUnit::Damage(int d){
 	return true;
 }
 
+void Game_BattleUnit::Heal(int v){
+	param[BATTLEUNIT_PARAM_HP] += v;
+	if(param[BATTLEUNIT_PARAM_HP] >= param[BATTLEUNIT_PARAM_MAXHP]){
+		param[BATTLEUNIT_PARAM_HP] = param[BATTLEUNIT_PARAM_MAXHP];
+	}
+}
+
+
 bool Game_BattleUnit::CheckDie(){
 	// ä˘Ç…êÌì¨ïsî\Ç©î€Ç©
 	if(CheckIsState(STATE_DEATH) != -1) return false;

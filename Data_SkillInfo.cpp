@@ -69,6 +69,12 @@ bool Data_SkillInfo::SetSkillData(){
 	assertMessages[SKILL_LOADOFF_ATTACK].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í•—‚Ì‚æ‚¤‚É‘f‘‚­UŒ‚‚µ‚½I"));
 
+	// ‰ñ•œ
+	strcpy_s(skillName[SKILL_HEAL1], MAX_SKILL_BYTES-1, _T("‰ñ•œ"));
+	targetType[SKILL_HEAL1] = ACTIONTARGET_TEAM_ONE;
+	assertMessages[SKILL_HEAL1].SetSkillMessage(
+		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í‰ñ•œ‚Ìp®‚ğg‚Á‚½I"));
+
 	return true;
 }
 

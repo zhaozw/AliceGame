@@ -264,6 +264,7 @@ public:
 	bool InterpretAction(Game_BattleAction* pAction);
 
 	bool Action_Damage(Game_BattleAction* pAction);
+	bool Action_Heal(Game_BattleAction* pAction);
 	bool Action_CallEnemyName();
 	bool Action_CallVictory();
 	bool Action_CallLose();
@@ -342,6 +343,10 @@ public:
 	// ダメージ計算。
 	// オプションを指定することで、通常攻撃以外のダメージ計算にも対応する。
 	int CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent, int param);
+
+	// 回復計算。
+	// オプションを指定することで、スキル以外の回復量計算にも対応する。
+	int CalcHeal(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent, int param);
 
 	// ある属性に対してある属性が有利か不利かを返す。
 	// 0 : 普通

@@ -49,6 +49,8 @@ void BWindow_DollSkill::OnOpened(){
 }
 
 void BWindow_DollSkill::OnChildIsClosed(){
+	// 位置を元に戻す
+	SetPosition(BWND_DOLLSKILL_X, BWND_DOLLSKILL_Y);
 	// 子ウィンドウはWindow_FocusedUnitを使用
 	BWindow_FocusedUnit* pFocusedUnitWindow = (BWindow_FocusedUnit*)pChildWindow;
 	if(pFocusedUnitWindow->GetSelectIndex() != SELECTRESULT_CANCELED){

@@ -64,6 +64,12 @@
 #define	CALCDAMAGE_ATTACK			0
 
 //=========================================
+// 回復量計算のタイプ
+
+#define CALCHEAL_UNDIFINED			0
+#define	CALCHEAL_HEAL1				1		// 回復の術式1
+
+//=========================================
 // 戦闘の結果
 
 #define BATTLERESULT_NONE			0	// まだ勝敗が決していない

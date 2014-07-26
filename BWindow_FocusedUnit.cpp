@@ -5,6 +5,7 @@
 #include "Static_Battle.h"
 #include "Scene_Battle.h"
 #include "WindowSkin.h"
+#include "Sprite_BattleDoll.h"
 
 extern	WindowSkins	g_wndSkins;
 
@@ -30,20 +31,41 @@ void BWindow_FocusedUnit::MySetup(Scene_Battle* _pScene){
 void BWindow_FocusedUnit::OnOpened(){
 	pTarget = NULL;
 	s_target.index = 0;
-	CheckEnemyEnabled();
-	if(focusTarget == BWND_FOCUS_TARGET_ONE_ENEMY){
-		if(!SetDefaultIndex()){
+	switch(focusTarget){
+	case BWND_FOCUS_TARGET_ONE_ENEMY:
+		CheckEnemyEnabled();
+		if(!SetDefaultEnemyIndex()){
 			// 選択にエラーが発生した
 			s_target.index = -1;
 		}
-	}else{
+		break;
+	case BWND_FOCUS_TARGET_ONE_DOLL:
+		CheckDollEnabled();
+		if(!SetDefaultDollIndex()){
+			// 選択にエラーが発生した
+			s_target.index = -1;
+		}
+		break;
+	default:
 		s_target.index = 0;
+		break;
+	}
+	switch(focusType){
+	case BWND_FOCUS_TYPE_SKILL:
+		// ウィンドウの位置を人形が見やすい位置に移動する
+		if(focusTarget == BWND_FOCUS_TARGET_ONE_DOLL 
+			|| focusTarget == BWND_FOCUS_TARGET_ALL_DOLLS){
+				pScene->GetWndDollSkillPtr()->SetPosition(
+					BWND_DOLLSKILL_X, BWND_DOLLSKILL_Y-260);
+		}
+		break;
 	}
 	OnIndexChanged();
 }
 
 void BWindow_FocusedUnit::OnIndexChanged(){
 	Game_BattleEnemy*	pEnemy = NULL;
+	Game_BattleDoll*	pDoll = NULL;
 	if(pScene == NULL) return;
 	switch(focusTarget){
 	case BWND_FOCUS_TARGET_ONE_ENEMY:
@@ -54,10 +76,17 @@ void BWindow_FocusedUnit::OnIndexChanged(){
 			pTarget = (Game_BattleUnit*)pEnemy;
 		}
 		break;
+	case BWND_FOCUS_TARGET_ONE_DOLL:
+		if(s_target.index >= 0 && s_target.index < NUM_BATTLEDOLL_FRONT){
+			pDoll = pScene->GetFrontDollPtr(s_target.index);
+			if(pDoll == NULL) return;
+			pTarget = (Game_BattleUnit*)pDoll;
+		}		
 	}
 }
 
-bool BWindow_FocusedUnit::SetDefaultIndex(){
+
+bool BWindow_FocusedUnit::SetDefaultEnemyIndex(){
 	Game_BattleEnemy* pTmpTarget;
 	if(pScene == NULL) return false;
 	if(pOwner == NULL) return false;
@@ -107,6 +136,27 @@ bool BWindow_FocusedUnit::SetDefaultIndex(){
 	return false;
 }
 
+bool BWindow_FocusedUnit::SetDefaultDollIndex(){
+	Game_BattleDoll* pTmpTarget;
+	if(pScene == NULL) return false;
+	if(pOwner == NULL) return false;
+	// 選べる敵が居れば選ぶ
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pTmpTarget = pScene->GetFrontDollPtr(n);
+		if(pTmpTarget == NULL){
+			continue;
+		}
+		if(!pTmpTarget->CanTarget()){
+			continue;
+		}
+		s_target.index = n;
+		return true;
+	}
+	s_target.index = -1;
+	return false;
+}
+
+
 void BWindow_FocusedUnit::CheckEnemyEnabled(){
 	Game_BattleEnemy* pTarget = NULL;
 	if(pScene == NULL) return;
@@ -126,6 +176,23 @@ void BWindow_FocusedUnit::CheckEnemyEnabled(){
 		}
 	}
 	s_target.maxSize = MAX_BATTLEENEMY;
+}
+
+void BWindow_FocusedUnit::CheckDollEnabled(){
+	Game_BattleDoll* pTarget = NULL;
+	if(pScene == NULL) return;
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pTarget = pScene->GetFrontDollPtr(n);
+		// 選択可能かどうか
+		if(pTarget == NULL){
+			s_target.isActive[n] = false;
+		}else if(!pTarget->CanTarget()){
+			s_target.isActive[n] = false;
+		}else{
+			s_target.isActive[n] = true;
+		}
+	}
+	s_target.maxSize = NUM_BATTLEDOLL_FRONT;
 }
 
 void BWindow_FocusedUnit::Update(){
@@ -171,8 +238,12 @@ void BWindow_FocusedUnit::DrawContent() const{
 		}
 		break;
 	case BWND_FOCUS_TARGET_ONE_DOLL:
+		DrawCntDoll(s_target.index);
 		break;
 	case BWND_FOCUS_TARGET_ALL_DOLLS:
+		for(BYTE n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+			DrawCntDoll(n);
+		}
 		break;
 	}
 }
@@ -181,6 +252,16 @@ void BWindow_FocusedUnit::DrawCntEnemy(Game_BattleEnemy* p) const {
 	int tmpX=0, tmpY=0;
 	tmpX = p->GetDrawX();
 	tmpY = p->GetDrawY()+20;
+	DrawBox(
+		tmpX-5, tmpY-5,
+		tmpX+5, tmpY+5,
+		GetColor(255, 0, 0), 1);
+}
+
+void BWindow_FocusedUnit::DrawCntDoll(BYTE n) const {
+	int tmpX=0, tmpY=0;
+	tmpX = SPRITE_BATTLEDOLL_IX+n*SPRITE_BATTLEDOLL_DX+SPRITE_BATTLEDOLL_WIDTH/2;
+	tmpY = SPRITE_BATTLEDOLL_IY-20;
 	DrawBox(
 		tmpX-5, tmpY-5,
 		tmpX+5, tmpY+5,

@@ -252,6 +252,36 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		}
 }
 
+int Scene_Battle::CalcHeal(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent,
+	int param){
+		int		base = 0;
+		float	rate = 1.0;
+		int		value = 0;
+
+		switch(param){
+		case CALCHEAL_HEAL1:
+			// 回復の術式1
+			// 最大HPの50%の回復
+			base = 0.5 * pOpponent->GetMaxHP();
+			break;
+		}
+		// 自分のステートによるダメージの補正
+		/*
+		if(pOpponent->IsState(STATE_GUARD)){
+			// 防御
+			rate *= 0.5;
+		}
+		*/
+
+		// 値の計算
+		value = (int)(rate*base);
+
+		// 回復させると最大HPを上回る場合は最大値を規定
+		return min(value, pOpponent->GetMaxHP()-pOpponent->GetHP());
+
+}
+
+
 BYTE Scene_Battle::GetAttrAffinity(BYTE attackerAttr, BYTE opponentAttr){
 	switch(attackerAttr){
 	case DOLL_ATTR_SUN:

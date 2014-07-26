@@ -156,6 +156,9 @@ public:
 	// HPが負になったらfalseを返す。
 	bool Damage(int damage);
 
+	// 指定したHPを回復させる。
+	void Heal(int v);
+
 	// 戦闘不能になるかどうかを判定する。
 	// HPが0以下で、かつまだ戦闘不能ステートが適用されていない場合、
 	// trueを返す。

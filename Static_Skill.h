@@ -15,6 +15,7 @@
 #define SKILL_WAIT				1	// —lq‚ğŒ©‚Ä‚¢‚é
 #define SKILL_ALLRANGE			2	// ‘S‘ÌUŒ‚
 #define SKILL_LOADOFF_ATTACK	3	// æ§UŒ‚
+#define SKILL_HEAL1				4	// –¡•ûˆê‘Ì‚Ì‰ñ•œ
 
 
 #endif // STATIC_SKILL_H

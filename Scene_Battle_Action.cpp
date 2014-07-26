@@ -18,6 +18,9 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	case Game_BattleAction::TYPE_DAMAGE:
 		Action_Damage(pAction);
 		break;
+	case Game_BattleAction::TYPE_HEAL:
+		Action_Heal(pAction);
+		break;
 	case Game_BattleAction::TYPE_CALLENEMYNAME:
 		Action_CallEnemyName();
 		break;
@@ -113,6 +116,78 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	
 	return true;
 }
+
+bool Scene_Battle::Action_Heal(Game_BattleAction* pAction){
+	Sprite_Base* pSprite = NULL;
+	Sprite_BattleDoll* pDoll = NULL;
+	MyTask* pTask = NULL;
+	int x=0, y=0;
+	// ダメージをメッセージウィンドウに表示する
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	TCHAR nameBuf[BATTLEUNIT_NAME_BYTES];
+	TCHAR numBuf[4]; // 数字表示用
+	// 名前を取得する
+	pAction->GetOpponent()->GetName(nameBuf, BATTLEUNIT_NAME_BYTES);
+	// 数値を取得する
+	wsprintf(numBuf, _T("%d"), pAction->GetParam());
+	// 名前の体裁を整える
+	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, nameBuf);
+	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("の体力が"));
+	strcat_s(buf, WND_MSG_STOCKLENGTH-1, numBuf);
+	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("回復した！"));
+	AddStockMessage(buf);
+	// ダメージを適用する
+	pAction->GetOpponent()->Heal(pAction->GetParam());
+	/*
+	// ダメージの数値を表示する
+	if(pAction->GetOpponent()->IsDoll()){
+		// 位置を取得
+		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pTask = gMyTask_InfoEffect->Call();
+			pDoll = (Sprite_BattleDoll*)pSprite;
+			if(pTask!=NULL){
+				new (pTask) MyTask_InfoEffect(
+					pDoll->GetDollX(), pDoll->GetDollY()+40,
+					INFO_DAMAGENUM_DOLL, pAction->GetParam(), 0);
+			}
+		}
+	}else{
+		// 位置を取得
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pTask = gMyTask_InfoEffect->Call();
+			if(pTask!=NULL){
+				new (pTask) MyTask_InfoEffect(
+					pSprite->GetIX(), pSprite->GetIY(),
+					INFO_DAMAGENUM_ENEMY, pAction->GetParam(), 0);
+			}
+		}
+	}
+	*/
+	/*
+	// スプライトに対する処理を行う
+	if(pAction->GetOpponent()->IsDoll()){
+		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_DAMAGE_DOLL, false, 8);
+		}
+	}else{
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_BLINK, false, 8);
+		}
+	}
+	*/
+
+	
+	return true;
+}
+
 
 bool Scene_Battle::Action_CallEnemyName(){
 	// それぞれの敵についてメッセージウィンドウに内容を送る

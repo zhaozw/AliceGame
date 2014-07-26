@@ -18,6 +18,8 @@ public:
 		TYPE_NONE,			// スタックの0番目の要素が持つタイプ
 		TYPE_DAMAGE,		// キャラ一体がダメージを受ける。
 							// paramがダメージ数値。演算は前もって行う。
+		TYPE_HEAL,			// キャラ一体がHPを回復させる。
+							// paramはダメージ回復。演算は前もって行う。
 		TYPE_CALLENEMYNAME,	// 戦闘開始時、敵の名前を列挙する。
 		TYPE_CALLVICTORY,	// 勝利時メッセージ。
 		TYPE_CALLLOSE,		// 敗北時メッセージ。

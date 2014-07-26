@@ -68,13 +68,20 @@ public:
 	// 選択肢の有効/無効を敵キャラに合わせて行う。
 	void CheckEnemyEnabled();
 
+	// 選択肢の有効/無効を味方キャラに合わせて行う。
+	void CheckDollEnabled();
+
 	// インデックス値が変わったとき、
 	// 位置及び表示内容の更新を行う。
 	void OnIndexChanged();
 
 	// 選択肢のインデックスを指定する。
 	// 選択できる敵がいない場合、falseを返す。
-	bool SetDefaultIndex();
+	bool SetDefaultEnemyIndex();
+
+	// 選択肢のインデックスを指定する。
+	// 選択できる味方がいない場合、falseを返す。
+	bool SetDefaultDollIndex();
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
@@ -84,6 +91,9 @@ public:
 
 	// 指定した敵キャラについての描画を行う。
 	virtual void DrawCntEnemy(Game_BattleEnemy* pTarget) const;
+
+	// 指定した人形（場所ID）についての描画を行う。
+	virtual void DrawCntDoll(BYTE index) const;
 
 	// アクセサ
 	int GetSelectIndex() const { return s_target.index; };

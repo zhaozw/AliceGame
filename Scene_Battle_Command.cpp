@@ -330,6 +330,16 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			actionStack.Push(action);
 			return 1;
 			break;
+		case SKILL_HEAL1:
+			// HP‚ð‰ñ•œ
+			action.Clear();
+			action.SetActor(pOwner);
+			action.SetOpponent(pTarget);
+			action.SetType(Game_BattleAction::TYPE_HEAL);
+			action.ClearFlag();
+			action.SetParam(CalcHeal(pOwner, pTarget, CALCHEAL_HEAL1));
+			actionStack.Push(action);
+			return 1;
 		}
 		break;
 	case ACTIONTYPE_ERROR:
