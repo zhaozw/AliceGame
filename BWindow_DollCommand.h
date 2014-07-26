@@ -71,6 +71,10 @@ public:
 	// ウィンドウを閉じる関数の上書き
 	virtual BYTE Close(bool force=false, bool sudden=false);
 
+	// 技のターゲットタイプをtargetTypeに変換する
+	// (人形側から見た値に変換する)
+	static BYTE ConvertSkillTargetToTarget(BYTE skillTarget);
+
 };
 
 

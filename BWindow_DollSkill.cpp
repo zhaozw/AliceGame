@@ -6,12 +6,14 @@
 #include "Game_BattleDoll.h"
 #include "Static_AliceDoll.h"
 #include "Data_SkillInfo.h"
+#include "Scene_Battle.h"
+#include "BWindow_FocusedUnit.h"
 
 extern WindowSkins			g_wndSkins;
 extern DXFont				g_font;
 extern Data_SkillInfo		d_skillInfo;
 
-BWindow_DollSkill::BWindow_DollSkill() : Window_Selectable(){
+BWindow_DollSkill::BWindow_DollSkill() : Window_Selectable(), pTarget(NULL){
 
 }
 
@@ -28,6 +30,7 @@ void BWindow_DollSkill::MySetup(Scene_Battle* _pScene){
 		frameArea, BWND_DOLLSKILL_PX, BWND_DOLLSKILL_PY,
 		font);
 	pScene = _pScene;
+	pTarget = NULL;
 }
 
 void BWindow_DollSkill::OnOpened(){
@@ -42,18 +45,41 @@ void BWindow_DollSkill::OnOpened(){
 		}
 	}
 	select.index = 0;
+	pTarget = NULL;
+}
+
+void BWindow_DollSkill::OnChildIsClosed(){
+	// 子ウィンドウはWindow_FocusedUnitを使用
+	BWindow_FocusedUnit* pFocusedUnitWindow = (BWindow_FocusedUnit*)pChildWindow;
+	if(pFocusedUnitWindow->GetSelectIndex() != SELECTRESULT_CANCELED){
+		// 特技を選択した場合
+		// このウィンドウもコマンドウィンドウも閉じる
+		pTarget = pFocusedUnitWindow->GetTargetAsCommandTarget();
+		Close(true, false);
+	}else{
+		// 何もしない（特技の選択に戻る）
+		state = UPDATING;
+	}
 }
 
 void BWindow_DollSkill::Update(){
-	int skillID;
+	int tmpSkillID = 0;
+	BYTE targetType = 0x00;
 	Window_Selectable::Update();
 	switch(state){
 	case UPDATING:
 		switch(select.CheckKey()){
 		case SELECT2D_CHOOSE:
-			skillID = pOwner->GetSkillID(select.index);
-			d_skillInfo.GetTargetType();
-			if(skillID == 0) return;
+			tmpSkillID = pOwner->GetSkillID(select.index);
+			targetType = d_skillInfo.GetTargetType(tmpSkillID);
+			if(tmpSkillID == 0) return;
+			if(targetType != ACTIONTARGET_NONE){
+				pScene->GetWndFocusedUnitPtr()->SetParam(
+					pOwner, NULL,
+					BWindow_FocusedUnit::ConvertTargetTypeToFocusType(targetType),
+					BWND_FOCUS_TYPE_SKILL);
+				OpenChildWindow((Window_Base*)pScene->GetWndFocusedUnitPtr(), true);
+			}
 			break;
 		case SELECT2D_CANCEL:
 			if(cancelable){

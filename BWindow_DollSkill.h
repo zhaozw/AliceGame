@@ -12,6 +12,7 @@
 
 class Scene_Battle;
 class Game_BattleDoll;
+class Game_BattleUnit;
 
 // BWindow_DollSkillクラス
 // 戦闘時に人形の特技一覧を表示するクラス。
@@ -21,7 +22,10 @@ private:
 	// このウィンドウを保持するシーンへのポインタ。
 	Scene_Battle*		pScene;
 	// 参照している人形へのハンドル
-	Game_BattleDoll*		pOwner;
+	Game_BattleDoll*	pOwner;
+	// ターゲット選択ウィンドウの選択値
+	// 全体選択だったりした場合はNULLになる
+	Game_BattleUnit*	pTarget;
 public:
 	BWindow_DollSkill();
 
@@ -33,6 +37,9 @@ public:
 
 	// 開いた時の挙動
 	virtual void OnOpened();
+
+	// 子が閉じた時の挙動
+	virtual void OnChildIsClosed();
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
@@ -46,6 +53,9 @@ public:
 
 	// 内容の描画を行う。
 	virtual void DrawContent() const;
+
+	// ターゲットを取得する。
+	Game_BattleUnit* GetTarget(){ return pTarget; };
 
 };
 

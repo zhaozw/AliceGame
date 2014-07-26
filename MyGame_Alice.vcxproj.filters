@@ -327,9 +327,6 @@
     <ClCompile Include="Data_EnemyDraw.cpp">
       <Filter>ソース ファイル\Source_Data</Filter>
     </ClCompile>
-    <ClCompile Include="BWindow_FocusedEnemy.cpp">
-      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
-    </ClCompile>
     <ClCompile Include="Scene_Battle_Command.cpp">
       <Filter>ソース ファイル\Source_Battle</Filter>
     </ClCompile>
@@ -364,6 +361,9 @@
       <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
     </ClCompile>
     <ClCompile Include="BWindow_DollSkill.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="BWindow_FocusedUnit.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
     </ClCompile>
   </ItemGroup>
@@ -575,9 +575,6 @@
     <ClInclude Include="Data_EnemyDraw.h">
       <Filter>ヘッダー ファイル\Header_Data</Filter>
     </ClInclude>
-    <ClInclude Include="BWindow_FocusedEnemy.h">
-      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
-    </ClInclude>
     <ClInclude Include="Data_BattleState.h">
       <Filter>ヘッダー ファイル\Header_Data</Filter>
     </ClInclude>
@@ -615,6 +612,9 @@
       <Filter>ヘッダー ファイル\Header_System\Header_Static</Filter>
     </ClInclude>
     <ClInclude Include="BWindow_DollSkill.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="BWindow_FocusedUnit.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
     </ClInclude>
   </ItemGroup>

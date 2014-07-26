@@ -13,7 +13,7 @@
 #include "BWindow_DollCommand.h"
 #include "BWindow_DollSkill.h"
 #include "BWIndow_SelectEnemy.h"
-#include "BWindow_FocusedEnemy.h"
+#include "BWindow_FocusedUnit.h"
 #include "Sprite_BattleDoll.h"
 #include "Sprite_BattleEnemy.h"
 
@@ -88,7 +88,7 @@ private:
 	// 敵の選択ウィンドウ
 	BWindow_SelectEnemy					w_selectEnemy;
 	// 敵のフォーカスウィンドウ
-	BWindow_FocusedEnemy				w_focusedEnemy;
+	BWindow_FocusedUnit				w_focusedEnemy;
 	// 人形のスプライト
 	Sprite_BattleDoll					s_dolls[NUM_BATTLEDOLL_FRONT];
 	// 敵のスプライト
@@ -214,7 +214,7 @@ public:
 	BWindow_SelectEnemy*	GetWndSelectEnemyPtr(){ return &w_selectEnemy; };
 	BYTE	OpenFocusedEnemyWindow();
 	int		GetFocusedEnemyIndex(){ return w_focusedEnemy.GetSelectIndex(); };
-	BWindow_FocusedEnemy*	GetWndFocusedEnemyPtr(){ return &w_focusedEnemy; };
+	BWindow_FocusedUnit*	GetWndFocusedUnitPtr(){ return &w_focusedEnemy; };
 	BYTE	OpenDollSkillWindow();
 	int		GetDollSkillIndex(){ return w_dollSkill.GetSelectIndex(); };
 	BWindow_DollSkill*		GetWndDollSkillPtr(){ return &w_dollSkill; };

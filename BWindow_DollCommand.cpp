@@ -5,9 +5,12 @@
 #include "DXFont.h"
 #include "Scene_Battle.h"
 #include "Sprite_BattleDoll.h"
+#include "Data_SkillInfo.h"
+
 
 extern WindowSkins			g_wndSkins;
 extern DXFont				g_font;
+extern Data_SkillInfo		d_skillInfo;
 
 BWindow_DollCommand::BWindow_DollCommand(){
 
@@ -60,9 +63,9 @@ void BWindow_DollCommand::Update(){
 			case BWND_DOLLCOMMAND_ATTACK:
 				// 攻撃相手選択ウィンドウを開く
 				commandIndex = BWND_DOLLCOMMAND_ATTACK;
-				pScene->GetWndFocusedEnemyPtr()->SetFocusAll(false);
-				pScene->GetWndFocusedEnemyPtr()->SetDoll(pActor);
-				OpenChildWindow((Window_Base*)pScene->GetWndFocusedEnemyPtr(), true);
+				pScene->GetWndFocusedUnitPtr()->SetParam(
+					pActor, NULL, BWND_FOCUS_TARGET_ONE_ENEMY, BWND_FOCUS_TYPE_ATTACK);
+				OpenChildWindow((Window_Base*)pScene->GetWndFocusedUnitPtr(), true);
 				break;
 			case BWND_DOLLCOMMAND_SKILL:
 				commandIndex = BWND_DOLLCOMMAND_SKILL;
@@ -95,12 +98,12 @@ void BWindow_DollCommand::Update(){
 
 void BWindow_DollCommand::OnChildIsClosed(){
 	// 子ウィンドウのハンドルを取得
-	BWindow_FocusedEnemy*	pFocusWindow = NULL;
+	BWindow_FocusedUnit*	pFocusWindow = NULL;
 	BWindow_DollSkill*		pDollSkill = NULL;
 
 	switch(GetSelectIndex()){
 	case BWND_DOLLCOMMAND_ATTACK:
-		pFocusWindow = (BWindow_FocusedEnemy*)pChildWindow;
+		pFocusWindow = (BWindow_FocusedUnit*)pChildWindow;
 		if(pFocusWindow == NULL) return;
 		// 決定キーかキャンセルキーかで分岐
 		if(pFocusWindow->GetSelectIndex() == SELECTRESULT_CANCELED){
@@ -120,6 +123,7 @@ void BWindow_DollCommand::OnChildIsClosed(){
 			// 何もしない
 			state = UPDATING;
 		}else{
+			SetCommandAndClose();
 			/*
 			// 攻撃としてターゲットを取得する
 			targetIndex = pFocusWindow->GetSelectIndex();
@@ -149,14 +153,19 @@ void BWindow_DollCommand::DrawContent() const{
 
 bool BWindow_DollCommand::SetCommandAndClose(){
 	// ウィンドウの取得
-	BWindow_FocusedEnemy* pFocusWindow = (BWindow_FocusedEnemy*)pChildWindow;
+	BWindow_FocusedUnit*	pFocusWindow = NULL; 
+	BWindow_DollSkill*		pSkillWindow = NULL;
 	// アクションスタックに追加するもの
-	Game_UnitCommand cmd;
+	Game_UnitCommand	cmd;
+	// ターゲットの形式を受け取る
+	BYTE				targetType = 0;
+	BYTE				cntSkillID = 0;
 
 	switch(commandIndex){
 	case BWND_DOLLCOMMAND_ATTACK:
+		pFocusWindow = (BWindow_FocusedUnit*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
-		cmd.SetTarget(pFocusWindow->GetEnemyPtr());
+		cmd.SetTarget(pFocusWindow->GetTarget());
 		cmd.SetActionType(ACTIONTYPE_ATTACK);
 		cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 		pScene->SetCommand(cmd);
@@ -164,15 +173,23 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 		Close();
 		break;
 	case BWND_DOLLCOMMAND_SKILL:
+		pSkillWindow = (BWindow_DollSkill*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
-		cmd.SetTarget(pFocusWindow->GetEnemyPtr());
-		cmd.SetActionType(ACTIONTYPE_ATTACK);
-		cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
-		pScene->SetCommand(cmd);
+		cmd.SetActionType(ACTIONTYPE_SKILL);
+		cntSkillID = pActor->GetSkillID(pSkillWindow->GetSelectIndex());
+		if(cntSkillID > 0){
+			targetType = d_skillInfo.GetTargetType(cntSkillID); // スキルのターゲット
+			targetType = ConvertSkillTargetToTarget(targetType); // 人形から見たターゲット
+			cmd.SetTargetType(targetType);
+			cmd.SetTarget(pSkillWindow->GetTarget());
+			cmd.SetSkillID(cntSkillID);
+			pScene->SetCommand(cmd);
+		}
 		state = Window_Base::IDLE;
 		Close();
 		break;
 	case BWND_DOLLCOMMAND_GUARD:
+		pFocusWindow = (BWindow_FocusedUnit*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
 		cmd.SetTarget(NULL);
 		cmd.SetActionType(ACTIONTYPE_GUARD);
@@ -198,4 +215,23 @@ BYTE BWindow_DollCommand::Close(bool force, bool sudden){
 		pSprite->SetMorphID(SPMORPH_DISACTIVATE, true);
 	}
 	return Window_Base::Close();
+}
+
+BYTE BWindow_DollCommand::ConvertSkillTargetToTarget(BYTE skillTarget){
+	switch(skillTarget){
+	case ACTIONTARGET_TEAM_ONE:
+	case ACTIONTARGET_SELF:
+		return ACTIONTARGET_DOLL_ONE;
+		break;
+	case ACTIONTARGET_TEAM_ALL:
+		return ACTIONTARGET_DOLL_ALL;
+		break;
+	case ACTIONTARGET_OPPONENT_ONE:
+		return ACTIONTARGET_ENEMY_ONE;
+		break;
+	case ACTIONTARGET_OPPONENT_ALL:
+		return ACTIONTARGET_ENEMY_ALL;
+		break;
+	}
+	return ACTIONTARGET_NONE;
 }
