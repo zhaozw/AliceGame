@@ -4,8 +4,8 @@
 #include "Window_Selectable.h"
 
 #define BWND_ALICECOMMAND_X		20
-#define BWND_ALICECOMMAND_Y		400
-#define BWND_ALICECOMMAND_W		300
+#define BWND_ALICECOMMAND_Y		380
+#define BWND_ALICECOMMAND_W		240
 #define BWND_ALICECOMMAND_H		200
 #define BWND_ALICECOMMAND_PX	16
 #define BWND_ALICECOMMAND_PY	16
@@ -26,6 +26,12 @@ public:
 	// 内容の描画を行う。
 	virtual void DrawContent() const;
 
+	// 自動で閉じるかは場合によって変わる。
+	virtual void CheckAutoClose(){ autoClose = true; };
+
+	// 現在の項目がキャンセル可能であるかどうかの判定を行う
+	// キャンセル可能かどうかは開く時に決まる。
+	virtual void CheckCancelable(){ cancelable = false; };
 };
 
 #endif // BWINDOW_ALICECOMMAND_H

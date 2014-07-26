@@ -192,7 +192,12 @@ public:
 	Window_Message();
 
 	// 内容のセットアップ
-	void Setup(WindowSkin* pSkin, WINDOWAREA _frameArea, int _px, int _py, bool _visible);
+	void Setup(WindowSkin* pSkin, WINDOWAREA _frameArea, WINDOWAREA _contentArea,
+		bool _visible);
+	void Setup_FixPadding(WindowSkin* pSkin, WINDOWAREA _frameArea,
+		int _px, int _py, bool _visible);
+	void Setup_FixContentWidth(WindowSkin* pSkin, WINDOWAREA _frameArea,
+		int _content_width, int _py, bool _visible);
 	
 	// 内容を全てクリア(Setup時、コンストラクタ時に使用)
 	void ResetAll();

@@ -19,7 +19,7 @@ void Window_BattleMessage::Setup(Scene_Battle* _pParent){
 		WND_BATTLEMSG_X, WND_BATTLEMSG_Y,
 		WND_BATTLEMSG_WIDTH, WND_BATTLEMSG_HEIGHT);
 	// 基本的なセットアップ
-	Window_Message::Setup(
+	Window_Message::Setup_FixPadding(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE], frameArea,
 		WND_BATTLEMSG_PX, WND_BATTLEMSG_PY, true);
 	Window_Message::ResetAll();

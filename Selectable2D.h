@@ -11,6 +11,10 @@
 #define SELECT2D_CANCEL 2
 #define SELECT2D_NONE 0
 
+#ifndef SELECTRESULT_CANCELED
+#define SELECTRESULT_CANCELED	-1
+#endif // SELECTRESULT_CANCELED
+
 class Selectable2D{
 public:
 	// 現在のインデックス。

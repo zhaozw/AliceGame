@@ -19,17 +19,6 @@ void Window_Base::Initialize(){
 	haveChild = false;
 }
 
-bool Window_Base::Setup(WindowSkin* _pSkin,
-	WINDOWAREA _frameArea, int _px, int _py,
-	bool _visible){
-		AttachSkin(_pSkin);
-		frameArea = _frameArea;
-		SetContentSizeByMargin(_px, _py);
-		visible = _visible;
-		haveChild = false;
-		return true;
-}
-
 bool Window_Base::Setup(WindowSkin* pSkin,
 	WINDOWAREA _frameArea, WINDOWAREA _contentArea,
 	bool _visible){
@@ -40,6 +29,29 @@ bool Window_Base::Setup(WindowSkin* pSkin,
 		haveChild = false;
 		return true;
 }
+
+bool Window_Base::Setup_FixPadding(WindowSkin* _pSkin,
+	WINDOWAREA _frameArea, int _px, int _py,
+	bool _visible){
+		AttachSkin(_pSkin);
+		frameArea = _frameArea;
+		SetContentSizeByMargin(_px, _py);
+		visible = _visible;
+		haveChild = false;
+		return true;
+}
+
+bool Window_Base::Setup_FixContentWidth(WindowSkin* pSkin,
+	WINDOWAREA _frameArea, int _contentWidth, int _py,
+	bool _visible){
+		AttachSkin(pSkin);
+		frameArea = _frameArea;
+		SetContentSizeByContentWidth(_contentWidth, _py);
+		visible = _visible;
+		haveChild = false;
+		return true;
+}
+
 
 BYTE Window_Base::Open(bool force, bool sudden){
 	bool success = false;

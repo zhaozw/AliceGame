@@ -22,9 +22,9 @@ void BWindow_AliceCommand::MySetup(){
 	SetContent(_T("ƒAƒŠƒX‚Ì“Á‹Z"), 2, true);
 	SetContent(_T("“¦‚°‚é"), 3, true);
 	SetRowByContentSize(1);
-	Window_Selectable::Setup(
+	Window_Selectable::Setup_FixContentWidth_Auto(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		frameArea, 16, 16, font, 100);
+		frameArea, 16, font);
 	SetVisible(true);
 }
 

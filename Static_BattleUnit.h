@@ -42,5 +42,6 @@
 #define ACTIONTARGET_TEAM_ALL		6	// –¡•û‘S‘Ì
 #define ACTIONTARGET_OPPONENT_ONE	7	// ‘ŠŽèˆê‘Ì
 #define ACTIONTARGET_OPPONENT_ALL	8	// ‘ŠŽè‘S‘Ì
+#define ACTIONTARGET_SELF			9	// Ž©•ª
 
 #endif // STATIC_BATTLEUNIT_H

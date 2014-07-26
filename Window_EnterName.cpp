@@ -18,7 +18,7 @@ Window_EnterName::Window_EnterName() : Window_Base(),
 
 void Window_EnterName::MySetup(WORD _nameType){
 	WINDOWAREA frameArea(0, 0, WND_ENTERNAME_WIDTH, WND_ENTERNAME_HEIGHT);
-	Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE],
+	Setup_FixPadding(&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, WND_ENTERNAME_PX, WND_ENTERNAME_PY, true);
 	nameType = _nameType;
 	page = 0;

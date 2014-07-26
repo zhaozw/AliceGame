@@ -27,6 +27,7 @@
 #define WND_SELECTABLE_DEFPADDING	0
 #define WND_SELECTABLE_DEFLINESPACE	4	// フォントに対する行の高さの差のデフォルト値。
 										// ウィンドウサイズの計算に使用する。
+#define WND_SELECTABLE_DEF_ITEM_MARGIN_X		32
 
 #define WND_SELECTABLE_RESULT_NONE		-1	// まだ選択されていない
 #define WND_SELECTABLE_RESULT_CANCEL	-2	// キャンセルボタンが押された
@@ -84,7 +85,8 @@ public:
 	int		GetContentMaxDrawWidth() const;					// 項目の描画サイズのうち
 															// 最も大きい値を取得
 	// ウィンドウのタイトルを設定する。
-	void	SetTitle(LPTSTR title, int hTitleFont = 0);
+	// ついでにフォントとタイトルの大きさも指定する必要がある。
+	void	SetTitle(LPTSTR title, int hTitleFont, int titleHeight);
 	void	GetTitle(LPTSTR str) const;
 	
 	// 選択肢の横の数と縦の数を設定する。
@@ -111,24 +113,33 @@ public:
 		WINDOWAREA _frameArea,
 		WINDOWAREA _contentArea,
 		WINDOWFONT _font,
-		int itemWidth
+		int item_margin_x = WND_SELECTABLE_DEF_ITEM_MARGIN_X
 		);
 
-	void	Setup(
+	// 内容のセットアップを行う。
+	// 項目のサイズに応じて項目のサイズを自動で調整してくれる。
+	void	Setup_FixPadding(
 		WindowSkin* _pSkin, 
 		WINDOWAREA _frameArea,
 		int _px, int _py,
 		WINDOWFONT _font,
-		int itemWidth
+		int item_margin_x = WND_SELECTABLE_DEF_ITEM_MARGIN_X
 		);
-	
-	// 内容のセットアップを行う。
-	// 項目のサイズに応じて項目のサイズを自動で調整してくれる。
-	void	Setup_AutoMargin(
+
+	void	Setup_FixContentWidth(
 		WindowSkin* _pSkin, 
 		WINDOWAREA _frameArea,
-		int _px, int _py,
-		WINDOWFONT _font
+		int _contentWidth, int _py,
+		WINDOWFONT _font,
+		int item_margin_x = WND_SELECTABLE_DEF_ITEM_MARGIN_X
+		);
+
+	void	Setup_FixContentWidth_Auto(
+		WindowSkin* _pSkin, 
+		WINDOWAREA _frameArea,
+		int _py,
+		WINDOWFONT _font,
+		int item_margin_x = WND_SELECTABLE_DEF_ITEM_MARGIN_X
 		);
 
 	// 内容のセットアップを行う。
@@ -147,8 +158,8 @@ public:
 	int		GetResult() const { return result; };
 	bool	Choosed() const { return result != WND_SELECTABLE_RESULT_NONE; };
 	// インデックスの初期値を決める。
-	void SetSelectIndex(WORD index){ select.index = index; };
-	int GetSelectIndex(){ return select.index; };
+	void	SetSelectIndex(WORD index){ select.index = index; };
+	int		GetSelectIndex(){ return select.index; };
 
 	// 開かれた時の処理。
 	// 選択された項目の初期化を行う。
@@ -157,8 +168,11 @@ public:
 	// 内容の更新を行う。
 	virtual void Update();
 
-	// 自動で閉じるかどうかの判定を行う
-	virtual void CheckAutoClose(){};
+	// 項目を選択後、自動で閉じるかどうかの判定を行う
+	virtual void CheckAutoClose(){ autoClose = true; };
+
+	// 現在の項目がキャンセル可能であるかどうかの判定を行う
+	virtual void CheckCancelable(){ cancelable = false; };
 
 	// 内容の描画を行う。
 	// クラスごとに派生する。

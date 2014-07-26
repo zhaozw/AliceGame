@@ -4,12 +4,12 @@
 #include "Window_Selectable.h"
 #include "Game_BattleDoll.h"
 
-#define BWND_DOLLCOMMAND_X		100
-#define BWND_DOLLCOMMAND_Y		400
-#define BWND_DOLLCOMMAND_W		300
+#define BWND_DOLLCOMMAND_X		60
+#define BWND_DOLLCOMMAND_Y		380
+#define BWND_DOLLCOMMAND_W		180
 #define BWND_DOLLCOMMAND_H		200
-#define BWND_DOLLCOMMAND_PX	16
-#define BWND_DOLLCOMMAND_PY	16
+#define BWND_DOLLCOMMAND_PX		24
+#define BWND_DOLLCOMMAND_PY		24
 
 #define BWND_DOLLCOMMAND_ATTACK		0
 #define BWND_DOLLCOMMAND_SKILL		1
@@ -54,8 +54,12 @@ public:
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
 
-	//
+	// 自動で閉じるかは場合によって変わる。
 	virtual void CheckAutoClose();
+
+	// 現在の項目がキャンセル可能であるかどうかの判定を行う
+	// キャンセル可能かどうかは開く時に決まる。
+	virtual void CheckCancelable(){};
 
 	// 内容の描画を行う。
 	virtual void DrawContent() const;

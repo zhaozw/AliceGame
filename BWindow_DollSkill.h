@@ -6,7 +6,7 @@
 #define BWND_DOLLSKILL_X		150
 #define BWND_DOLLSKILL_Y		400
 #define BWND_DOLLSKILL_W		500
-#define BWND_DOLLSKILL_H		200
+#define BWND_DOLLSKILL_H		150
 #define BWND_DOLLSKILL_PX		16
 #define BWND_DOLLSKILL_PY		16
 
@@ -36,6 +36,13 @@ public:
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
+
+	// 項目を選択後、自動で閉じるかどうかの判定を行う
+	virtual void CheckAutoClose(){ autoClose = false; };
+
+	// 現在の項目がキャンセル可能であるかどうかの判定を行う
+	// スキルウィンドウは常にキャンセル可能。
+	virtual void CheckCancelable(){ cancelable = true; };
 
 	// 内容の描画を行う。
 	virtual void DrawContent() const;

@@ -24,9 +24,9 @@ void BWindow_DollCommand::MySetup(Scene_Battle* _pScene){
 	SetContent(_T("特技"), 1, true);
 	SetContent(_T("防御"), 2, true);
 	SetRowByContentSize(1);
-	Window_Selectable::Setup(
+	Window_Selectable::Setup_FixContentWidth(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		frameArea, 16, 16, font, 100);
+		frameArea, BWND_DOLLCOMMAND_W-32, 16, font);
 	SetVisible(true);
 	// 内容を元にセットアップする
 	pScene = _pScene;
@@ -38,7 +38,7 @@ void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll, bool _cancelable
 	pActor = pDoll;
 	pDoll->GetName(buf, BATTLEUNIT_NAME_BYTES);
 	MySetup(pScene);
-	SetTitle(buf);
+	SetTitle(buf, g_font.hInfo, FONTSIZE_INFO+16);
 	select.index = 0;
 	commandIndex = 0;
 	cancelable = _cancelable;
@@ -95,22 +95,38 @@ void BWindow_DollCommand::Update(){
 
 void BWindow_DollCommand::OnChildIsClosed(){
 	// 子ウィンドウのハンドルを取得
-	BWindow_FocusedEnemy* pFocusWindow = (BWindow_FocusedEnemy*)pChildWindow;
-	if(pFocusWindow == NULL) return;
-	// 決定キーかキャンセルキーかで分岐
-	if(pFocusWindow->GetSelectIndex() == SELECTRESULT_CANCELED){
-		// 何もしない
-		state = UPDATING;
-	}else{
-		switch(GetSelectIndex()){
-		case BWND_DOLLCOMMAND_ATTACK:
+	BWindow_FocusedEnemy*	pFocusWindow = NULL;
+	BWindow_DollSkill*		pDollSkill = NULL;
+
+	switch(GetSelectIndex()){
+	case BWND_DOLLCOMMAND_ATTACK:
+		pFocusWindow = (BWindow_FocusedEnemy*)pChildWindow;
+		if(pFocusWindow == NULL) return;
+		// 決定キーかキャンセルキーかで分岐
+		if(pFocusWindow->GetSelectIndex() == SELECTRESULT_CANCELED){
+			// 何もしない
+			state = UPDATING;
+		}else{
 			// 攻撃としてターゲットを取得する
 			targetIndex = pFocusWindow->GetSelectIndex();
 			SetCommandAndClose();
-			break;
-		case BWND_DOLLCOMMAND_SKILL:
-			break;
 		}
+		break;
+	case BWND_DOLLCOMMAND_SKILL:
+		pDollSkill = (BWindow_DollSkill*)pChildWindow;
+		if(pDollSkill == NULL) return;
+		// 決定キーかキャンセルキーかで分岐
+		if(pDollSkill->GetSelectIndex() == SELECTRESULT_CANCELED){
+			// 何もしない
+			state = UPDATING;
+		}else{
+			/*
+			// 攻撃としてターゲットを取得する
+			targetIndex = pFocusWindow->GetSelectIndex();
+			SetCommandAndClose();
+			*/
+		}
+		break;
 	}
 }
 

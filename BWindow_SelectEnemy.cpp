@@ -21,9 +21,9 @@ void BWindow_SelectEnemy::MySetup(Scene_Battle* _pScene){
 		BWND_SELECTENEMY_W, BWND_SELECTENEMY_H);
 	WINDOWFONT	font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
 	Window_Selectable_Content content;
-	Window_Selectable::Setup(
+	Window_Selectable::Setup_FixPadding(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
-		frameArea, 16, 16, font, 100);
+		frameArea, 16, 16, font);
 	SetVisible(true);
 	pScene = _pScene;
 	enemyNum = 0;

@@ -17,7 +17,7 @@ BWindow_FocusedEnemy::BWindow_FocusedEnemy() : Window_Base(), s_enemy(MAX_BATTLE
 
 void BWindow_FocusedEnemy::MySetup(Scene_Battle* _pScene){
 	WINDOWAREA frameArea(-100, -100, BWND_FOCUSEDENEMY_WIDTH, BWND_FOCUSEDENEMY_HEIGHT);
-	Window_Base::Setup(
+	Window_Base::Setup_FixPadding(
 		&g_wndSkins.skin[WNDSKIN_NONE],
 		frameArea, 16, 16, true);
 	pScene = _pScene;

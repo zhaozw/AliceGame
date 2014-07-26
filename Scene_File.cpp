@@ -74,7 +74,7 @@ bool Scene_File::InitWindow(){
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, contentArea, font,
 		true);
-	w_yesno.SetTitle(_T("ファイルを上書きしますか？"), g_font.hInfo);
+	w_yesno.SetTitle(_T("ファイルを上書きしますか？"), g_font.hInfo, FONTSIZE_INFO+16);
 	w_yesno.SetPositionH(WND_WIDTH/2);		// 画面中央に揃える
 	w_yesno.SetPositionV(WND_HEIGHT/2);
 	return true;

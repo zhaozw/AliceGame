@@ -92,10 +92,13 @@ public:
 
 	// ウィンドウのセットアップ（位置・スキン・サイズの設定）を行う
 	bool Setup(WindowSkin* pSkin,
+		WINDOWAREA _frameArea, WINDOWAREA _contentArea,
+		bool _visible);
+	bool Setup_FixPadding(WindowSkin* pSkin,
 		WINDOWAREA _frameArea, int _px, int _py,
 		bool _visible);
-	bool Setup(WindowSkin* pSkin,
-		WINDOWAREA _frameArea, WINDOWAREA _contentArea,
+	bool Setup_FixContentWidth(WindowSkin* pSkin,
+		WINDOWAREA _frameArea, int _contentSize, int _py,
 		bool _visible);
 
 	// 位置を手動で決める
@@ -127,6 +130,13 @@ public:
 		contentArea.h = frameArea.h - _py;
 	};
 
+	// サイズを決めた上でアイテムの大きさを決めるとパディングの大きさを自動で決める。
+	void SetContentSizeByContentWidth(int _itemWidth, int _py){
+		contentArea.x = (frameArea.w - _itemWidth)/2;
+		contentArea.y = _py;
+		contentArea.w = _itemWidth;
+		contentArea.h = frameArea.h - _py;
+	};
 
 	// ウィンドウを開く。
 	// force :	無理やり開く(閉じている最中などでも開く。)

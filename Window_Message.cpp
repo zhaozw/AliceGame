@@ -232,10 +232,10 @@ Window_Message::Window_Message() : Window_Text(){
 }
 
 void Window_Message::Setup(
-	WindowSkin* _pSkin, WINDOWAREA _frameArea,
-	int _px, int _py, bool _visible){
+	WindowSkin* _pSkin, WINDOWAREA _frameArea, WINDOWAREA _contentArea,
+	bool _visible){
 	// 初期化
-	Window_Text::Setup(_pSkin, _frameArea, _px, _py, _visible);
+	Window_Text::Setup(_pSkin, _frameArea, _contentArea, _visible);
 	// 仮の値
 	SetColor(GetColor(255, 255, 255));
 	SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
@@ -243,6 +243,20 @@ void Window_Message::Setup(
 	// 全てリセットする
 	ResetAll();
 }
+
+void Window_Message::Setup_FixPadding(
+	WindowSkin* _pSkin, WINDOWAREA _frameArea,
+	int _px, int _py, bool _visible){
+	// 初期化
+	Window_Text::Setup_FixPadding(_pSkin, _frameArea, _px, _py, _visible);
+	// 仮の値
+	SetColor(GetColor(255, 255, 255));
+	SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
+	SetFontWidth(FONTSIZE_INFO);
+	// 全てリセットする
+	ResetAll();
+}
+
 
 void Window_Message::ResetAll(){
 	// 内容のクリア

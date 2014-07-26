@@ -15,7 +15,7 @@ Window_DollStatus::Window_DollStatus() : Window_Text(){
 
 bool Window_DollStatus::Setup(int _x, int _y){
 	WINDOWAREA frameArea(_x, _y, WND_DOLLSTATUS_WIDTH, WND_DOLLSTATUS_HEIGHT);
-	Window_Text::Setup(
+	Window_Text::Setup_FixPadding(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, WND_DOLLSTATUS_PX, WND_DOLLSTATUS_PY,
 		false);

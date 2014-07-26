@@ -78,6 +78,12 @@ bool Data_SkillInfo::GetSkillName(LPTSTR buf, WORD skillID){
 	return true;
 }
 
+BYTE Data_SkillInfo::GetTargetType(WORD skillID){
+	if(skillID == 0 || skillID >= MAX_SKILL) return ACTIONTARGET_NONE;
+	return targetType[skillID];
+}
+
+
 bool Data_SkillInfo::GetAssertMessage(LPTSTR buf, WORD skillID, Game_BattleUnit* pUnit){
 	bool result = true;
 	result = assertMessages[skillID].GetSkillMessage(buf, pUnit);

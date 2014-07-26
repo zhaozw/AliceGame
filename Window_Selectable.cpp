@@ -37,16 +37,18 @@ int Window_Selectable::GetContentMaxDrawWidth() const{
 	int result = 0;
 	for(int n=0; n<WND_SELECTABLE_CONTENT; n++){
 		if(strlen(content.data[n]) > 0){
-			result = max(result, GetDrawStringWidthToHandle(
+			result = max(result, 
+				GetDrawStringWidthToHandle(
 				content.data[n], strlen(content.data[n]), windowFont.hFont)); 
 		}
 	}
 	return result;
 }
 
-void Window_Selectable::SetTitle(LPTSTR _title, int _hTitleFont){
+void Window_Selectable::SetTitle(LPTSTR _title, int _hTitleFont, int _titleHeight){
 	strcpy_s(content.title, WND_SELECTABLE_TITLELENGTH-1, _title);
 	content.hTitleFont = (_hTitleFont!=0) ? _hTitleFont : windowFont.hFont;
+	content.titleHeight = _titleHeight;
 	content.useTitle = (strlen(_title) > 0);
 }
 
@@ -79,31 +81,45 @@ void Window_Selectable::Setup(
 	WINDOWAREA _frameArea,
 	WINDOWAREA _contentArea,
 	WINDOWFONT _font,
-	int _itemWidth){
-		Window_Text::Setup(_pSkin, _frameArea, _contentArea, true);
+	int _item_margin_x){
 		windowFont = _font;
-		item_width = _itemWidth;
+		Window_Text::Setup(_pSkin, _frameArea, _contentArea, true);
+		item_width = (_contentArea.w - _item_margin_x*(column-1))/column;
 }
 
-void Window_Selectable::Setup(
+void Window_Selectable::Setup_FixPadding(
 	WindowSkin* _pSkin, 
 	WINDOWAREA _frameArea,
 	int _px, int _py,
 	WINDOWFONT _font,
-	int _itemWidth){
-		Window_Text::Setup(_pSkin, _frameArea, _px, _py, true);
+	int _item_margin_x){
 		windowFont = _font;
-		item_width = _itemWidth;
+		Window_Text::Setup_FixPadding(_pSkin, _frameArea, _px, _py, true);
+		item_width = (contentArea.w - _item_margin_x*(column-1))/column;
 }
 
-void Window_Selectable::Setup_AutoMargin(
+void Window_Selectable::Setup_FixContentWidth(
 	WindowSkin* _pSkin, 
 	WINDOWAREA _frameArea,
-	int _px, int _py,
-	WINDOWFONT _font){
-		Window_Text::Setup(_pSkin, _frameArea, _px, _py, true);
+	int _content_width, int _py, 
+	WINDOWFONT _font,
+	int _item_margin_x){
+		windowFont = _font;
+		Window_Text::Setup_FixContentWidth(_pSkin, _frameArea,
+			_content_width, _py, true);
+		item_width = (contentArea.w - _item_margin_x*(column-1))/column;
+}
+
+void Window_Selectable::Setup_FixContentWidth_Auto(
+	WindowSkin* _pSkin, 
+	WINDOWAREA _frameArea,
+	int _py, WINDOWFONT _font,
+	int _item_margin_x){
 		windowFont = _font;
 		item_width = GetContentMaxDrawWidth();
+		Window_Text::Setup_FixContentWidth(
+			_pSkin, _frameArea,
+			item_width + _item_margin_x*(column-1), _py, true);
 }
 
 
@@ -130,13 +146,15 @@ void Window_Selectable::DrawContent() const{
 			cntY += content.titleHeight;
 		}
 
-		item_margin_x = (contentArea.w - column * item_width)/column;
+		item_margin_x = (column <= 1) ? 0 
+			: (contentArea.w - column * item_width)/(column-1);
 		// 各選択肢の描画
 		for(int h=0; h<row; h++){
 			for(int w=0; w<column; w++){
 				cell = w+h*column;
 				GetContent(buf, cell);
-				cntX = frameArea.x + item_margin_x/2 + (item_width+item_margin_x)*w;
+				cntX = frameArea.x + contentArea.x 
+					 + (item_width+item_margin_x)*w;
 				switch(windowFont.align){
 				case 0:
 					ddx = 0;
@@ -179,6 +197,8 @@ void Window_Selectable::Update(){
 	Update_Common();
 	// 選択時にウィンドウを閉じるかの判定
 	CheckAutoClose();
+	// キャンセル可能かどうかの判定
+	CheckCancelable();
 	switch(state){
 	case UPDATING:
 		// 更新

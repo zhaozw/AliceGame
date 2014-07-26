@@ -20,13 +20,13 @@ void BWindow_DollSkill::MySetup(Scene_Battle* _pScene){
 	WINDOWAREA		frameArea(
 		BWND_DOLLSKILL_X, BWND_DOLLSKILL_Y,
 		BWND_DOLLSKILL_W, BWND_DOLLSKILL_H);
-	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4, ALIGN_CENTER);
+	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+8, ALIGN_CENTER);
 	ClearContent();
 	SetGridSize(2, 4);
-	Window_Selectable::Setup(
+	Window_Selectable::Setup_FixPadding(
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, BWND_DOLLSKILL_PX, BWND_DOLLSKILL_PY,
-		font, 100);
+		font);
 	pScene = _pScene;
 }
 
@@ -41,17 +41,26 @@ void BWindow_DollSkill::OnOpened(){
 			SetContent(buf, n, true);
 		}
 	}
+	select.index = 0;
 }
 
 void BWindow_DollSkill::Update(){
+	int skillID;
 	Window_Selectable::Update();
 	switch(state){
 	case UPDATING:
 		switch(select.CheckKey()){
 		case SELECT2D_CHOOSE:
+			skillID = pOwner->GetSkillID(select.index);
+			d_skillInfo.GetTargetType();
+			if(skillID == 0) return;
 			break;
 		case SELECT2D_CANCEL:
-
+			if(cancelable){
+				select.index = SELECTRESULT_CANCELED;
+				Close(true, false);
+				break;
+			}
 			break;
 		}
 		break;
