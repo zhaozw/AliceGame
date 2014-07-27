@@ -4,10 +4,10 @@
 #include "Window_Message.h"
 
 // ウィンドウ表示関連の定数
-#define WND_BATTLEMSG_X				0
-#define WND_BATTLEMSG_Y				0
-#define WND_BATTLEMSG_WIDTH			(WND_WIDTH)
-#define WND_BATTLEMSG_HEIGHT		128
+#define WND_BATTLEMSG_X				15
+#define WND_BATTLEMSG_Y				15
+#define WND_BATTLEMSG_WIDTH			(WND_WIDTH)-150
+#define WND_BATTLEMSG_HEIGHT		90
 #define WND_BATTLEMSG_PX			16
 #define WND_BATTLEMSG_PY			16
 

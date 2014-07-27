@@ -55,6 +55,7 @@ typedef struct Image_Icon{
 	int attrstone[DOLL_GROUP_NUM][DOLL_ATTR_NUM];
 	int state_group;
 	int	state[64];
+	int attr_graph;
 }IMAGE_ICON_; // IMAGE_ICONだと組み込みの定数とかぶるので
 
 // 各種背景系（画面全体）の画像を保持する。

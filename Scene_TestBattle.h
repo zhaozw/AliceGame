@@ -4,7 +4,9 @@
 #include "Scene_Base.h"
 #include "Selectable.h"
 
-#define MAX_TESTBATTLE		10
+#define MAX_TESTBATTLE			10
+#define MAX_TESTBATTLE_MENU		3
+#define TESTBATTLE_SELECT_NUM	(MAX_TESTBATTLE+MAX_TESTBATTLE_MENU)
 
 class Scene_TestBattle : public Scene_Base{
 public:

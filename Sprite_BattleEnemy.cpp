@@ -135,9 +135,9 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 	TCHAR	hpStr[16];
 	wsprintf(hpStr, _T("%d/%d"), pEnemy->GetHP(), pEnemy->GetMaxHP());
 	DrawStringToHandle(
-		GetX()-BATTLEENEMY_HPGAUGE_WIDTH/2
+		(int)(GetX()-BATTLEENEMY_HPGAUGE_WIDTH/2
 		+ GetRightAlignDX(
-		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH),
-		GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2, hpStr,
+		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH)),
+		(int)(GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2), hpStr,
 		GetColor(255, 255, 255), g_font.hTinyInfo);
 }

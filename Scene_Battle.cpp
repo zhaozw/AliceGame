@@ -185,6 +185,9 @@ bool Scene_Battle::AttachDollPtrToSprite(){
 
 
 void Scene_Battle::Draw() const{
+	// 背景の描画
+	DrawBG();
+
 	// スプライトの描画
 	DrawDollsSprite();
 	DrawEnemiesSprite();
@@ -200,9 +203,13 @@ void Scene_Battle::Draw() const{
 	// エフェクトの描画
 	Draw_MyTask_InfoEffect();
 
+	// 前情報の描画
+	DrawBattleInfo();
+
 	// フェードの描画
 	ResetDrawARGB();
 	DrawReserveFade();
+
 }
 
 bool Scene_Battle::SetupWindow(){

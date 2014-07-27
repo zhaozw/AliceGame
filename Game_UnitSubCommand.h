@@ -35,6 +35,8 @@ public:
 	void	ResetResult(BYTE r){ result &= ~r; };
 	WORD	GetResult(){ return result; };
 
+
+
 };
 
 #endif // GAME_UNITSUBCOMMAND_H

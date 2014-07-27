@@ -55,6 +55,12 @@ public:
 	// ターゲットが消滅した場合など。
 	void SetEmpty();
 
+	// まとめて値をセットする
+	// ついでにisUsedもtrueにする
+	void SetBaseValues(Game_BattleUnit* _pOwner, Game_BattleUnit* _pTarget,
+		BYTE _actionType);
+
+
 };
 
 #endif GAME_UNITCOMMAND_H

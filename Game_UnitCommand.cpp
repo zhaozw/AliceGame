@@ -40,3 +40,12 @@ void Game_UnitCommand::SetEmpty(){
 	actionType = ACTIONTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
 }
+
+void Game_UnitCommand::SetBaseValues(
+	Game_BattleUnit* _pOwner, Game_BattleUnit* _pTarget,
+	BYTE _actionType){
+		pOwner = _pOwner;
+		pTarget = _pTarget;
+		actionType = _actionType;
+		isUsed = true;
+}

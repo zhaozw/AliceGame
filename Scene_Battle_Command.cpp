@@ -338,18 +338,11 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 	case ACTIONTYPE_ATTACK:
 		// 通常攻撃
 		if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
-			subCommands[subCommandIndex].SetOwner(pDefOwner);
-			subCommands[subCommandIndex].SetTarget(pDefTarget);
-			subCommands[subCommandIndex].SetActionType(ACTIONTYPE_DAMAGE);
-			subCommands[subCommandIndex].SetUsed();
+			subCommands[subCommandIndex].SetBaseValues(
+				pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+			subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
 			subCommandIndex++;
-			/*
-		action.SetType(Game_BattleAction::TYPE_DAMAGE);
-		action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
-		actionStack.Push(action);
-		*/
 		}
-		// return 1;
 		break;
 	case ACTIONTYPE_GUARD:
 		// 宣言のみで何も行わない
@@ -359,18 +352,30 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		case SKILL_LOADOFF_ATTACK:
 			if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
 				// 通常攻撃と同様のダメージ判定
+				subCommands[subCommandIndex].SetBaseValues(
+					pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+				subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
+				subCommandIndex++;
+				/*
 				action.SetType(Game_BattleAction::TYPE_DAMAGE);
 				action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
 				actionStack.Push(action);
+				*/
 			}
-			return 1;
+			// return 1;
 			break;
 		case SKILL_HEAL1:
 			// HPを回復
+			subCommands[subCommandIndex].SetBaseValues(
+				pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
+			subCommands[subCommandIndex].SetParam(CALCHEAL_HEAL1);
+			subCommandIndex++;
+			/*
 			action.SetType(Game_BattleAction::TYPE_HEAL);
 			action.SetParam(CalcHeal(pDefOwner, pDefTarget, CALCHEAL_HEAL1));
 			actionStack.Push(action);
-			return 1;
+			*/
+			// return 1;
 		}
 		break;
 	case ACTIONTYPE_ERROR:
@@ -395,20 +400,24 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			action.ClearFlag();
 			action.SetParam(CalcDamage(
 				subCommands[n].GetOwner(), subCommands[n].GetTarget(),
-				CALCDAMAGE_ATTACK));
+				subCommands[n].GetParam()));
 			actionStack.Push(action);
 			result = (result==0?1:result);
 			break;
 		case ACTIONTYPE_HEAL:
 			// 回復関連。param:回復の種類。
+			action.Clear();
+			action.SetActor(subCommands[n].GetOwner());
+			action.SetOpponent(subCommands[n].GetTarget());
+			action.SetType(Game_BattleAction::TYPE_HEAL);
+			action.ClearFlag();
+			action.SetParam(CalcHeal(
+				subCommands[n].GetOwner(), subCommands[n].GetTarget(),
+				subCommands[n].GetParam()));
+			actionStack.Push(action);
+			result = (result==0?1:result);
 			break;
-		case ACTIONTYPE_STATE_ATTACK:
-			// ステートの付加。param:適用するステートのID。
-			break;
-		case ACTIONTYPE_STATE_PURE:
-			// ステートの付加。param:適用するステートのID。
-			break;
-		case ACTIONTYPE_STATE_FIX:
+		case ACTIONTYPE_STATE:
 			// ステートの付加。param:適用するステートのID。
 			break;
 		}

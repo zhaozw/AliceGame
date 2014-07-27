@@ -380,10 +380,16 @@ public:
 	// 描画
 	// 下記の関数はScene_Battle_Draw.cppに記述する。
 
+	// 背景を描画する。
+	void DrawBG() const;
+
 	// 人形のスプライトを描画する。
 	void DrawDollsSprite() const;
 	// 敵キャラのスプライトを描画する。
 	void DrawEnemiesSprite() const;
+
+	// 画面前景などを描画する。
+	void DrawBattleInfo() const;
 
 };
 

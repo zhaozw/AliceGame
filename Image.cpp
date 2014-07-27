@@ -216,6 +216,9 @@ bool Image::Load_Icon(){
 		}
 	}
 
+	// ‘®«ŠÖŒW‰æ‘œ‚Ì“Ç‚İ‚İ
+	icon.attr_graph = LoadGraph(_T("img\\attr_graph.png"));
+
 	return true;
 }
 
