@@ -31,6 +31,15 @@
 #define ACTIONTYPE_ATTACK		2	// 通常攻撃
 #define ACTIONTYPE_GUARD		3	// 防御
 #define ACTIONTYPE_SKILL		4	// 特技
+// ここから下はコマンドの解釈中においてのみ使用。
+#define ACTIONTYPE_DAMAGE		0	// ダメージ。
+#define ACTIONTYPE_HEAL			1	// 回復。
+#define ACTIONTYPE_STATE_ATTACK	2	// 攻撃に伴うステート付加。
+									// かばうによるターゲット変更を受け付ける。
+#define	ACTIONTYPE_STATE_PURE	3	// 純粋なステート付加。
+									// かばえるかどうかは状況とかばうの種類による。
+#define ACTIONTYPE_STATE_FIX	4	// ステートの付加。
+									// かばうことは出来ない。
 
 // 行動のターゲットに関する定数
 #define ACTIONTARGET_NONE			0	// ターゲットなし

@@ -19,6 +19,9 @@ private:
 											// Static_BattleUnit.hに記述される定数。
 	bool						isUsed;		// コマンドにデータが入っているか
 	WORD						skillID;	// スキルのID。
+	int							param;		// 汎用パラメータ。
+											// 通常のコマンドとしては使用せず、
+											// Game_BattleActionの解釈中に使用する。
 public:
 	// コンストラクタ
 	Game_UnitCommand();
@@ -41,13 +44,15 @@ public:
 	void SetTargetType(BYTE t){ targetType = t; };
 	void SetSkillID(WORD i){ skillID = i; };
 	void SetUsed(){ isUsed = true; };
-	
+	void SetIsUsed(bool b){ isUsed = b; };
+	void SetParam(int p){ param = p; };
 
 	Game_BattleUnit* GetOwner(){ return pOwner; };
 	Game_BattleUnit* GetTarget(){ return pTarget; };
 	BYTE GetActionType(){ return actionType; };
 	BYTE GetTargetType(){ return targetType; };
 	WORD GetSkillID(){ return skillID; };
+	int GetParam(){ return param; };
 
 	bool IsEmpty() const{ return !isUsed; };
 

@@ -151,6 +151,7 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 
 // ※混乱してそもそも正しい行動が出来ない場合の補正はこれより前に行う。
 // ※全体攻撃のターゲットはアクション発生時に補正を行う。
+// ※「かばう」はアクション発生時に補正を行う。
 
 char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
@@ -176,6 +177,8 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 
 	switch(fixType){
 	case FIXTARGET_NOFIX:
+		// 全体攻撃・複数回攻撃など、ターゲットが複数の場合はここに該当する。
+		// その場合、ターゲットの変更は後で行う。
 		break;
 	case FIXTARGET_DIE_DISAPPEAR:
 		if(pCmd->GetTarget()->IsDead()){
@@ -295,22 +298,45 @@ char Scene_Battle::InterpretCommand_Pre_Action(Game_UnitCommand* pCmd){
 	return 0;
 }
 
+#define MAX_SUBCOMMAND_PER_COMMAND		16
+
 char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
+	// このフェイズのInterpretCommandは特殊。
+	// かばうなどの処理を発生するアクションごとに行う必要があるが、
+	// 便宜上、複数ターゲットの場合はpTarget = NULLとなっているため
+	// 一旦、本来のコマンドをScene_Battleクラスが保持するのとは別の
+	// Game_UnitCommandの配列subCommandsを用意し、
+	// そこでターゲットを一体に確定させる。
+	// そのターゲットが確定したsubCommandsに対して
+	// それぞれコマンドの確認を行った上で
+	// 実際のアクションとして適用する。
+	// 
 	Game_BattleAction action;
-	Game_BattleUnit*		pOwner = pCmd->GetOwner();
-	Game_BattleUnit*		pTarget = pCmd->GetTarget();
+	Game_BattleUnit*		pDefOwner = pCmd->GetOwner();
+	Game_BattleUnit*		pDefTarget = pCmd->GetTarget();
+	Game_UnitCommand		subCommands[MAX_SUBCOMMAND_PER_COMMAND];
+	int						subCommandIndex = 0;
+	for(int n=0; n<MAX_SUBCOMMAND_PER_COMMAND; n++){
+		subCommands[n].SetOwner(pDefOwner);
+		subCommands[n].SetIsUsed(false);
+		subCommands[n].SetEmpty();
+	}
+
+
 	if(pCmd == NULL) return -1;
+
+	// 本来のコマンドをsubCommandsの配列に変換する。
 	switch(pCmd->GetActionType()){
 	case ACTIONTYPE_NONE:
 		break;
 	case ACTIONTYPE_ATTACK:
 		// 通常攻撃
 		action.Clear();
-		action.SetActor(pOwner);
-		action.SetOpponent(pTarget);
+		action.SetActor(pDefOwner);
+		action.SetOpponent(pDefTarget);
 		action.SetType(Game_BattleAction::TYPE_DAMAGE);
 		action.ClearFlag();
-		action.SetParam(CalcDamage(pOwner, pTarget, CALCDAMAGE_ATTACK));
+		action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
 		actionStack.Push(action);
 		return 1;
 		break;
@@ -322,22 +348,22 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		case SKILL_LOADOFF_ATTACK:
 			// 通常攻撃と同様のダメージ判定
 			action.Clear();
-			action.SetActor(pOwner);
-			action.SetOpponent(pTarget);
+			action.SetActor(pDefOwner);
+			action.SetOpponent(pDefTarget);
 			action.SetType(Game_BattleAction::TYPE_DAMAGE);
 			action.ClearFlag();
-			action.SetParam(CalcDamage(pOwner, pTarget, CALCDAMAGE_ATTACK));
+			action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
 			actionStack.Push(action);
 			return 1;
 			break;
 		case SKILL_HEAL1:
 			// HPを回復
 			action.Clear();
-			action.SetActor(pOwner);
-			action.SetOpponent(pTarget);
+			action.SetActor(pDefOwner);
+			action.SetOpponent(pDefTarget);
 			action.SetType(Game_BattleAction::TYPE_HEAL);
 			action.ClearFlag();
-			action.SetParam(CalcHeal(pOwner, pTarget, CALCHEAL_HEAL1));
+			action.SetParam(CalcHeal(pDefOwner, pDefTarget, CALCHEAL_HEAL1));
 			actionStack.Push(action);
 			return 1;
 		}
@@ -346,7 +372,44 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		return -1;
 		break;
 	}
-	return 0;
+
+	// subCommandsの配列を解釈してactionStackに追加する。
+	BYTE result = 0;
+	for(int n=0; n<MAX_SUBCOMMAND_PER_COMMAND; n++){
+		if(subCommands[n].IsEmpty()){
+			break;
+		}
+		switch(subCommands[n].GetActionType()){
+		case ACTIONTYPE_DAMAGE:
+			// ダメージ関連。param:ダメージの種類。
+			// 「かばう」などによるターゲット変更
+			action.Clear();
+			action.SetActor(subCommands[n].GetOwner());
+			action.SetOpponent(subCommands[n].GetTarget());
+			action.SetType(Game_BattleAction::TYPE_DAMAGE);
+			action.ClearFlag();
+			action.SetParam(CalcDamage(
+				subCommands[n].GetOwner(), subCommands[n].GetTarget(),
+				CALCDAMAGE_ATTACK));
+			actionStack.Push(action);
+			result = (result==0?1:result);
+			break;
+		case ACTIONTYPE_HEAL:
+			// 回復関連。param:回復の種類。
+			break;
+		case ACTIONTYPE_STATE_ATTACK:
+			// ステートの付加。param:適用するステートのID。
+			break;
+		case ACTIONTYPE_STATE_PURE:
+			// ステートの付加。param:適用するステートのID。
+			break;
+		case ACTIONTYPE_STATE_FIX:
+			// ステートの付加。param:適用するステートのID。
+			break;
+		}
+	}
+
+	return result;
 }
 
 char Scene_Battle::InterpretCommand_Check_Death(Game_UnitCommand* pCmd){

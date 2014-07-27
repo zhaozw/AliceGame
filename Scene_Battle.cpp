@@ -568,7 +568,7 @@ bool Scene_Battle::ExecuteAction(){
 				// コマンドリストの内容を順に実行する。
 				// 各コマンドごとに、行動前、実際の行動、行動後、とフェイズに分かれる。
 				// それぞれのフェイズにおいてアクションスタックはリセットされている。
-				if(commandPhaze == COMMANDPHAZE_NOPHAZE){
+				if(commandPhaze == COMMANDPHAZE_NEXTCOMMAND){
 					// コマンドの処理が終わった場合(条件3)
 					// 次のコマンドのインデックスを取得
 					commandIndex++;
@@ -598,7 +598,7 @@ bool Scene_Battle::ExecuteAction(){
 				}else{
 					// 最終フェイズの解釈を終えた場合(条件3→コマンド処理終了へ)
 					// コマンドの解釈は行わずに次のコマンドへ
-					commandPhaze = COMMANDPHAZE_NOPHAZE;
+					commandPhaze = COMMANDPHAZE_NEXTCOMMAND;
 					if(CheckBattleResult()){
 						// 戦闘の結果が決した場合は
 						// すぐさま次のフェイズ(POST_BATTLE)へ
@@ -797,7 +797,7 @@ void Scene_Battle::SetupBattleDo(){
 	// 最初に処理するコマンドにインデックスを合わせる
 	// 最初にインクリメントが行われて0になるので-1から始める。
 	commandIndex = -1;
-	commandPhaze = COMMANDPHAZE_NOPHAZE;
+	commandPhaze = COMMANDPHAZE_NEXTCOMMAND;
 }
 
 
