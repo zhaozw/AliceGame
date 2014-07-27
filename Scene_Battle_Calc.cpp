@@ -222,6 +222,12 @@ void Scene_Battle::ClearCommands(){
 	commandIndex = 0;
 }
 
+BYTE Scene_Battle::CheckDamageAction(
+	Game_BattleUnit* pActor, Game_BattleUnit* pTarget, int param){
+		return 0;
+}
+
+
 int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent,
 	int param){
 		int from = 0;		// UŒ‚‘¤‚Ìƒpƒ‰ƒ[ƒ^

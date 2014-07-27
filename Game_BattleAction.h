@@ -52,6 +52,9 @@ public:
 	// 内容を初期化する。
 	// スタックが取り出された時に実行する。
 	void Clear();
+	// 内容を初期化するが、
+	// pActorとpOpponentの値は初期化しない。
+	void ClearWithoutUnit();
 
 	// アクセサ
 	void SetActor(Game_BattleUnit* p){ pActor = p; };

@@ -366,6 +366,9 @@
     <ClCompile Include="BWindow_FocusedUnit.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
     </ClCompile>
+    <ClCompile Include="Game_UnitSubCommand.cpp">
+      <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="BWindow_FocusedUnit.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_UnitSubCommand.h">
+      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

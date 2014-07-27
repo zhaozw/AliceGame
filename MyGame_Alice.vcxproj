@@ -118,6 +118,7 @@
     <ClCompile Include="Game_BattleUnit.cpp" />
     <ClCompile Include="Game_DollList.cpp" />
     <ClCompile Include="Game_FileHeader.cpp" />
+    <ClCompile Include="Game_UnitSubCommand.cpp" />
     <ClCompile Include="MyTask_BaseEffect.cpp" />
     <ClCompile Include="Game_UnitCommand.cpp" />
     <ClCompile Include="GlobalData.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Game_BattleEnemy.h" />
     <ClInclude Include="Game_BattleUnit.h" />
     <ClInclude Include="Game_DollList.h" />
+    <ClInclude Include="Game_UnitSubCommand.h" />
     <ClInclude Include="MyTask_BaseEffect.h" />
     <ClInclude Include="MyTask_InfoEffect.h" />
     <ClInclude Include="MyTask_ObjectEffect.h" />

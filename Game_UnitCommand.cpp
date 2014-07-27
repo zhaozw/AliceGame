@@ -6,7 +6,7 @@
 // コンストラクタ
 Game_UnitCommand::Game_UnitCommand() : 
 pOwner(NULL), pTarget(NULL), actionType(ACTIONTYPE_NONE), targetType(ACTIONTARGET_NONE),
-isUsed(false), param(0){
+isUsed(false){
 	Reset();
 }
 
@@ -32,7 +32,6 @@ void Game_UnitCommand::Reset(){
 	targetType = ACTIONTARGET_NONE;
 	isUsed = false;
 	skillID = -1;
-	param = 0;
 }
 
 void Game_UnitCommand::SetEmpty(){
@@ -40,5 +39,4 @@ void Game_UnitCommand::SetEmpty(){
 	pTarget = NULL;
 	actionType = ACTIONTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
-	param = 0;
 }

@@ -4,6 +4,7 @@
 #include "Game_BattleAction.h"
 #include "Data_BattleState.h"
 #include "Static_Skill.h"
+#include "Game_UnitSubCommand.h"
 
 char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
 	if(pCmd == NULL) return -1;
@@ -314,7 +315,7 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	Game_BattleUnit*		pDefOwner = pCmd->GetOwner();
 	Game_BattleUnit*		pDefTarget = pCmd->GetTarget();
-	Game_UnitCommand		subCommands[MAX_SUBCOMMAND_PER_COMMAND];
+	Game_UnitSubCommand		subCommands[MAX_SUBCOMMAND_PER_COMMAND];
 	int						subCommandIndex = 0;
 	for(int n=0; n<MAX_SUBCOMMAND_PER_COMMAND; n++){
 		subCommands[n].SetOwner(pDefOwner);
@@ -325,20 +326,30 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 
 	if(pCmd == NULL) return -1;
 
+	// 使用者とターゲット以外の情報をクリア
+	action.SetActor(pDefOwner);
+	action.SetOpponent(pDefTarget);
+	action.ClearWithoutUnit();
+
 	// 本来のコマンドをsubCommandsの配列に変換する。
 	switch(pCmd->GetActionType()){
 	case ACTIONTYPE_NONE:
 		break;
 	case ACTIONTYPE_ATTACK:
 		// 通常攻撃
-		action.Clear();
-		action.SetActor(pDefOwner);
-		action.SetOpponent(pDefTarget);
+		if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+			subCommands[subCommandIndex].SetOwner(pDefOwner);
+			subCommands[subCommandIndex].SetTarget(pDefTarget);
+			subCommands[subCommandIndex].SetActionType(ACTIONTYPE_DAMAGE);
+			subCommands[subCommandIndex].SetUsed();
+			subCommandIndex++;
+			/*
 		action.SetType(Game_BattleAction::TYPE_DAMAGE);
-		action.ClearFlag();
 		action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
 		actionStack.Push(action);
-		return 1;
+		*/
+		}
+		// return 1;
 		break;
 	case ACTIONTYPE_GUARD:
 		// 宣言のみで何も行わない
@@ -346,23 +357,17 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 	case ACTIONTYPE_SKILL:
 		switch(pCmd->GetSkillID()){
 		case SKILL_LOADOFF_ATTACK:
-			// 通常攻撃と同様のダメージ判定
-			action.Clear();
-			action.SetActor(pDefOwner);
-			action.SetOpponent(pDefTarget);
-			action.SetType(Game_BattleAction::TYPE_DAMAGE);
-			action.ClearFlag();
-			action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
-			actionStack.Push(action);
+			if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+				// 通常攻撃と同様のダメージ判定
+				action.SetType(Game_BattleAction::TYPE_DAMAGE);
+				action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
+				actionStack.Push(action);
+			}
 			return 1;
 			break;
 		case SKILL_HEAL1:
 			// HPを回復
-			action.Clear();
-			action.SetActor(pDefOwner);
-			action.SetOpponent(pDefTarget);
 			action.SetType(Game_BattleAction::TYPE_HEAL);
-			action.ClearFlag();
 			action.SetParam(CalcHeal(pDefOwner, pDefTarget, CALCHEAL_HEAL1));
 			actionStack.Push(action);
 			return 1;

@@ -27,6 +27,13 @@ void Game_BattleAction::Clear(){
 	param = 0;
 }
 
+void Game_BattleAction::ClearWithoutUnit(){
+	type = TYPE_UNDIFINED;
+	flags = 0;
+	param = 0;
+}
+
+
 // Game_BattleActionStackƒNƒ‰ƒX
 
 Game_BattleActionStack::Game_BattleActionStack():data(){

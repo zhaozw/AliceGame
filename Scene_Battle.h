@@ -340,6 +340,13 @@ public:
 	// commandsの内容を全てクリアする。
 	void ClearCommands();
 
+	// InterpretCommand_Action内でのみ使用される。
+	// 使用者、ターゲット、パラメータを与えることで
+	// ダメージを与える行動の成否を判断する。
+	// 戻り値がその判断。
+	BYTE CheckDamageAction(Game_BattleUnit* pActor, Game_BattleUnit* pTarget, int param);
+	
+
 	// ダメージ計算。
 	// オプションを指定することで、通常攻撃以外のダメージ計算にも対応する。
 	int CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent, int param);
