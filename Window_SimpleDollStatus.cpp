@@ -49,7 +49,16 @@ void Window_SimpleDollStatus::DrawContent() const{
 }
 
 void Window_SimpleDollStatus::DrawContent_Battle() const{
-
+	TCHAR status[][12] = {
+		"‚k‚–",
+		"‚g‚o",
+		"UŒ‚",
+		"•q·",
+		"–‚—Í",
+		"‹ZI",
+	};
+	// –¼‘O‚Ì•`‰æ
+	// í‘°‚Ì•`‰æ
 
 }
 
