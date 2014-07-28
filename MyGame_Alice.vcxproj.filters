@@ -369,6 +369,12 @@
     <ClCompile Include="Game_UnitSubCommand.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Instance</Filter>
     </ClCompile>
+    <ClCompile Include="Window_Info.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
+    <ClCompile Include="Window_SimpleDollStatus.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -622,6 +628,12 @@
     </ClInclude>
     <ClInclude Include="Game_UnitSubCommand.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_SimpleDollStatus.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_Info.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

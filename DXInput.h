@@ -16,10 +16,11 @@
 
 // 十字キーの方向をint値で表す場合。
 // DXライブラリの値とは対応していない。
-#define DIGDIR_DOWN 2
-#define DIGDIR_LEFT 4
-#define DIGDIR_RIGHT 6
-#define DIGDIR_UP 8
+#define DIGDIR_DOWN		2
+#define DIGDIR_LEFT		4
+#define DIGDIR_RIGHT	6
+#define DIGDIR_UP		8
+#define DIGDIR_NONE		5
 
 // アナログ入力の閾値を設定する。
 #define DEF_INPUT_MIN		30
@@ -31,7 +32,8 @@ public:
 	int key;				// 押しているキー
 	int pushedKey;			// 押されたキー
 	int analogX, analogY;	// アナログの十字キー状態 
-	int digitalDir;			// 十字キーの方向を8方向で入れる
+	int digitalDir;			// 十字キーの方向を8方向で入れる。
+							// 値は必ず1～9になる。
 
 	// 十字キーの1回押しを認識するための値
 	// 一度入力が入るとtrueになり、入力offになるとfalseになる。
@@ -42,6 +44,8 @@ public:
 
 	DXInput();
 	void getInput(bool is2P);		// key, pushedKeyの取得。2Pの場合はis2P = true
+	BYTE getDigDir();			// digitalKeyの値を4方向に限定して返す。
+								// 優先順位は右、下、上、左。
 };
 
 #endif

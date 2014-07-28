@@ -14,8 +14,14 @@
 #include "BWindow_DollSkill.h"
 #include "BWIndow_SelectEnemy.h"
 #include "BWindow_FocusedUnit.h"
+#include "Window_SimpleDollStatus.h"
+
 #include "Sprite_BattleDoll.h"
 #include "Sprite_BattleEnemy.h"
+
+#define INFOWINDOW_NONE				0
+#define INFOWINDOW_DOLLINFO			1
+#define INFOWINDOW_ENEMY			2
 
 class Scene_Battle : public Scene_Base{
 public:
@@ -88,7 +94,12 @@ private:
 	// 敵の選択ウィンドウ
 	BWindow_SelectEnemy					w_selectEnemy;
 	// 敵のフォーカスウィンドウ
-	BWindow_FocusedUnit				w_focusedEnemy;
+	BWindow_FocusedUnit					w_focusedEnemy;
+	// 人形の情報を表示するウィンドウ
+	Window_SimpleDollStatus				w_simpleDollStatus;
+	// 情報表示用ウィンドウの状態。
+	// 0なら開いていない、それ以外なら開いている。
+	BYTE								infoWindowID;
 	// 人形のスプライト
 	Sprite_BattleDoll					s_dolls[NUM_BATTLEDOLL_FRONT];
 	// 敵のスプライト
@@ -156,6 +167,10 @@ public:
 
 	// 戦闘が終わっていないかを判断する。
 	bool CheckBattleResult();
+
+	// 情報ウィンドウを閉じる。
+	// 現在のinfoWindowの値に応じ、開かれているものを閉じる。
+	void CloseInfoWindow();
 
 	//=========================================
 	// アクセサ関連

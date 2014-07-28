@@ -167,6 +167,10 @@ bool Scene_Battle::CheckBattleResult(){
 	return false;
 }
 
+void Scene_Battle::CloseInfoWindow(){
+	// infoWindowの値に応じてウィンドウを閉じる。
+}
+
 bool Scene_Battle::AttachDollPtrToSprite(){
 	Game_BattleDoll*	pDoll	= NULL;
 	int					index	= 0;

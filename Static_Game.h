@@ -27,9 +27,10 @@
 
 // ボタンの名称の羅列。
 // 作るゲームに合わせて覚えやすいように変える。
-#define BTN_CHOOSE 0	// 決定ボタン
-#define BTN_CANCEL 1	// キャンセルボタン
-#define BTN_C 2		// ボムボタン・キャンセルボタン
+#define BTN_CHOOSE		0	// 決定ボタン
+#define BTN_CANCEL		1	// キャンセルボタン
+#define BTN_SHOWINFO	2	// 情報ウィンドウの表示・非表示切り替えボタン
+#define BTN_SCREENSHOT	3	// スクリーンショットを撮るボタン
 #define BTN_D 3		// キャラチェンジボタン・スキップボタン
 #define BTN_E 4		// 一時停止ボタン
 

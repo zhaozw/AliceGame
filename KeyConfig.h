@@ -5,7 +5,7 @@
 #include <DxLib.h>
 
 // 定数
-#define MAX_BUTTON			5
+#define MAX_BUTTON			4
 // デフォルトのキー配置
 #define DEF_INPUT_0		(PAD_INPUT_A) // ショットボタン
 #define DEF_INPUT_1		(PAD_INPUT_B) // 低速ボタン
@@ -20,11 +20,10 @@
 class KeyConfig{
 public:
 	int		input[MAX_BUTTON];		// キー割り当て。
-									// 0: ショット、決定
-									// 1: 低速移動
-									// 2: ボム、キャンセル
-									// 3: チェンジボタン
-									// 4: 一時停止
+									// 0: 決定ボタン
+									// 1: キャンセルボタン
+									// 2: 情報表示/非表示ボタン
+									// 3: スクリーンショットを撮る
 
 	// コンストラクタ
 	KeyConfig();

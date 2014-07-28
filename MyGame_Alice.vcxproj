@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -21,12 +21,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -163,10 +165,12 @@
     <ClCompile Include="WindowSkin_DrawFocus.cpp" />
     <ClCompile Include="Window_Base.cpp" />
     <ClCompile Include="Window_BattleMessage.cpp" />
+    <ClCompile Include="Window_Info.cpp" />
     <ClCompile Include="Window_Message.cpp" />
     <ClCompile Include="Window_DollStatus.cpp" />
     <ClCompile Include="Window_EnterName.cpp" />
     <ClCompile Include="Window_Selectable.cpp" />
+    <ClCompile Include="Window_SimpleDollStatus.cpp" />
     <ClCompile Include="Window_Text.cpp" />
     <ClCompile Include="Window_Yesno.cpp" />
   </ItemGroup>
@@ -249,6 +253,8 @@
     <ClInclude Include="WindowSkin.h" />
     <ClInclude Include="Window_Base.h" />
     <ClInclude Include="Window_BattleMessage.h" />
+    <ClInclude Include="Window_Info.h" />
+    <ClInclude Include="Window_SimpleDollStatus.h" />
     <ClInclude Include="Window_Message.h" />
     <ClInclude Include="Window_DollStatus.h" />
     <ClInclude Include="Window_EnterName.h" />

@@ -72,3 +72,27 @@ void DXInput::getInput(bool is2P){
 	}
 }
 
+BYTE DXInput::getDigDir(){
+	switch (digitalDir){
+	case 3:
+	case 6:
+	case 9:
+		return DIGDIR_RIGHT;
+		break;
+	case 1:
+	case 2:
+		return DIGDIR_DOWN;
+		break;
+	case 7:
+	case 8:
+		return DIGDIR_UP;
+		break;
+	case 4:
+		return DIGDIR_LEFT;
+		break;
+	default:
+		return DIGDIR_NONE;
+		break;
+	}
+	return DIGDIR_NONE;
+}
