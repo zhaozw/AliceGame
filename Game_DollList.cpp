@@ -2,7 +2,7 @@
 
 #include "Game_DollList.h"
 
-Game_DollList::Game_DollList(){
+Game_DollList::Game_DollList() : list(){
 }
 
 bool Game_DollList::Release(){

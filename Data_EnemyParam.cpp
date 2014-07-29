@@ -105,7 +105,7 @@ int Data_EnemyParam_Each::GetActConditionParam(
 	return actionPtn[index].conditionParam[conditionIndex][paramIndex];
 }
 
-Data_EnemyParam::Data_EnemyParam(){
+Data_EnemyParam::Data_EnemyParam() : enemyList(){
 }
 
 bool Data_EnemyParam::Load(){

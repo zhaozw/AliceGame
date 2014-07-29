@@ -27,7 +27,7 @@ bool Create_MyTaskList(){
 	// çÌèúÇµÇƒç\ÇÌÇ»Ç¢ÅB
 	gMyTask_Sample = NEW MyGroup(sizeof(MyTask_Sample), 20);
 	gMyTask_InfoEffect = NEW MyGroup(sizeof(MyTask_InfoEffect), 128);
-	gMyTask_ParticleEffect = NEW MyGroup(sizeof(MyTask_ParticleEffect), 1024);
+	gMyTask_ParticleEffect = NEW MyGroup(sizeof(MyTask_ParticleEffect), 512);
 	return true;
 }
 
