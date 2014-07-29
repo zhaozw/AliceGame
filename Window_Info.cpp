@@ -46,10 +46,10 @@ BYTE Window_Info::GetDigDir(){
 }
 
 void Window_Info::Update(){
-	Window_Text::Update();
+	Window_Base::Update();
 	switch (state){
 	case SUSPENDED:
-		state = IDLE;
+		state = UPDATING;
 		break;
 	}
 
@@ -57,6 +57,4 @@ void Window_Info::Update(){
 		changedTime++;
 		opacity = max(0, min(255, 255 * changedTime / CONTENT_CHANGED_DELAY));
 	}
-	CheckClose();
-
 }

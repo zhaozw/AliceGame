@@ -90,6 +90,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BWindow_AliceCommand.cpp" />
+    <ClCompile Include="BWindow_BattleDollStatus.cpp" />
     <ClCompile Include="BWindow_DollCommand.cpp" />
     <ClCompile Include="BWindow_DollSkill.cpp" />
     <ClCompile Include="BWindow_FocusedUnit.cpp" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BWindow_AliceCommand.h" />
+    <ClInclude Include="BWindow_BattleDollStatus.h" />
     <ClInclude Include="BWindow_DollCommand.h" />
     <ClInclude Include="BWindow_DollSkill.h" />
     <ClInclude Include="BWindow_FocusedUnit.h" />

@@ -13,7 +13,11 @@ class Game_BattleDoll : public Game_BattleUnit{
 private:
 	// 覚えているスキルの配列
 	WORD skillID[DOLL_SKILL_MAX];
+	// 人形の種類(情報の表示用)
+	BYTE dollType;
+
 public: 
+	// コンストラクタ
 	Game_BattleDoll();
 
 	// スキルIDをセットする。
@@ -21,6 +25,9 @@ public:
 
 	// スキルIDを取得する。
 	WORD GetSkillID(int index){ return skillID[index]; };
+
+	// 人形のタイプを取得する。
+	BYTE GetDollType(){ return dollType; };
 
 	// 人形への参照を指定すると、その人形のレベルを元にパラメータを作成する。
 	// 現在のHPのコピー及びスキルのコピーも行う。

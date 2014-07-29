@@ -23,6 +23,8 @@ Scene_Battle::Scene_Battle():Scene_Base(){
 	enemyGroup = 0;
 	dollsNum = 0;
 	enemiesNum = 0;
+	infoWindowID = INFOWINDOW_NONE;
+	infoWindowID = INFOWINDOW_NONE;
 }
 
 bool Scene_Battle::Initialize(bool fSkipFrame){
@@ -120,6 +122,9 @@ void Scene_Battle::UpdateObjects(){
 	w_selectEnemy.UpdateA();
 	w_focusedEnemy.UpdateA();
 
+	// 情報ウィンドウのアップデート
+	w_battleDollStatus.Update();
+
 	// エフェクトのアップデート
 	Update_MyTask_InfoEffect();
 
@@ -203,6 +208,7 @@ void Scene_Battle::Draw() const{
 	w_dollSkill.Draw();
 	w_selectEnemy.Draw();
 	w_focusedEnemy.Draw();
+	w_battleDollStatus.Draw();
 
 	// エフェクトの描画
 	Draw_MyTask_InfoEffect();
@@ -224,6 +230,7 @@ bool Scene_Battle::SetupWindow(){
 	w_dollSkill.MySetup(this);
 	w_selectEnemy.MySetup(this);
 	w_focusedEnemy.MySetup(this);
+	w_battleDollStatus.Setup(this);
 	return true;
 }
 
@@ -411,6 +418,13 @@ bool Scene_Battle::CheckNextAction(){
 					// ウィンドウの異常を元に戻す
 					w_dollCommand.Refresh();
 				}
+			}
+		}
+
+		// 場合によっては情報ウィンドウを開く
+		if(infoWindowID == INFOWINDOW_NONE){
+			if(w_battleDollStatus.OpenIfCalled()){
+				infoWindowID = INFOWINDOW_DOLLINFO;
 			}
 		}
 		break;

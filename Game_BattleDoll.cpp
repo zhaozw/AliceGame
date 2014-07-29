@@ -17,6 +17,7 @@ void Game_BattleDoll::Reset(int n){
 	for(int n=0; n<DOLL_SKILL_MAX; n++){
 		skillID[n] = 0;
 	}
+	dollType = 0;
 }
 
 bool Game_BattleDoll::SetParamFromReference(Game_AliceDoll_Essence* pDoll, bool useHP){
@@ -25,6 +26,10 @@ bool Game_BattleDoll::SetParamFromReference(Game_AliceDoll_Essence* pDoll, bool 
 	int tmpParam = 0;
 	// 名前のコピー
 	
+
+	// 人形のタイプのコピー
+	dollType = pDoll->GetType();
+
 	// 各パラメータのコピー
 	for(BYTE n=0; n<DOLL_PARAM_MAX; n++){
 		index = 1+((n>=DOLL_PARAM_SPD)?n+1:n);		// HP、防御力に関してずれる

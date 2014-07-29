@@ -3,18 +3,55 @@
 #include "Window_SimpleDollStatus.h"
 #include "Game_BattleDoll.h"
 #include "Game_AliceDoll.h"
+#include "WindowSkin.h"
+
+extern WindowSkins g_wndSkins;
 
 Window_SimpleDollStatus::Window_SimpleDollStatus() : Window_Info(){
 	pBattleDoll = NULL;
 	pCampDoll = NULL;
+	isBattle = true;
+	drawPtn = DRAWPTN_ALLSTATUS;
 }
 
-void Window_SimpleDollStatus::OpenWithBattleDoll(Game_BattleDoll* _pDoll){
+void Window_SimpleDollStatus::Setup(BYTE _drawPtn, bool _isBattle){
+	WINDOWAREA frame;
+	WINDOWAREA content;
+	int width = 0;
+	int height = 0;
+	int frameSize = 0;
+	switch (_drawPtn){
+	case DRAWPTN_ALLSTATUS:
+		width = 128;
+		height = 160;
+		frameSize = 16;
+		break;
+	}
+
+	// 大きさを決定
+	frame.x = 0;
+	frame.y = 0;
+	frame.w = width;
+	frame.h = height;
+	content.x = frameSize;
+	content.y = frameSize;
+	content.w = width - frameSize * 2;
+	content.h = height - frameSize * 2;
+
+	// ウィンドウのセットアップ
+	Window_Info::Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE], frame, content);
+	drawPtn = _drawPtn;
+	isBattle = _isBattle;
+}
+
+void Window_SimpleDollStatus::OpenWithBattleDoll(Game_BattleDoll* _pDoll, int _x, int _y){
 	pBattleDoll = _pDoll;
+	SetPosition(_x, _y);
 }
 
-void Window_SimpleDollStatus::OpenWithCampDoll(Game_AliceDoll* _pDoll){
+void Window_SimpleDollStatus::OpenWithCampDoll(Game_AliceDoll* _pDoll, int _x, int _y){
 	pCampDoll = _pDoll;
+	SetPosition(_x, _y);
 }
 
 bool Window_SimpleDollStatus::ChangeRefBattleDoll(Game_BattleDoll* _pDoll){

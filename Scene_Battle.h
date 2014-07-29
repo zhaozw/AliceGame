@@ -14,7 +14,7 @@
 #include "BWindow_DollSkill.h"
 #include "BWIndow_SelectEnemy.h"
 #include "BWindow_FocusedUnit.h"
-#include "Window_SimpleDollStatus.h"
+#include "BWindow_BattleDollStatus.h"
 
 #include "Sprite_BattleDoll.h"
 #include "Sprite_BattleEnemy.h"
@@ -96,7 +96,7 @@ private:
 	// 敵のフォーカスウィンドウ
 	BWindow_FocusedUnit					w_focusedEnemy;
 	// 人形の情報を表示するウィンドウ
-	Window_SimpleDollStatus				w_simpleDollStatus;
+	BWindow_BattleDollStatus			w_battleDollStatus;
 	// 情報表示用ウィンドウの状態。
 	// 0なら開いていない、それ以外なら開いている。
 	BYTE								infoWindowID;
@@ -233,6 +233,8 @@ public:
 	BYTE	OpenDollSkillWindow();
 	int		GetDollSkillIndex(){ return w_dollSkill.GetSelectIndex(); };
 	BWindow_DollSkill*		GetWndDollSkillPtr(){ return &w_dollSkill; };
+
+	void	ResetInfoWindowID(){ infoWindowID = INFOWINDOW_NONE; };
 
 	// メッセージウィンドウへのメッセージの追加。
 	bool AddStockMessage(LPTSTR str){

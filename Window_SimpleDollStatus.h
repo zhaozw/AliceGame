@@ -6,6 +6,8 @@
 class Game_BattleDoll;
 class Game_AliceDoll;
 
+#define DRAWPTN_ALLSTATUS		0	// 戦闘に関するすべてのステータスを表示。
+
 //===================================
 // Window_SimpleDollStatusクラス
 // 
@@ -26,6 +28,9 @@ private:
 	// キャンプシーンであればpCampDollを使用する。
 	Game_BattleDoll*		pBattleDoll;
 	Game_AliceDoll*			pCampDoll;
+	// 描画パターン。
+	// 表示する情報を微妙に変える場合に用いる。
+	BYTE					drawPtn;
 	// 戦闘シーンであればtrue。
 	bool					isBattle;
 
@@ -35,10 +40,13 @@ public:
 
 	// セットアップ。
 	// 描画パターンと使用するシーンをセットする。
+	// ウィンドウの大きさは描画パターンにより自動的に決まる。
+	// ウィンドウの位置はウィンドウを開くときに決定する。
+	void Setup(BYTE _drawPtn, bool _isBattle);
 
 	// 参照する人形を指定して開く。
-	void OpenWithBattleDoll(Game_BattleDoll* pDoll);
-	void OpenWithCampDoll(Game_AliceDoll* pDoll);
+	void OpenWithBattleDoll(Game_BattleDoll* pDoll, int _x, int _y);
+	void OpenWithCampDoll(Game_AliceDoll* pDoll, int _x, int _y);
 
 	// 参照している人形を変更する。
 	// 元の参照と異なる場合、表示を消してから再出現させる。
