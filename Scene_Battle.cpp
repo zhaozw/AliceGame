@@ -24,7 +24,6 @@ Scene_Battle::Scene_Battle():Scene_Base(){
 	dollsNum = 0;
 	enemiesNum = 0;
 	infoWindowID = INFOWINDOW_NONE;
-	infoWindowID = INFOWINDOW_NONE;
 }
 
 bool Scene_Battle::Initialize(bool fSkipFrame){
