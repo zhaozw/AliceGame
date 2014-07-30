@@ -198,6 +198,8 @@ public:
 	bool Load();
 	bool LoadDataFromCsv();
 
+	void ReleaseList(){ enemyList.Release(); };
+
 	// 文字からアクションタイプに変換する。
 	// A : 攻撃
 	// S : 特技

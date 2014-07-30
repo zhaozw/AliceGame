@@ -90,9 +90,10 @@ public:
 	// content : 文字
 	// strSize : 文字列の長さ（省略可）
 	// _hFont : hFontと異なるフォントを使用する際のフォントのハンドル
+	// なぜかDrawContent内で使用しようとするとErrorを吐くへっぽこ関数。
 	// ※constにしておかないと派生クラスから使用した時にエラーが出る。
 	//   メンバを変更されると困るとか何とか？
-	int GetDrawDeltaX(LPTSTR content, int strSize = -1, int _hFont = 0) const;
+	int GetDrawDeltaX(TCHAR* content, int strSize = -1, int _hFont = 0) const;
 };
 
 #endif // WINDOW_TEXT_H

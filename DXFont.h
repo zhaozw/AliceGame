@@ -7,6 +7,17 @@
 #define FONTSIZE_STR_L		32
 #define FONTSIZE_TINYINFO	16
 
+// ä÷êîñºÇÃíZèk
+#ifndef ABBR_GETDRAWSTRINGWIDTHTOHANDLE
+#define ABBR_GETDRAWSTRINGWIDTHTOHANDLE
+#define GetStrWidth GetDrawStringWidthToHandle
+#endif // ABBR_GETDRAWSTRINGWIDTHTOHANDLE
+
+#ifndef ABBR_DRAWSTRINGTOHANDLE
+#define ABBR_DRAWSTRINGTOHANDLE
+#define DrawStr DrawStringToHandle
+#endif // ABBR_DRAWSTRINGTOHANDLE
+
 //==================================================
 // DXFontÉNÉâÉX
 // 

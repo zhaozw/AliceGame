@@ -19,11 +19,15 @@ public:
 	// コンストラクタ
 	BWindow_BattleDollStatus();
 
+
 	// セットアップ
 	void Setup(Scene_Battle* _pScene);
 
 	// 内容の更新
 	virtual void Update();
+
+	// 開いたときの挙動
+	virtual void OnOpened();
 };
 
 

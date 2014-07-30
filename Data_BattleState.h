@@ -97,6 +97,10 @@ public:
 	bool Load();
 	bool LoadDataFromCsv();
 
+	// ステートの配列をリリースする。
+	void ReleaseList(){ stateList.Release(); };
+
+
 	// ステートへのポインタを取得する。
 	// データベースを参照し、指定するrefIDを持っているものを返す。
 	// 該当するものがない場合はNULLを返す。

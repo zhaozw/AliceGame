@@ -115,7 +115,11 @@ template<class T>bool FlexList<T>::Generate(DWORD n){
 }
 
 template<class T>void FlexList<T>::Release(){
-	SAFE_DELETE_ARRAY(list);
+	if(num > 0){
+		// リストを生成している場合、開放する
+		// (if文がないとエラーになる)
+		SAFE_DELETE_ARRAY(list);
+	}
 	num = 0;
 	index = -1;
 	_RPTF0(_CRT_WARN, _T("リストの開放を行いました。\n"));

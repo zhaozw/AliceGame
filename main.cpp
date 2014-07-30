@@ -6,6 +6,9 @@
 // 最初のシーンを指定する。
 #define FIRST_SCENE (SCENE_TESTBATTLE)
 
+// メモリリーク検出
+#define _CRTDBG_MAP_ALLOC
+
 // DXライブラリのインクルード
 #include "DxLib.h"
 #include "Common_Macro.h"
@@ -432,6 +435,12 @@ bool WinMain_ReleaseResource(){
 	// タスク群
 	if(!Release_MyTaskList()) return false;
 
+	// データベースのリスト群
+	d_enemyParam.ReleaseList();
+	d_enemyDraw.ReleaseList();
+	d_enemyGroup.ReleaseList();
+	d_battleState.ReleaseList();
+
 	// フォント
 	if(!g_font.Release()){
 #ifdef MYGAME_USE_WARN_ERROR
@@ -448,6 +457,11 @@ bool WinMain_ReleaseResource(){
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						LPSTR lpCmdLine, int nCmdShow )
 {
+#ifdef MYGAME_USE_CHECKMEMORY
+	// プログラムの終了時にメモリリークを表示する
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+#endif // MYGAME_USE_CHECKMEMORY	
 	// ゲームの初期化
 	if(!WinMain_Initialize()) return -1;
 	// リソースを読み込む
@@ -458,10 +472,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		return -1;
 	}
 	WinMain_ReleaseResource();
-#ifdef MYGAME_USE_CHECKMEMORY
-	// この時点で開放されていないメモリの情報の表示
-	_CrtDumpMemoryLeaks();
-#endif // MYGAME_USE_CHECKMEMORY	
+
 
 	return 0;
 }

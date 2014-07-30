@@ -52,6 +52,9 @@ public:
 	// 内部レベル、パラメータ種を指定すると
 	// パラメータの数値を返す。
 	int GetParamFromLv(BYTE paramType, int lv);
+
+	// 名前を返す。
+	void GetName(LPTSTR buf, int bufSize);
 };
 
 class Data_DollParam{
@@ -60,6 +63,10 @@ protected:
 public:
 	// コンストラクタ
 	Data_DollParam();
+
+	// 人形の名前を返す。
+	void GetTypeName(BYTE index, LPTSTR buf, int bufSize){
+		dollList[index-1].GetName(buf, bufSize); };
 	
 	// 人形タイプID、内部レベル、パラメータ種を指定すると
 	// パラメータの数値を返す。

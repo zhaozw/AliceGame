@@ -378,6 +378,9 @@
     <ClCompile Include="BWindow_BattleDollStatus.cpp">
       <Filter>ソース ファイル\Source_Battle\BSource_Window</Filter>
     </ClCompile>
+    <ClCompile Include="Window_LineInfo.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -640,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="BWindow_BattleDollStatus.h">
       <Filter>ヘッダー ファイル\Header_Battle\BHeader_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window_LineInfo.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

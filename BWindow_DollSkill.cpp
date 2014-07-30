@@ -22,7 +22,7 @@ void BWindow_DollSkill::MySetup(Scene_Battle* _pScene){
 	WINDOWAREA		frameArea(
 		BWND_DOLLSKILL_X, BWND_DOLLSKILL_Y,
 		BWND_DOLLSKILL_W, BWND_DOLLSKILL_H);
-	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+8, ALIGN_CENTER);
+	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+5, ALIGN_CENTER);
 	ClearContent();
 	SetGridSize(2, 4);
 	Window_Selectable::Setup_FixPadding(

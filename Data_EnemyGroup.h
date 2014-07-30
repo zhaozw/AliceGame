@@ -69,6 +69,9 @@ public:
 	bool Load();
 	bool LoadDataFromCsv();
 
+	// Vectorリストを意図的に開放する
+	void ReleaseList(){ groupList.Release(); };
+
 	// 敵グループへのポインタを取得する。
 	// データベースを参照し、指定するrefIDを持っているものを返す。
 	// 該当するものがない場合はNULLを返す。

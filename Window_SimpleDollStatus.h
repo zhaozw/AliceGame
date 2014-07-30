@@ -6,7 +6,8 @@
 class Game_BattleDoll;
 class Game_AliceDoll;
 
-#define DRAWPTN_ALLSTATUS		0	// 戦闘に関するすべてのステータスを表示。
+#define DRAWPTN_ALLSTATUS		0	
+#define DRAWPTN_BATTLESTATUS	1	// 戦闘中のコマンド選択時の表示。ウィンドウは横長。
 
 //===================================
 // Window_SimpleDollStatusクラス
@@ -22,7 +23,7 @@ class Game_AliceDoll;
 // 共通して表示するアクロバティックなクラス。
 
 class Window_SimpleDollStatus : public Window_Info{
-private:
+protected:
 	// 参照している人形。
 	// 戦闘シーンであればpBattleDoll,
 	// キャンプシーンであればpCampDollを使用する。
@@ -59,8 +60,8 @@ public:
 	// 内容の描画。
 	virtual void DrawContent() const;
 
-	// 内容の描画（戦闘シーンの場合）
-	virtual void DrawContent_Battle() const;
+	// 内容の描画（戦闘シーンのステータス表示）
+	virtual void DrawContent_BattleStatus() const;
 
 	// 内容の描画（戦闘シーン以外の場合）
 	virtual void DrawContent_Camp() const;

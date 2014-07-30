@@ -18,6 +18,9 @@ private:
 	int maxSize;			// 代入可能な最大サイズ。
 public:
 
+	// コンストラクタ？
+	VectorList<T>();
+
 	// i番目の要素のポインタを返す。
 	T* GetPointerByIndex(int i);
 
@@ -38,6 +41,11 @@ public:
 	bool Release();
 };
 
+template<class T> VectorList<T>::VectorList(){
+	// Release();
+	maxSize = 0;
+}
+
 template<class T>T* VectorList<T>::GetPointerByIndex(int index){
 	if(index >= GetSize()) return NULL;
 	return &list[index];
@@ -51,6 +59,9 @@ template<class T>bool VectorList<T>::AddData(T data){
 template<class T>bool VectorList<T>::Release(){
 	// 要素を全て解放する
 	list.clear();
+	// メモリも開放する
+	std::vector<T>().swap(list);
+	// 
 	return true;
 }
 

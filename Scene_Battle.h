@@ -208,6 +208,9 @@ public:
 	Game_BattleDoll*	GetRandomDollPtr();
 	// 敵キャラ一体のポインタをランダムで返す。
 	Game_BattleEnemy*	GetRandomEnemyPtr();
+	
+	// 人形のコマンド選択中、現在選択中の人形のポインタを返す。
+	Game_BattleDoll*	GetCommandDollPtr();
 
 	// 人形へのポインタを渡すと、
 	// その人形のスプライトのポインタを返す。

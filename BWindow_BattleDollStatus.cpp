@@ -7,7 +7,7 @@ BWindow_BattleDollStatus::BWindow_BattleDollStatus() : Window_SimpleDollStatus()
 }
 
 void BWindow_BattleDollStatus::Setup(Scene_Battle* _pScene){
-	Window_SimpleDollStatus::Setup(DRAWPTN_ALLSTATUS, true);
+	Window_SimpleDollStatus::Setup(DRAWPTN_BATTLESTATUS, true);
 	pScene = _pScene;
 }
 
@@ -20,4 +20,10 @@ void BWindow_BattleDollStatus::Update(){
 		}
 	}
 	Window_SimpleDollStatus::Update();
+}
+
+void BWindow_BattleDollStatus::OnOpened(){
+	if(pScene){
+		pBattleDoll = pScene->GetCommandDollPtr();
+	}
 }

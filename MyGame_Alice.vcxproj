@@ -168,6 +168,7 @@
     <ClCompile Include="Window_Base.cpp" />
     <ClCompile Include="Window_BattleMessage.cpp" />
     <ClCompile Include="Window_Info.cpp" />
+    <ClCompile Include="Window_LineInfo.cpp" />
     <ClCompile Include="Window_Message.cpp" />
     <ClCompile Include="Window_DollStatus.cpp" />
     <ClCompile Include="Window_EnterName.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="Window_Base.h" />
     <ClInclude Include="Window_BattleMessage.h" />
     <ClInclude Include="Window_Info.h" />
+    <ClInclude Include="Window_LineInfo.h" />
     <ClInclude Include="Window_SimpleDollStatus.h" />
     <ClInclude Include="Window_Message.h" />
     <ClInclude Include="Window_DollStatus.h" />

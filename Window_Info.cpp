@@ -2,9 +2,11 @@
 
 #include "Window_Info.h"
 #include "KeyConfig.h"
+#include "DXFont.h"
 
 extern DXInput		g_input;
 extern KeyConfig	g_key;
+extern DXFont		g_font;
 
 Window_Info::Window_Info() : Window_Text(){
 }
@@ -16,10 +18,12 @@ bool Window_Info::Setup(
 	){
 	changedTime = CONTENT_CHANGED_DELAY;
 	opacity = 255;
+	SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
 	return Window_Text::Setup(_pSkin, _frameArea, _contentArea, true);
 }
 
 bool Window_Info::OpenIfCalled(){
+	if (state != CLOSED) return false;
 	if (g_input.pushedKey & g_key.input[BTN_SHOWINFO]){
 		Open(false, false);
 		return true;

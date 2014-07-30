@@ -61,6 +61,9 @@ public:
 	bool Load();
 	bool LoadDataFromCsv();
 
+	// リストを開放する
+	void ReleaseList(){ drawList.Release(); };
+
 	// Imageクラスとハンドルを結びつける。
 	int	GetImgHandleByRefID(WORD refID);
 

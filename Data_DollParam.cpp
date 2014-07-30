@@ -56,6 +56,11 @@ int Data_DollParam_Each::GetParamFromLv(BYTE paramType, int lv){
 		+ LvToP[paramType].c); 
 }
 
+void Data_DollParam_Each::GetName(LPTSTR buf, int bufSize){
+	strcpy_s(buf, bufSize-1, typeName);
+}
+
+
 //======================================================
 // Data_DollParamƒNƒ‰ƒX
 

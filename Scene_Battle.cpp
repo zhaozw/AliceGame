@@ -11,6 +11,7 @@
 #include "MyTask_InfoEffect.h"
 #include "Game_BattleUnit.h"
 #include "Game_BattleDoll.h"
+#include "Sprite_BattleDoll.h"
 
 extern TempData		g_temp;
 extern DXFont		g_font;
@@ -315,6 +316,11 @@ Game_BattleEnemy* Scene_Battle::GetRandomEnemyPtr(){
 	return pEnemies[GetRand(index-1)];
 }
 
+Game_BattleDoll* Scene_Battle::GetCommandDollPtr(){
+	if(phaze != DOLLS_COMMAND) return NULL;
+	return GetFrontDollPtr(commandIndex);
+}
+
 Sprite_BattleDoll* Scene_Battle::GetDollSprite(Game_BattleDoll* pDoll){
 	if(pDoll == NULL) return NULL;
 	Game_BattleDoll* refDoll = NULL;
@@ -423,6 +429,10 @@ bool Scene_Battle::CheckNextAction(){
 		// 場合によっては情報ウィンドウを開く
 		if(infoWindowID == INFOWINDOW_NONE){
 			if(w_battleDollStatus.OpenIfCalled()){
+				/*
+				w_battleDollStatus.SetPosition(
+					Sprite_BattleDoll::GetSpriteX(currentIndex), 200);
+					*/
 				infoWindowID = INFOWINDOW_DOLLINFO;
 			}
 		}

@@ -80,6 +80,9 @@ public:
 	// アクセサ
 	int	GetDollX() const{ return (GetX()+SPRITE_BATTLEDOLL_WIDTH/2); };
 	int	GetDollY() const{ return (GetY()+SPRITE_BATTLEDOLL_HEIGHT/2+20); };
+	
+	// 他のクラスからスプライトの位置を知りたい場合
+	static int GetSpriteX(int n){ return SPRITE_BATTLEDOLL_IX+n*SPRITE_BATTLEDOLL_DX; };
 
 };
 
