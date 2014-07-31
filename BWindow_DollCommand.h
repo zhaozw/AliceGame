@@ -15,6 +15,11 @@
 #define BWND_DOLLCOMMAND_SKILL		1
 #define BWND_DOLLCOMMAND_GUARD		2
 
+#define BWND_DOLLCOMMAND_PHAZE_NONE		0	// エラー
+#define BWND_DOLLCOMMAND_PHAZE_MAIN		1	// コマンド選択中
+#define BWND_DOLLCOMMAND_PHAZE_SKILL	2	// スキル選択中
+#define BWND_DOLLCOMMAND_PHAZE_TARGET	3	// ターゲット選択中
+
 class Scene_Battle;
 
 class BWindow_DollCommand : public Window_Selectable{
@@ -31,6 +36,8 @@ private:
 	int			targetIndex;
 	// キャンセル可能か否か
 	bool		cancelable;
+	// ウィンドウのフェイズ。
+	BYTE		phaze;
 public:
 	// コンストラクタ
 	BWindow_DollCommand();
@@ -41,6 +48,8 @@ public:
 	// アクセサ
 	int			GetCommandIndex(){ return commandIndex; };
 	int			GetSubIndex(){ return subIndex; };
+	BYTE		GetPhaze(){ return phaze; };
+	void		SetPhaze(BYTE p){ phaze = p; }; // 外部からアクセスする場合
 
 	// 子ウィンドウが閉じた時の挙動
 	virtual void OnChildIsClosed();

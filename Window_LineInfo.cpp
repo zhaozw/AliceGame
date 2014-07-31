@@ -11,10 +11,11 @@ extern WindowSkins	g_wndSkins;
 
 Window_LineInfo::Window_LineInfo() : Window_Text(){
 	SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO);
+	strcpy_s(text, WND_LINEINFO_BYTES, _T(""));
 }
 
 void Window_LineInfo::Setup(int x, int y, int w, BYTE _align){
-	WINDOWAREA	frame(x, y, w, FONTSIZE_INFO+32);
+	WINDOWAREA	frame(x, y, w, WND_LINEINFO_HEIGHT);
 	WINDOWAREA	content(16, 16, w-32, FONTSIZE_INFO);
 	frameArea.x = x;
 	frameArea.y = y;

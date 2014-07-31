@@ -2,17 +2,20 @@
 #define BWINDOW_DOLLSKILL_H
 
 #include "Window_Selectable.h"
+#include "Window_LineInfo.h"
 
-#define BWND_DOLLSKILL_X		150
-#define BWND_DOLLSKILL_Y		400
 #define BWND_DOLLSKILL_W		500
 #define BWND_DOLLSKILL_H		150
+#define BWND_DOLLSKILL_X		150
+#define BWND_DOLLSKILL_Y		(WND_HEIGHT-WND_LINEINFO_HEIGHT-BWND_DOLLSKILL_H)
 #define BWND_DOLLSKILL_PX		16
 #define BWND_DOLLSKILL_PY		16
 
 class Scene_Battle;
 class Game_BattleDoll;
 class Game_BattleUnit;
+
+class BWindow_DollCommand;
 
 // BWindow_DollSkillクラス
 // 戦闘時に人形の特技一覧を表示するクラス。
@@ -26,11 +29,14 @@ private:
 	// ターゲット選択ウィンドウの選択値
 	// 全体選択だったりした場合はNULLになる
 	Game_BattleUnit*	pTarget;
+	// コマンドウィンドウへのポインタ
+	BWindow_DollCommand* pWndCommand;
 public:
 	BWindow_DollSkill();
 
 	// セットアップ
-	void MySetup(Scene_Battle* _pScene);
+	// BWindow_DollCommandを渡すのは、情報ウィンドウにアクセスするため。
+	void MySetup(Scene_Battle* _pScene, BWindow_DollCommand* _pWndCommand);
 
 	// 人形へのハンドルを渡す。
 	void SetDoll(Game_BattleDoll* p){ pOwner = p; };
@@ -40,6 +46,9 @@ public:
 
 	// 子が閉じた時の挙動
 	virtual void OnChildIsClosed();
+
+	// インデックスが変化した、または開いたときの挙動
+	void OnIndexChanged();
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。

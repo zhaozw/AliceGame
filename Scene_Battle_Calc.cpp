@@ -357,7 +357,10 @@ BYTE Scene_Battle::AddStateToUnit(
 				// ステートになったときのメッセージを取得
 				d_stateMessage.GetStateMessage(
 					buf, stateRefID,
-					STATEMESSAGE_INDEX_DOLL_ADDED, pUnit);
+					pUnit->IsDoll() 
+					? STATEMESSAGE_INDEX_DOLL_ADDED 
+					: STATEMESSAGE_INDEX_ENEMY_ADDED,
+					pUnit);
 				// メッセージに追加
 				AddStockMessage(buf);
 				break;

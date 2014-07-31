@@ -42,6 +42,7 @@ bool Data_SkillMessage_Each::GetSkillMessage(LPTSTR buf, Game_BattleUnit* pUnit)
 Data_SkillInfo::Data_SkillInfo() : assertMessages(), subMessages(){
 	for(int n=0; n<MAX_SKILL; n++){
 		strcpy_s(skillName[n], MAX_SKILL_BYTES-1, _T(""));
+		strcpy_s(account[n], SKILLACC_BYTES-1, _T(""));
 		targetType[n] = ACTIONTARGET_NONE;
 	}
 }
@@ -56,24 +57,30 @@ bool Data_SkillInfo::SetSkillData(){
 	targetType[SKILL_WAIT] = ACTIONTARGET_NONE;
 	assertMessages[SKILL_WAIT].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í—lŽq‚ðŒ©‚Ä‚¢‚éI"));
+	strcpy_s(account[SKILL_WAIT], SKILLACC_BYTES-1, _T("‰½‚à‚µ‚Ü‚¹‚ñB"));
 
 	// ‘S‘ÌUŒ‚
 	strcpy_s(skillName[SKILL_ALLRANGE], MAX_SKILL_BYTES-1, _T("‘S‘ÌUŒ‚"));
 	targetType[SKILL_ALLRANGE] = ACTIONTARGET_OPPONENT_ALL;
 	assertMessages[SKILL_ALLRANGE].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚ÌUŒ‚I"));
+	strcpy_s(account[SKILL_ALLRANGE], SKILLACC_BYTES-1, _T("“G‘S‘Ì‚ÉUŒ‚‚µ‚Ü‚·B"));
 
 	// æ§UŒ‚
 	strcpy_s(skillName[SKILL_LOADOFF_ATTACK], MAX_SKILL_BYTES-1, _T("æ§UŒ‚"));
 	targetType[SKILL_LOADOFF_ATTACK] = ACTIONTARGET_OPPONENT_ONE;
 	assertMessages[SKILL_LOADOFF_ATTACK].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í•—‚Ì‚æ‚¤‚É‘f‘‚­UŒ‚‚µ‚½I"));
+	strcpy_s(account[SKILL_LOADOFF_ATTACK], SKILLACC_BYTES-1,
+		_T("’N‚æ‚è‚à‘¬‚­•—‚Ì‚æ‚¤‚É‘f‘‚­UŒ‚‚µ‚Ü‚·B"));
 
 	// ‰ñ•œ
 	strcpy_s(skillName[SKILL_HEAL1], MAX_SKILL_BYTES-1, _T("‰ñ•œ"));
 	targetType[SKILL_HEAL1] = ACTIONTARGET_TEAM_ONE;
 	assertMessages[SKILL_HEAL1].SetSkillMessage(
 		SKILLMESSAGE_TYPE_UNIT, _T("%s‚Í‰ñ•œ‚ÌpŽ®‚ðŽg‚Á‚½I"));
+	strcpy_s(account[SKILL_HEAL1], SKILLACC_BYTES-1,
+		_T("–¡•ûˆê‘Ì‚Ì‘Ì—Í‚ð‚T‚O“‰ñ•œ‚µ‚Ü‚·B"));
 
 	return true;
 }
@@ -83,6 +90,13 @@ bool Data_SkillInfo::GetSkillName(LPTSTR buf, WORD skillID){
 	strcpy_s(buf, MAX_SKILL_BYTES-1, skillName[skillID]);
 	return true;
 }
+
+bool Data_SkillInfo::GetSkillAccount(LPTSTR buf, WORD skillID){
+	if(skillID == 0 || skillID >= MAX_SKILL) return false;
+	strcpy_s(buf, SKILLACC_BYTES-1, account[skillID]);
+	return true;
+}
+
 
 BYTE Data_SkillInfo::GetTargetType(WORD skillID){
 	if(skillID == 0 || skillID >= MAX_SKILL) return ACTIONTARGET_NONE;

@@ -8,6 +8,7 @@
 #include "Game_BattleEnemy.h"
 #include "Game_UnitCommand.h"
 #include "Game_BattleAction.h"
+#include "Window_LineInfo.h"
 #include "Window_BattleMessage.h"
 #include "BWindow_AliceCommand.h"
 #include "BWindow_DollCommand.h"
@@ -15,13 +16,15 @@
 #include "BWIndow_SelectEnemy.h"
 #include "BWindow_FocusedUnit.h"
 #include "BWindow_BattleDollStatus.h"
+#include "BWindow_BattleEnemyStatus.h"
+
 
 #include "Sprite_BattleDoll.h"
 #include "Sprite_BattleEnemy.h"
 
 #define INFOWINDOW_NONE				0
-#define INFOWINDOW_DOLLINFO			1
-#define INFOWINDOW_ENEMY			2
+#define INFOWINDOW_DOLLSTATUS		1
+#define INFOWINDOW_ENEMYSTATUS		2
 
 class Scene_Battle : public Scene_Base{
 public:
@@ -97,6 +100,11 @@ private:
 	BWindow_FocusedUnit					w_focusedEnemy;
 	// 人形の情報を表示するウィンドウ
 	BWindow_BattleDollStatus			w_battleDollStatus;
+	// 敵の情報を表示するウィンドウ
+	BWindow_BattleEnemyStatus			w_battleEnemyStatus;
+	// 特技の説明を表示するウィンドウ
+	Window_LineInfo						w_skillAccLine;
+
 	// 情報表示用ウィンドウの状態。
 	// 0なら開いていない、それ以外なら開いている。
 	BYTE								infoWindowID;
@@ -212,6 +220,9 @@ public:
 	// 人形のコマンド選択中、現在選択中の人形のポインタを返す。
 	Game_BattleDoll*	GetCommandDollPtr();
 
+	// 敵のターゲット選択中、現在選択中の敵のポインタを返す。
+	Game_BattleEnemy*	GetTargetEnemyPtr();
+
 	// 人形へのポインタを渡すと、
 	// その人形のスプライトのポインタを返す。
 	Sprite_BattleDoll* GetDollSprite(Game_BattleDoll* dollPtr);
@@ -236,6 +247,10 @@ public:
 	BYTE	OpenDollSkillWindow();
 	int		GetDollSkillIndex(){ return w_dollSkill.GetSelectIndex(); };
 	BWindow_DollSkill*		GetWndDollSkillPtr(){ return &w_dollSkill; };
+	BYTE	OpenSkillAccLineWindow();
+	BYTE	CloseSkillAccLineWindow();
+	Window_LineInfo*		GetSkillAccLinePtr(){ return &w_skillAccLine; };
+
 
 	void	ResetInfoWindowID(){ infoWindowID = INFOWINDOW_NONE; };
 

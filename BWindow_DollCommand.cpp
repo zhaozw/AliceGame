@@ -12,8 +12,14 @@ extern WindowSkins			g_wndSkins;
 extern DXFont				g_font;
 extern Data_SkillInfo		d_skillInfo;
 
-BWindow_DollCommand::BWindow_DollCommand(){
-
+BWindow_DollCommand::BWindow_DollCommand() : Window_Selectable(){
+	pScene = NULL;
+	pActor = NULL;
+	commandIndex = -1;
+	subIndex = -1;
+	targetIndex = 0;
+	cancelable = false;
+	phaze = BWND_DOLLCOMMAND_PHAZE_NONE;
 }
 
 void BWindow_DollCommand::MySetup(Scene_Battle* _pScene){
@@ -52,6 +58,7 @@ void BWindow_DollCommand::Refresh(){
 	commandIndex = 0;
 	subIndex = -1;
 	targetIndex = 0;
+	phaze = BWND_DOLLCOMMAND_PHAZE_MAIN;
 }
 
 void BWindow_DollCommand::Update(){
@@ -66,11 +73,13 @@ void BWindow_DollCommand::Update(){
 				pScene->GetWndFocusedUnitPtr()->SetParam(
 					pActor, NULL, BWND_FOCUS_TARGET_ONE_ENEMY, BWND_FOCUS_TYPE_ATTACK);
 				OpenChildWindow((Window_Base*)pScene->GetWndFocusedUnitPtr(), true);
+				phaze = BWND_DOLLCOMMAND_PHAZE_TARGET;
 				break;
 			case BWND_DOLLCOMMAND_SKILL:
 				commandIndex = BWND_DOLLCOMMAND_SKILL;
 				pScene->GetWndDollSkillPtr()->SetDoll(pActor);
 				OpenChildWindow((Window_Base*)pScene->GetWndDollSkillPtr(), false);
+				phaze = BWND_DOLLCOMMAND_PHAZE_SKILL;
 				break;
 			case BWND_DOLLCOMMAND_GUARD:
 				// 防御コマンドを選択して終了
@@ -132,6 +141,7 @@ void BWindow_DollCommand::OnChildIsClosed(){
 		}
 		break;
 	}
+	phaze = BWND_DOLLCOMMAND_PHAZE_NONE;
 }
 
 void BWindow_DollCommand::CheckAutoClose(){

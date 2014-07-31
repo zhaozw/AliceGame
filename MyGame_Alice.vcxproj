@@ -87,11 +87,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>C:\AliceGame\DxLib;C:\AliceGame\DxLib;C:\Lua5_1\lib\static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BWindow_AliceCommand.cpp" />
     <ClCompile Include="BWindow_BattleDollStatus.cpp" />
+    <ClCompile Include="BWindow_BattleEnemyStatus.cpp" />
     <ClCompile Include="BWindow_DollCommand.cpp" />
     <ClCompile Include="BWindow_DollSkill.cpp" />
     <ClCompile Include="BWindow_FocusedUnit.cpp" />
@@ -256,6 +258,7 @@
     <ClInclude Include="VectorList.h" />
     <ClInclude Include="WindowSkin.h" />
     <ClInclude Include="Window_Base.h" />
+    <ClInclude Include="BWindow_BattleEnemyStatus.h" />
     <ClInclude Include="Window_BattleMessage.h" />
     <ClInclude Include="Window_Info.h" />
     <ClInclude Include="Window_LineInfo.h" />

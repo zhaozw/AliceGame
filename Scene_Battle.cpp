@@ -124,6 +124,8 @@ void Scene_Battle::UpdateObjects(){
 
 	// 情報ウィンドウのアップデート
 	w_battleDollStatus.Update();
+	w_battleEnemyStatus.Update();
+	w_skillAccLine.Update();
 
 	// エフェクトのアップデート
 	Update_MyTask_InfoEffect();
@@ -209,6 +211,8 @@ void Scene_Battle::Draw() const{
 	w_selectEnemy.Draw();
 	w_focusedEnemy.Draw();
 	w_battleDollStatus.Draw();
+	w_battleEnemyStatus.Draw();
+	w_skillAccLine.Draw();
 
 	// エフェクトの描画
 	Draw_MyTask_InfoEffect();
@@ -227,10 +231,12 @@ bool Scene_Battle::SetupWindow(){
 	w_battleMsg.Setup(this);
 	w_aliceCommand.MySetup();
 	w_dollCommand.MySetup(this);
-	w_dollSkill.MySetup(this);
+	w_dollSkill.MySetup(this, &w_dollCommand);
 	w_selectEnemy.MySetup(this);
 	w_focusedEnemy.MySetup(this);
 	w_battleDollStatus.Setup(this);
+	w_battleEnemyStatus.Setup(this);
+	w_skillAccLine.Setup(100, WND_HEIGHT-WND_LINEINFO_HEIGHT, WND_WIDTH-200, ALIGN_LEFT);
 	return true;
 }
 
@@ -321,6 +327,12 @@ Game_BattleDoll* Scene_Battle::GetCommandDollPtr(){
 	return GetFrontDollPtr(commandIndex);
 }
 
+Game_BattleEnemy* Scene_Battle::GetTargetEnemyPtr(){
+	if(phaze != DOLLS_COMMAND) return NULL;
+	return (Game_BattleEnemy*)w_focusedEnemy.GetTarget();
+}
+
+
 Sprite_BattleDoll* Scene_Battle::GetDollSprite(Game_BattleDoll* pDoll){
 	if(pDoll == NULL) return NULL;
 	Game_BattleDoll* refDoll = NULL;
@@ -348,6 +360,15 @@ Sprite_BattleEnemy* Scene_Battle::GetEnemySprite(Game_BattleEnemy* pEnemy){
 BYTE Scene_Battle::OpenSelectEnemyWindow(){
 	return w_selectEnemy.Open();
 }
+
+BYTE Scene_Battle::OpenSkillAccLineWindow(){
+	return w_skillAccLine.Open(true, false);
+}
+
+BYTE Scene_Battle::CloseSkillAccLineWindow(){
+	return w_skillAccLine.Close(true, false);
+}
+
 
 bool Scene_Battle::CheckNextAction(){
 	Game_BattleDoll* pDoll = NULL;
@@ -395,6 +416,7 @@ bool Scene_Battle::CheckNextAction(){
 						// ウィンドウを開く
 						w_dollCommand.OpenWithActor(pDoll,
 							GetCommandWindowIsCancelable(currentIndex));
+						w_dollCommand.SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);
 						// スプライトを前に出す
 						if(GetDollSprite(pDoll)){
 							GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
@@ -412,6 +434,7 @@ bool Scene_Battle::CheckNextAction(){
 					// ウィンドウを開く
 					w_dollCommand.OpenWithActor(pDoll,
 						GetCommandWindowIsCancelable(currentIndex));
+					w_dollCommand.SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);
 					// スプライトを前に出す
 					if(GetDollSprite(pDoll)){
 						GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
@@ -428,12 +451,32 @@ bool Scene_Battle::CheckNextAction(){
 
 		// 場合によっては情報ウィンドウを開く
 		if(infoWindowID == INFOWINDOW_NONE){
-			if(w_battleDollStatus.OpenIfCalled()){
-				/*
-				w_battleDollStatus.SetPosition(
-					Sprite_BattleDoll::GetSpriteX(currentIndex), 200);
-					*/
-				infoWindowID = INFOWINDOW_DOLLINFO;
+			switch(w_dollCommand.GetPhaze()){
+			case BWND_DOLLCOMMAND_PHAZE_MAIN:
+				if(w_battleDollStatus.OpenIfCalled()){
+					infoWindowID = INFOWINDOW_DOLLSTATUS;
+				}
+				break;
+			case BWND_DOLLCOMMAND_PHAZE_TARGET:
+				// 選択可能なターゲットがいる場合、敵のパラメータを参照可能に
+				if(GetTargetEnemyPtr() != NULL){
+					if(w_battleEnemyStatus.OpenIfCalled()){
+						infoWindowID = INFOWINDOW_ENEMYSTATUS;
+					}
+				}
+				break;
+			}
+		}
+
+		// 敵の情報ウィンドウの更新
+		if(infoWindowID == INFOWINDOW_ENEMYSTATUS){
+			if(w_battleEnemyStatus.GetEnemyPtr() != GetTargetEnemyPtr()){
+				if(GetTargetEnemyPtr() != NULL){
+					w_battleEnemyStatus.ChangeRefEnemy(GetTargetEnemyPtr());
+				}else{
+					w_battleEnemyStatus.Close(true, false);
+					infoWindowID = INFOWINDOW_NONE;
+				}
 			}
 		}
 		break;

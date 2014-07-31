@@ -14,6 +14,9 @@
 // スキルに伴うメッセージのバイト数。
 #define SKILLMESSAGE_BYTES		48
 
+// スキルの説明画面で出る文章のバイト数。
+#define SKILLACC_BYTES			64			
+
 // 一つのメッセージのデータ構造
 // メッセージそのものと、表示タイプを保持する。
 class Data_SkillMessage_Each{
@@ -48,9 +51,15 @@ protected:
 	// スキルの数だけ存在する。
 	Data_SkillMessage_Each		assertMessages[MAX_SKILL];
 
+	// スキルの説明。
+	// スキルの数だけ存在する。
+	TCHAR						account[MAX_SKILL][SKILLACC_BYTES];
+
+
 	// 使用時以外に、スキルに関連して流れるメッセージ。
 	// スキルの数だけ存在するわけではない。
 	Data_SkillMessage_Each		subMessages[MAX_SKILL_SUBMESSAGE];
+
 public:
 
 	// コンストラクタ
@@ -65,6 +74,9 @@ public:
 
 	// スキル名を取得する。
 	bool GetSkillName(LPTSTR buf, WORD skillID);
+
+	// スキルの説明を取得する。
+	bool GetSkillAccount(LPTSTR buf, WORD skillID);
 
 	// ターゲットのタイプを取得する。
 	BYTE GetTargetType(WORD skillID);

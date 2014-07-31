@@ -164,19 +164,6 @@ void Window_SimpleDollStatus::DrawContent_BattleStatus() const{
 				buf, windowFont.color, windowFont.hFont);
 		}
 	}
-
-	/*
-	TCHAR status[][12] = {
-		"‚k‚–",
-		"‚g‚o",
-		"UŒ‚",
-		"•q·",
-		"–‚—Í",
-		"‹ZI",
-	};
-	// –¼‘O‚Ì•`‰æ
-	// í‘°‚Ì•`‰æ
-	*/
 }
 
 void Window_SimpleDollStatus::DrawContent_Camp() const{

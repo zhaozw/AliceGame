@@ -48,4 +48,5 @@ void MyTask_InfoEffect::Draw() const{
 			g_font.hStrL);
 		break;
 	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
