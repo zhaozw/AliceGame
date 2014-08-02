@@ -20,6 +20,7 @@ Selectable2D::Selectable2D(int _column, int _row, int _iniRow, int _iniCol,
 		isActive[i] = true;
 	}
 	stayCount = 0;
+	canChooseInactive = false;
 }
 
 int Selectable2D::Move(int hSnd){
@@ -46,7 +47,7 @@ int Selectable2D::Move(int hSnd){
 				// 右端に達して折り返せない場合
 				break;
 			}
-			if(isActive[checkIndex]){
+			if(isActive[checkIndex] || canChooseInactive){
 				// 移動可能な選択肢に当たったらブレークする
 				resultIndex = checkIndex;
 				break;
@@ -64,7 +65,7 @@ int Selectable2D::Move(int hSnd){
 				// 左端に達して折り返せない場合
 				break;
 			}
-			if(isActive[checkIndex]){
+			if(isActive[checkIndex] || canChooseInactive){
 				// 移動可能な選択肢に当たったらブレークする
 				resultIndex = checkIndex;
 				break;
@@ -83,7 +84,7 @@ int Selectable2D::Move(int hSnd){
 				// 下端に達して折り返せない場合
 				break;
 			}
-			if(isActive[checkIndex]){
+			if(isActive[checkIndex] || canChooseInactive){
 				// 移動可能な選択肢に当たったらブレークする
 				resultIndex = checkIndex;
 				break;
@@ -102,7 +103,7 @@ int Selectable2D::Move(int hSnd){
 				// 上端に達して折り返せない場合
 				break;
 			}
-			if(isActive[checkIndex]){
+			if(isActive[checkIndex] || canChooseInactive){
 				// 移動可能な選択肢に当たったらブレークする
 				resultIndex = checkIndex;
 				break;

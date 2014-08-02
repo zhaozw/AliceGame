@@ -122,6 +122,9 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 		break;
 	case ACTIONTYPE_ATTACK:
 		break;
+	case ACTIONTYPE_SKILL:
+		// MPが足りない場合、「しかしMPが足りない！」に差し替え
+		break;
 	case ACTIONTYPE_ERROR:
 		return -1;
 		break;
@@ -171,6 +174,7 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 			fixType = FIXTARGET_DIE_CHANGE;
 			break;
 		}
+		break;
 	case ACTIONTYPE_ERROR:
 		return -1;
 		break;
@@ -312,11 +316,13 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 	// それぞれコマンドの確認を行った上で
 	// 実際のアクションとして適用する。
 	// 
-	Game_BattleAction action;
+	Game_BattleAction		action;
 	Game_BattleUnit*		pDefOwner = pCmd->GetOwner();
 	Game_BattleUnit*		pDefTarget = pCmd->GetTarget();
+	Game_BattleUnit*		pTmpTarget = NULL;
 	Game_UnitSubCommand		subCommands[MAX_SUBCOMMAND_PER_COMMAND];
 	int						subCommandIndex = 0;
+	bool					isDollSide = false;
 	for(int n=0; n<MAX_SUBCOMMAND_PER_COMMAND; n++){
 		subCommands[n].SetOwner(pDefOwner);
 		subCommands[n].SetIsUsed(false);
@@ -356,11 +362,6 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 					pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
 				subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
 				subCommandIndex++;
-				/*
-				action.SetType(Game_BattleAction::TYPE_DAMAGE);
-				action.SetParam(CalcDamage(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK));
-				actionStack.Push(action);
-				*/
 			}
 			// return 1;
 			break;
@@ -370,12 +371,24 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 				pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
 			subCommands[subCommandIndex].SetParam(CALCHEAL_HEAL1);
 			subCommandIndex++;
-			/*
-			action.SetType(Game_BattleAction::TYPE_HEAL);
-			action.SetParam(CalcHeal(pDefOwner, pDefTarget, CALCHEAL_HEAL1));
-			actionStack.Push(action);
-			*/
-			// return 1;
+			break;
+		case SKILL_ALLRANGE:
+			// 全体攻撃
+			isDollSide = pDefOwner->IsDoll();
+			for(int n=0; n<(isDollSide?MAX_BATTLEENEMY:NUM_BATTLEDOLL_FRONT); n++){
+				if(isDollSide){
+					pTmpTarget = GetEnemyPtr(MAX_BATTLEENEMY-n-1, true);
+				}else{
+					pTmpTarget = GetFrontDollPtr(NUM_BATTLEDOLL_FRONT-n-1, true);
+				}
+				if(pTmpTarget != NULL){
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pTmpTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
+					subCommandIndex++;
+				}
+			}
+			break;
 		}
 		break;
 	case ACTIONTYPE_ERROR:
@@ -385,6 +398,7 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 
 	// subCommandsの配列を解釈してactionStackに追加する。
 	BYTE result = 0;
+	int tmp;
 	for(int n=0; n<MAX_SUBCOMMAND_PER_COMMAND; n++){
 		if(subCommands[n].IsEmpty()){
 			break;
@@ -398,9 +412,20 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			action.SetOpponent(subCommands[n].GetTarget());
 			action.SetType(Game_BattleAction::TYPE_DAMAGE);
 			action.ClearFlag();
-			action.SetParam(CalcDamage(
+			tmp = CalcDamage(
 				subCommands[n].GetOwner(), subCommands[n].GetTarget(),
-				subCommands[n].GetParam()));
+				subCommands[n].GetParam());
+			action.SetParam(tmp);
+			/*
+			// HPが0になるようなダメージである場合、即座に死亡ステートを付加する
+			// ダメージ表示の後に死亡にするため、actionStackへのアクセスの順序が逆。
+			// actionStackとして付加したいので、AddStateToUnitを使用しない。
+			// ※ということにしようと思っていたが、中止。
+			if(subCommands[n].GetTarget()->GetHP() < tmp){
+				AddStateToUnit(subCommands[n].GetTarget(),
+					STATE_DEATH, true, 1, true);
+			}
+			*/
 			actionStack.Push(action);
 			result = (result==0?1:result);
 			break;
@@ -419,6 +444,7 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			break;
 		case ACTIONTYPE_STATE:
 			// ステートの付加。param:適用するステートのID。
+			// if(AddStateToUnit(&dolls[n], STATE_DEATH, true, 1, true));
 			break;
 		}
 	}
@@ -432,23 +458,26 @@ char Scene_Battle::InterpretCommand_Check_Death(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	for(int n=0; n<dollsNum; n++){
 		if(dolls[n].CheckDie()){
-			if(AddStateToUnit(&dolls[n], STATE_DEATH, true) == ADDSTATE_SUCCEED){
+			AddStateToUnit(&dolls[n], STATE_DEATH, true, 1, true);
+			/*== ADDSTATE_SUCCEED){
 				pSprite = GetDollSprite(&dolls[n]);
 				if(pSprite != NULL){
 					// pSprite->SetMorphID(SPMORPH_DISAPPEAR, true, 60);
 				}
 			}
+			*/
 			return 1;
 		}
 	}
 	for(int n=0; n<enemiesNum; n++){
 		if(enemies[n].CheckDie()){
-			if(AddStateToUnit(&enemies[n], STATE_DEATH, true) == ADDSTATE_SUCCEED){
+			AddStateToUnit(&enemies[n], STATE_DEATH, true, 1, true);
+			/*if(AddStateToUnit(&enemies[n], STATE_DEATH, true) == ADDSTATE_SUCCEED){
 				pSprite = GetEnemySprite(&enemies[n]);
 				if(pSprite != NULL){
 					pSprite->SetMorphID(SPMORPH_DISAPPEAR, true, 60);
 				}
-			}
+			}*/
 			return 1;
 		}
 	}

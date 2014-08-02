@@ -58,7 +58,7 @@ void Sprite_BattleEnemy::UpdateRefID(){
 	// ‰æ‘œ‚Ì•\Ž¦”{—¦‚ðŽæ“¾
 	baseExRate = pDrawData->GetExRate();
 	// ‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ðŽæ“¾
-	hImg = pDrawData->GetHImg();
+	hImg = pDrawData->GetHImg(pEnemy->GetAttr());
 }
 
 void Sprite_BattleEnemy::Update(){
@@ -134,6 +134,12 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 	// HP‚ð”’l‚Å•`‰æ
 	TCHAR	hpStr[16];
 	wsprintf(hpStr, _T("%d/%d"), pEnemy->GetHP(), pEnemy->GetMaxHP());
+	DrawStringToHandle(
+		(int)(GetX()-BATTLEENEMY_HPGAUGE_WIDTH/2
+		+ GetRightAlignDX(
+		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH))+1,
+		(int)(GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2)+2, hpStr,
+		GetColor(0, 0, 0), g_font.hTinyInfo);
 	DrawStringToHandle(
 		(int)(GetX()-BATTLEENEMY_HPGAUGE_WIDTH/2
 		+ GetRightAlignDX(

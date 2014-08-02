@@ -5,8 +5,10 @@
 #include "MyTask_InfoEffect.h"
 #include "Static_InfoEffect.h"
 #include "Data_SkillInfo.h"
+#include "Game_AliceInfo.h"
 
 extern Data_SkillInfo d_skillInfo;
+extern Game_AliceInfo g_aliceInfo;
 
 extern MyGroup* gMyTask_InfoEffect;
 
@@ -237,6 +239,8 @@ bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	d_skillInfo.GetAssertMessage(buf, pAction->GetParam(), pAction->GetActor());
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	// ‚±‚±‚ÅMP‚ğŒ¸‚ç‚·
+	g_aliceInfo.SubMP(d_skillInfo.GetCostMP(pAction->GetParam()));
 	return true;
 }
 

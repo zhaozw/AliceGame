@@ -76,6 +76,7 @@ public:
 	void SetMgc(int n){ param[BATTLEUNIT_PARAM_MGC] = n; };
 	void SetTec(int n){ param[BATTLEUNIT_PARAM_TEC] = n; };
 	void SetAttr(BYTE _attr){ attr = _attr; };
+	void SetRandomAttr(); // 属性をランダムに入れる
 	void SetFront(bool _front){ isFront = _front; };
 	void SetPosition(BYTE _position){ position = _position; };
 	// パラメータを取得する。

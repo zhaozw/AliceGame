@@ -13,6 +13,19 @@ Data_EnemyDraw_Each::Data_EnemyDraw_Each(){
 }
 
 void Data_EnemyDraw_Each::Refresh(){
+	refID = 0;
+	// 描画の中心位置
+	cx=0;
+	cy=0;
+	// 画像のサイズ
+	iWidth=1,
+	iHeight=1;
+	// 基本的な描画の倍率
+	baseExRate=1.0;
+	// 画像のハンドル(属性ごと)
+	for(int n=0; n<DOLL_ATTR_NUM; n++){
+		hImg[n] = 0;
+	}
 }
 
 Data_EnemyDraw::Data_EnemyDraw(){
@@ -58,9 +71,8 @@ bool Data_EnemyDraw::LoadDataFromCsv(){
 			tmpDraw.SetExRate(reader.GetFloatValue(6, 1.0));
 
 			// 画像を取得
-			tmpDraw.SetHImg(GetImgHandleByRefID(tmpDraw.GetRefID()));
-			if(tmpDraw.GetHImg() == 0){
-				continue;
+			for(int n=0; n<DOLL_ATTR_NUM; n++){
+				tmpDraw.SetHImg(n, GetImgHandleByRefID(tmpDraw.GetRefID(), n));
 			}
 			// 
 			// 取得したグループをデータベースにセットする
@@ -72,13 +84,15 @@ bool Data_EnemyDraw::LoadDataFromCsv(){
 	return true;
 }
 
-int Data_EnemyDraw::GetImgHandleByRefID(WORD refID){
+int Data_EnemyDraw::GetImgHandleByRefID(WORD refID, BYTE attr){
+	// 敵のID及び属性と画像の対応を決める。
+	// 同じ画像を参照していてもかまわない。
 	switch(refID){
 	case ENEMYDRAW_ELF:
-		return g_image.enemy.elf;
+		return g_image.enemy.fairy[attr];
 		break;
 	case ENEMYDRAW_FIREELF:
-		return g_image.enemy.elf;
+		return g_image.enemy.fairy[attr];
 		break;
 	default:
 		break;

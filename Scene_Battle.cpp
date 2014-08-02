@@ -186,7 +186,7 @@ bool Scene_Battle::AttachDollPtrToSprite(){
 		s_dolls[i].ResetDollPtr();
 		index = GetFrontIndex(i);
 		pDoll = GetDollPtr(index);
-		if(pDoll == NULL && i <= dollsNum){
+		if(pDoll == NULL && i < dollsNum){
 			result = false;
 		}
 		s_dolls[i].SetDollPtr(pDoll);
@@ -200,8 +200,8 @@ void Scene_Battle::Draw() const{
 	DrawBG();
 
 	// スプライトの描画
-	DrawDollsSprite();
 	DrawEnemiesSprite();
+	DrawDollsSprite();
 
 	// バトルメッセージウィンドウの描画
 	w_battleMsg.Draw();
@@ -411,8 +411,29 @@ bool Scene_Battle::CheckNextAction(){
 					return true;
 				}else{
 					// 戦闘可能な人形についてコマンド選択画面を開く
+					pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+					if(pDoll != NULL){
+						if(pDoll->CanAct()){
+							// ウィンドウを開く
+							w_dollCommand.OpenWithActor(pDoll,
+								GetCommandWindowIsCancelable(currentIndex));
+							w_dollCommand.SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);
+							// スプライトを前に出す
+							if(GetDollSprite(pDoll)){
+								GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
+							}
+						}
+					}
+				}
+			}else{
+				// キャンセルした場合
+				currentIndex--;
+				pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+				if(pDoll != NULL){
+					// 戦闘可能な人形についてコマンド選択画面を開く
 					if(GetDollPtr(GetFrontIndex(currentIndex))->CanAct()){
-						pDoll = GetDollPtr(GetFrontIndex(currentIndex));
+						// コマンドを一つリセットする
+						RemoveOneCommand();
 						// ウィンドウを開く
 						w_dollCommand.OpenWithActor(pDoll,
 							GetCommandWindowIsCancelable(currentIndex));
@@ -421,23 +442,6 @@ bool Scene_Battle::CheckNextAction(){
 						if(GetDollSprite(pDoll)){
 							GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
 						}
-					}
-				}
-			}else{
-				// キャンセルした場合
-				currentIndex--;
-				// 戦闘可能な人形についてコマンド選択画面を開く
-				if(GetDollPtr(GetFrontIndex(currentIndex))->CanAct()){
-					pDoll = GetDollPtr(GetFrontIndex(currentIndex));
-					// コマンドを一つリセットする
-					RemoveOneCommand();
-					// ウィンドウを開く
-					w_dollCommand.OpenWithActor(pDoll,
-						GetCommandWindowIsCancelable(currentIndex));
-					w_dollCommand.SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);
-					// スプライトを前に出す
-					if(GetDollSprite(pDoll)){
-						GetDollSprite(pDoll)->SetMorphID(SPMORPH_ACTIVATE, true);
 					}
 				}
 				// 何かエラーがあった場合

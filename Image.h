@@ -41,8 +41,30 @@ typedef struct Image_Illust{
 // “GƒLƒƒƒ‰‚Ì‰æ‘œ‚ğ•Û‚·‚éB
 typedef struct Image_Enemy{
 	int	elf;
+	int fairy[DOLL_ATTR_NUM];
+	int snail[DOLL_ATTR_NUM];
+	int butterfly[DOLL_ATTR_NUM];
+	int rat[DOLL_ATTR_NUM];
+	int crow[DOLL_ATTR_NUM];
+	int slime[DOLL_ATTR_NUM];
+	int flower[DOLL_ATTR_NUM];
+	int skeleton[DOLL_ATTR_NUM];
+	int harpy[DOLL_ATTR_NUM];
+	int cardinal;
 	Image_Enemy(){
 		elf = -1;
+		for(int n=0; n<DOLL_ATTR_NUM; n++){
+			fairy[n] = -1;
+			snail[n] = -1;
+			butterfly[n] = -1;
+			rat[n] = -1;
+			crow[n] = -1;
+			slime[n] = -1;
+			flower[n] = -1;
+			skeleton[n] = -1;
+			harpy[n] = -1;
+		}
+		cardinal = -1;
 	}
 }IMAGE_ENEMY;
 

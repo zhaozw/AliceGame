@@ -34,17 +34,28 @@ public:
 	// hSnd : 移動時に鳴らす音のハンドル。
 	int Move(int hSnd = 0);
 	int CheckKey(int hSnd = 0);
+	
+	// 内容のクリア。
+	// isActive値をすべてtrueにする。
+	void Reset(){
+		for(int n=0; n<SELECTABLE2D_MAX; n++){
+			isActive[n] = true;
+		}
+		index = lastIndex = 0;
+	}
 		
 	// 左右の端がつながっていればtrue。
 	bool canHWrap;
 	// 上下の端が繋がっていればtrue
 	bool canVWrap; 
+	// 選択不可能の項目にカーソルを合わせることが出来るか
+	// (選択出来るかどうかは別。そのあたりの機能は元々このクラスに含まれない)。
+	bool canChooseInactive;
 
 	// 入力から次の入力可能までの時間。
 	// デフォルトでは0。
 	int choiceWait;
 	int choiceDelay;	// 現在の待ち時間。
-
 
 	// 現在の位置にとどまっている時間。
 	int stayCount;
@@ -60,6 +71,9 @@ public:
 	
 	// 縦の位置・横の位置からインデックスを取得。
 	int GetIndex(int _col, int _row){ return _row*column+_col; };
+
+	// 現在の選択肢が有効であるかどうかを返す。
+	bool IsInactive() const{ return !isActive[index]; };
 };
 
 

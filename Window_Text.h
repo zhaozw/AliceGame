@@ -7,6 +7,7 @@
 #define WINDOWFONT_DEFICOLOR	0x00909090
 #define WINDOWFONT_DEFNCOLOR	0x00404060
 
+
 typedef struct WindowFont{
 	int		hFont;			// フォントのハンドル。
 	int		fontSize;		// フォントサイズ。
@@ -85,6 +86,10 @@ public:
 		windowFont.fontSize = _fontSize;
 		windowFont.lineHeight = _lineHeight;
 	};
+
+	int GetTextColor() const{ return windowFont.color; };
+	int GetIColor() const{ return windowFont.iColor; };
+	int GetNColor() const{ return windowFont.nColor; };
 
 	// 内容の並びを揃える時の描画位置のずれの設定
 	// content : 文字

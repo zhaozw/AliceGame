@@ -29,8 +29,10 @@ bool Sprite_BattleDoll::SetupDrawScreen(){
 }
 
 void Sprite_BattleDoll::Update(){
-	// 
-	Sprite_Base::Update();
+	if(enabled){
+		// 
+		Sprite_Base::Update();
+	}
 }
 
 #define BATTLEDOLL_HPGAUGE_HEIGHT	12
@@ -51,6 +53,12 @@ void Sprite_BattleDoll::DrawFrame() const{
 		GetIX(), GetIY(),
 		GetIX()+SPRITE_BATTLEDOLL_WIDTH,
 		GetIY()+SPRITE_BATTLEDOLL_HEIGHT, GetColor(255, 255, 255), 0);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 192);
+	DrawBox(
+		GetIX()+1, GetIY()+1,
+		GetIX()+SPRITE_BATTLEDOLL_WIDTH-1,
+		GetIY()+SPRITE_BATTLEDOLL_HEIGHT-1, GetColor(0, 0, 0), 1);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
 
 void Sprite_BattleDoll::DrawDoll() const{

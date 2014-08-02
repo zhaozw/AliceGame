@@ -1,6 +1,7 @@
 // Window_Selectable.cpp
 
 #include "Window_Selectable.h"
+#include "DXFont.h"
 
 Window_Selectable::Window_Selectable() : Window_Text(),
 	content(), select(1, 1){
@@ -10,6 +11,7 @@ Window_Selectable::Window_Selectable() : Window_Text(),
 		result = WND_SELECTABLE_RESULT_NONE;
 		cancelable = false;
 		autoClose = true;
+		canChooseInactive = false;
 }
 
 void Window_Selectable::SetContent(WINDOW_SELECTABLE_CONTENT _content){
@@ -52,22 +54,29 @@ void Window_Selectable::SetTitle(LPTSTR _title, int _hTitleFont, int _titleHeigh
 	content.useTitle = (strlen(_title) > 0);
 }
 
-void Window_Selectable::SetRowByContentSize(int _column){
-	int lastIndex = -1;
-	column = _column;
+
+int Window_Selectable::GetContentSize() const{
+	int num = 0;
 	for(int n=0; n<WND_SELECTABLE_CONTENT; n++){
 		if(strlen(content.data[n]) > 0){
 			// 中身の入っている項目の数を調べる
-			lastIndex = n;
+			num = n+1;
 		}
 	}
-	if(lastIndex == -1){
+	return num;
+}
+
+void Window_Selectable::SetRowByContentSize(int _column){
+	int num = GetContentSize();
+	column = _column;
+	if(num == 0){
 		row = 1;
 	}else{
-		row = (lastIndex + column) / column;
+		row = (num + column - 1) / column;
 	}
 	SetGridSize(column, row);
 }
+
 
 void Window_Selectable::CheckActiveSelect(){
 	for(int n=0; n<WND_SELECTABLE_CONTENT; n++){
@@ -127,66 +136,15 @@ void Window_Selectable::GetTitle(LPTSTR str) const{
 	strcpy_s(str, WND_SELECTABLE_TITLELENGTH-1, content.title);
 }
 
-void Window_Selectable::DrawContent() const{
-	int cell;
-	int ddx=0;	// 中央揃え・右揃えの時の描画位置のずれ
-	int item_margin_x;	// 項目間のスペース
-	if(GetActive()){
-		TCHAR buf[WND_SELECTABLE_TITLELENGTH];
-		int cntX = frameArea.x + contentArea.x;
-		int cntY = frameArea.y + contentArea.y;
-		// タイトルを描画する場合
-		if(content.useTitle){
-			GetTitle(buf);
-			DrawStringToHandle(
-				cntX + GetDrawDeltaX(buf, -1, content.hTitleFont), 
-				cntY, 
-				buf,
-				windowFont.color, content.hTitleFont);
-			cntY += content.titleHeight;
-		}
-
-		item_margin_x = (column <= 1) ? 0 
-			: (contentArea.w - column * item_width)/(column-1);
-		// 各選択肢の描画
-		for(int h=0; h<row; h++){
-			for(int w=0; w<column; w++){
-				cell = w+h*column;
-				GetContent(buf, cell);
-				cntX = frameArea.x + contentArea.x 
-					 + (item_width+item_margin_x)*w;
-				switch(windowFont.align){
-				case 0:
-					ddx = 0;
-					break;
-				case 1:
-					ddx = (item_width - 
-						GetDrawStringWidthToHandle(buf, strlen(buf), windowFont.hFont))/2;
-					break;
-				case 2:
-					ddx = item_width - 
-						GetDrawStringWidthToHandle(buf, strlen(buf), windowFont.hFont);
-					break;
-				}
-				DrawStringToHandle(
-					cntX+ddx, cntY, 
-					buf,
-					select.isActive[cell] ? ((select.index == cell) 
-					? windowFont.color : windowFont.iColor) : windowFont.nColor,
-					windowFont.hFont);
-				if(cell == select.index){
-					// フォーカスの描画
-					pSkin->DrawFocus(
-						cntX, cntY,
-						item_width,
-						windowFont.fontSize, count);
-				}
-			}
-			cntY += windowFont.lineHeight;
-		}
-	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+bool Window_Selectable::CheckInactive() const{
+	return select.IsInactive();
 }
+
+bool Window_Selectable::GetIsEmpty(int i) const{
+	if(i < 0 || i >= WND_SELECTABLE_CONTENT) return true;
+	return strlen(content.data[i]) <= 0;
+}
+
 
 void Window_Selectable::OnOpened(){
 	result = WND_SELECTABLE_RESULT_NONE;
@@ -225,3 +183,152 @@ void Window_Selectable::Update(){
 	}
 }
 
+
+void Window_Selectable::DrawContent() const{
+	TCHAR buf[WND_SELECTABLE_TITLELENGTH];
+	WINDOWAREA tmpArea;
+	BYTE color;
+	int contentSize = 0;
+	if(GetActive()){
+		int cntX = frameArea.x + contentArea.x;
+		int cntY = frameArea.y + contentArea.y;
+		// タイトルを描画する場合
+		if(content.useTitle){
+			GetTitle(buf);
+			DrawStringToHandle(
+				cntX + GetDrawDeltaX(buf, -1, content.hTitleFont), 
+				cntY, 
+				buf,
+				windowFont.color, content.hTitleFont);
+			cntY += content.titleHeight;
+		}
+
+		// 各選択肢の描画
+		contentSize = GetContentSize();
+		for(int n=0; n<contentSize; n++){
+			tmpArea = GetDrawArea(n);
+			color = select.isActive[n] ? ((select.index == n) 
+			? WND_SELECTABLE_COLOR_SELECTED : WND_SELECTABLE_COLOR_ACTIVE) 
+			: WND_SELECTABLE_COLOR_INACTIVE,
+			DrawContentItem(n, color);
+			if(n == select.index){
+				// フォーカスの描画
+				pSkin->DrawFocus(
+					tmpArea.x, tmpArea.y,
+					tmpArea.w, tmpArea.h, count);
+			}
+		}
+		/*
+		for(int h=0; h<row; h++){
+			for(int w=0; w<column; w++){
+				cell = w+h*column;
+				GetContent(buf, cell);
+				cntX = frameArea.x + contentArea.x 
+					 + (item_width+item_margin_x)*w;
+				switch(windowFont.align){
+				case 0:
+					ddx = 0;
+					break;
+				case 1:
+					ddx = (item_width - 
+						GetDrawStringWidthToHandle(buf, strlen(buf), windowFont.hFont))/2;
+					break;
+				case 2:
+					ddx = item_width - 
+						GetDrawStringWidthToHandle(buf, strlen(buf), windowFont.hFont);
+					break;
+				}
+				DrawStringToHandle(
+					cntX+ddx, cntY, 
+					buf,
+					select.isActive[cell] ? ((select.index == cell) 
+					? windowFont.color : windowFont.iColor) : windowFont.nColor,
+					windowFont.hFont);
+				if(cell == select.index){
+					// フォーカスの描画
+					pSkin->DrawFocus(
+						cntX, cntY,
+						item_width,
+						windowFont.fontSize, count);
+				}
+			}
+			cntY += windowFont.lineHeight;
+		}
+		*/
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+}
+
+WINDOWAREA Window_Selectable::GetDrawArea(int i) const{
+	WINDOWAREA area;
+	int tmpX=0, tmpY=0;
+	tmpX = frameArea.x + contentArea.x;
+	tmpY = frameArea.y + contentArea.y;
+	if(content.useTitle){
+		tmpY += content.titleHeight;
+	}
+	int line=0, pos=0;
+	line = i/column;	// インデックスが該当する行数
+	pos = i%column;		// インデックスが該当する桁の位置
+	int item_margin_x = (column <= 1) ? 0 
+		: (contentArea.w - column * item_width)/(column-1);
+	tmpX += (item_width+item_margin_x)*pos;
+	tmpY += windowFont.lineHeight*line;
+	// 値の代入
+	area.x = tmpX;
+	area.y = tmpY;
+	area.w = item_width;
+	area.h = windowFont.fontSize;
+	return area;
+}
+
+int Window_Selectable::GetItemColor(BYTE itemType) const{
+	switch(itemType){
+	case WND_SELECTABLE_COLOR_SELECTED:
+		return GetTextColor();
+		break;
+	case WND_SELECTABLE_COLOR_ACTIVE:
+		return GetIColor();
+		break;
+	case WND_SELECTABLE_COLOR_INACTIVE:
+		return GetNColor();
+		break;
+	}
+	return 0;
+}
+
+void Window_Selectable::DrawContentItem(int index, BYTE fontColor) const{
+	TCHAR buf[WND_SELECTABLE_TITLELENGTH];
+	WINDOWAREA tmpArea;
+	int ddx=0;	// 中央揃え・右揃えの時の描画位置のずれ
+
+	tmpArea = GetDrawArea(index);
+	GetContent(buf, index);
+	switch(windowFont.align){
+	case 0:
+		ddx = 0;
+		break;
+	case 1:
+		ddx = (tmpArea.w - GetStrWidth(buf, strlen(buf), windowFont.hFont))/2;
+		break;
+	case 2:
+		ddx = tmpArea.w - GetStrWidth(buf, strlen(buf), windowFont.hFont);
+		break;
+	}
+	int color = fontColor;
+	switch(color){
+	case WND_SELECTABLE_COLOR_SELECTED:
+		color = windowFont.color;
+		break;
+	case WND_SELECTABLE_COLOR_ACTIVE:
+		color = windowFont.iColor;
+		break;
+	case WND_SELECTABLE_COLOR_INACTIVE:
+		color = windowFont.nColor;
+		break;
+	}
+	DrawStringToHandle(
+		tmpArea.x+ddx, tmpArea.y, 
+		buf, color,
+		windowFont.hFont);
+}

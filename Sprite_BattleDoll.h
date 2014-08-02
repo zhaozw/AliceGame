@@ -61,7 +61,7 @@ public:
 			SPRITE_BATTLEDOLL_IY + SPRITE_BATTLEDOLL_DY*i);
 	};
 	// 人形へのポインタを渡す
-	void SetDollPtr(Game_BattleDoll* p){ pDoll = p; enabled = true; };
+	void SetDollPtr(Game_BattleDoll* p){ pDoll = p; enabled = (p!=NULL); };
 	// 人形へのポインタを返す
 	Game_BattleDoll*  GetDollPtr(){ return (enabled ? pDoll : NULL); };
 	// ポインタを外す

@@ -197,10 +197,15 @@ public:
 	}
 
 	// 敵キャラのポインタを取得する。
-	Game_BattleEnemy*	GetEnemyPtr(int index){
+	// checkCanTargetをtrueにすると、敵が戦闘不能であった場合NULLを返す。
+	Game_BattleEnemy*	GetEnemyPtr(int index, bool checkCanTarget=false){
 		if(index < 0 || index >= MAX_BATTLEENEMY) return NULL;
 		if(enemies[index].GetIsUsed()){
-			return &enemies[index];
+			if(checkCanTarget && enemies[index].IsDead()){
+				return NULL;
+			}else{
+				return &enemies[index];
+			}
 		}else{
 			return NULL;
 		}
@@ -272,14 +277,14 @@ public:
 	bool LoadDefaultDolls(int defaultID);	
 	// データベースファイルからIDを指定して読み込む。
 	// ファイルパスはdat_battle\\preset_dolls%02d.csv
-	bool LoadPresetDolls(int presetID);
+	bool LoadPresetDolls(int presetID, BYTE battleType);
 	// グループIDを指定してデータベースから読み込む。
 	// SetupEnemyから使用される。
 	bool LoadEnemyGroup();
 	// Game_BattleEnemyの要素一つに指定した敵IDの情報を読み込む。
 	// ついでに描画位置もセットする。
 	// LoadEnemyGroupから使用される。
-	bool LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY);
+	bool LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY, BYTE _attr);
 
 	//=========================================
 	// ユニット関連
@@ -404,8 +409,15 @@ public:
 	// stateRefID	: ステートのID
 	// showMessage	: メッセージを表示するか否か
 	// level		: ステートレベル
+	// morphSprite	: ステートの付加に成功した場合、
+	//				  対応するスプライトアクションも実行する。
 	BYTE AddStateToUnit(Game_BattleUnit* pUnit, WORD stateRefID,
-		bool showMessage=true, int level=1);
+		bool showMessage=true, int level=1, bool morphSprite=true);
+
+	// 人形または敵オブジェクトを指定すると、そのスプライトに対して
+	// ステート付加時のスプライトアクションを付加する。
+	void SetDollSpriteMorphByState(Game_BattleDoll* pDoll, WORD stateRefID);
+	void SetEnemySpriteMorphByState(Game_BattleEnemy* pEnemy, WORD stateRefID);
 
 	// ステートのターン経過を処理する。
 	// 一括してターン終了時に行う。

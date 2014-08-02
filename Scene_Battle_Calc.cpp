@@ -239,15 +239,17 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		bool canMinus = false;	// 負数を認めるか否か
 		switch(param){
 		case CALCDAMAGE_ATTACK:
-			from	= pAttacker->GetAtk();
+			// 攻撃力に属性補正を適用する
+			from	= pAttacker->GetAtk() 
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
 			to		= pOpponent->GetDef();
-			rate	= GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			rate	= 1.0f;
 			break;
 		}
 		// 自分のステートによるダメージの補正
 		if(pOpponent->IsState(STATE_GUARD)){
 			// 防御
-			rate *= 0.5;
+			gRate *= 0.5;
 		}
 
 		damage = (int)(gRate*(rate*(from-to)+fix));
@@ -341,7 +343,7 @@ float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
 
 BYTE Scene_Battle::AddStateToUnit(
 	Game_BattleUnit* pUnit, WORD stateRefID,
-	bool showMessage, int level){
+	bool showMessage, int level, bool morphSprite){
 		TCHAR buf[WND_MSG_STOCKLENGTH];
 		BYTE result;
 		if(pUnit == NULL){
@@ -363,11 +365,42 @@ BYTE Scene_Battle::AddStateToUnit(
 					pUnit);
 				// メッセージに追加
 				AddStockMessage(buf);
+				// スプライトアクションの追加
+				if(pUnit->IsDoll()){
+					SetDollSpriteMorphByState(
+						(Game_BattleDoll*)pUnit, stateRefID);
+				}else{
+					SetEnemySpriteMorphByState(
+						(Game_BattleEnemy*)pUnit, stateRefID);
+				}
 				break;
 			}
 		}
 		return result;
 }
+
+void Scene_Battle::SetDollSpriteMorphByState(Game_BattleDoll* pUnit, WORD stateRefID){
+	Sprite_BattleDoll* pSprite;
+	pSprite = GetDollSprite(pUnit);
+	if(pSprite == NULL) return;
+	switch(stateRefID){
+	case STATE_DEATH:
+		// pSprite->SetMorphID(SPMORPH_DISAPPEAR, true, 60);
+		break;
+	}
+}
+
+void Scene_Battle::SetEnemySpriteMorphByState(Game_BattleEnemy* pUnit, WORD stateRefID){
+	Sprite_BattleEnemy* pSprite;
+	pSprite = GetEnemySprite(pUnit);
+	if(pSprite == NULL) return;
+	switch(stateRefID){
+	case STATE_DEATH:
+		pSprite->SetMorphID(SPMORPH_DISAPPEAR, true, 60);
+		break;
+	}
+}
+
 
 void Scene_Battle::UpdateStateTurn(){
 	for(int n=0; n<MAX_BATTLEDOLL; n++){

@@ -4,8 +4,12 @@
 #include "Static_Battle.h"
 
 #include "Image.h"
+#include "DXFont.h"
+#include "Game_AliceInfo.h"
 
 extern Image g_image;
+extern DXFont g_font;
+extern Game_AliceInfo	g_aliceInfo;
 
 void Scene_Battle::DrawBG() const{
 }
@@ -28,4 +32,14 @@ void Scene_Battle::DrawBattleInfo() const{
 		g_image.icon.attr_graph, 1);
 
 	// ƒAƒŠƒX‚Ì–‚—Í‚ð•`‰æ
+	TCHAR buf[16];
+	int w = 0;
+	switch(phaze){
+	case DOLLS_COMMAND:
+	case ALICE_COMMAND:
+		wsprintf(buf, _T("Žc‚è–‚—Í:%d"), g_aliceInfo.data.mp);
+		w = GetStrWidth(buf, strlen(buf), g_font.hInfo);
+		DrawStringToHandle(150-w/2, 378-FONTSIZE_INFO, buf, GetColor(255,255,255), g_font.hInfo);
+	}
+	// DrawStringToHandle(WND_WIDTH-w-36, 370-FONTSIZE_INFO, buf, GetColor(255,255,255), g_font.hInfo);
 }

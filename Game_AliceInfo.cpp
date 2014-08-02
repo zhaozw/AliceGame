@@ -6,7 +6,7 @@
 #include <crtdbg.h>
 #include "Func_Windows.h"
 
-Game_AliceInfo::Game_AliceInfo():data(){
+Game_AliceInfo::Game_AliceInfo() : data(){
 
 }
 
@@ -32,4 +32,20 @@ void Game_AliceInfo::GetCntTime(bool load){
 	addPlayTime /= 1000; // ïb
 	data.playTime += addPlayTime; // ïbêîÇ≈â¡éZ
 	lastSavedWinTime = cntTime;
+}
+
+bool Game_AliceInfo::AddMP(int p){
+	if(p < 0) return SubMP(-p);
+	bool result = true;
+	if(data.mp + p > data.maxMP) result = false;
+	data.mp = min(data.maxMP, data.mp+p);
+	return result;
+}
+
+bool Game_AliceInfo::SubMP(int p){
+	if(p < 0) return AddMP(-p);
+	bool result = true;
+	if(data.mp < p) result = false;
+	data.mp = max(0, data.mp-p);
+	return result;
 }

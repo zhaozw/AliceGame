@@ -60,6 +60,9 @@ public:
 	// 実行者を指定してウィンドウを開く
 	void OpenWithActor(Game_BattleDoll* pDoll, bool cancelable);
 
+	// コマンド選択の可否を指定
+	virtual void OnOpened();
+
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
 

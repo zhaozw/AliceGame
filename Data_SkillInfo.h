@@ -35,6 +35,40 @@ public:
 	bool GetSkillMessage(LPTSTR buf, Game_BattleUnit* pUnit);
 };
 
+// 一つのスキルのデータ構造
+// スキル名、ターゲット、消費MPなどを保持する構造体。
+class Data_SkillInfo_Each{
+protected:
+	// スキル名。
+	TCHAR		skillName[MAX_SKILL_BYTES];
+	// スキルの説明。
+	TCHAR		account[SKILLACC_BYTES];
+	// スキル使用時のメッセージ。
+	Data_SkillMessage_Each		assertMessage;
+	// スキルで消費する魔力。
+	int			costMP;
+	// スキルの対象。
+	BYTE		targetType;
+public:
+	// コンストラクタ
+	Data_SkillInfo_Each();
+
+	// データをセットする。
+	void SetData(
+		LPTSTR _skillName,
+		LPTSTR _account,
+		LPTSTR _assertMsg, BYTE _assertMsgType,
+		int _costMP, BYTE _targetType);
+
+	// アクセサ
+	void	GetSkillName(LPTSTR buf);
+	void	GetSkillAccount(LPTSTR buf);
+	void	GetAssertMessage(LPTSTR buf, Game_BattleUnit* pUnit){
+		assertMessage.GetSkillMessage(buf, pUnit); };
+	int		GetCostMP(){ return costMP; };
+	BYTE	GetTargetType(){ return targetType; };
+};
+
 //================================================
 // スキルに関するデータベース。
 // スキル名、及び、スキルの使用時などに流れるメッセージを記録する。
@@ -42,10 +76,14 @@ public:
 
 class Data_SkillInfo{
 protected:
+	Data_SkillInfo_Each			data[MAX_SKILL];
+	/*
 	// スキル名。
 	TCHAR						skillName[MAX_SKILL][MAX_SKILL_BYTES];
 	// スキルの対象。
 	BYTE						targetType[MAX_SKILL];
+	// スキルで消費する魔力。
+	int							costMP[MAX_SKILL];
 
 	// スキルを使用する際に流れるメッセージ。
 	// スキルの数だけ存在する。
@@ -54,7 +92,7 @@ protected:
 	// スキルの説明。
 	// スキルの数だけ存在する。
 	TCHAR						account[MAX_SKILL][SKILLACC_BYTES];
-
+	*/
 
 	// 使用時以外に、スキルに関連して流れるメッセージ。
 	// スキルの数だけ存在するわけではない。
@@ -80,6 +118,9 @@ public:
 
 	// ターゲットのタイプを取得する。
 	BYTE GetTargetType(WORD skillID);
+
+	// 消費MPを取得する。
+	int GetCostMP(WORD skillID);
 
 	// メッセージを取得する
 	bool GetAssertMessage(LPTSTR buf, WORD skillID, Game_BattleUnit* pUnit);

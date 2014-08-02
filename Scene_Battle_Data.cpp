@@ -4,15 +4,29 @@
 #include "Data_EnemyGroup.h"
 #include "Data_EnemyParam.h"
 #include "Game_AliceDoll.h"
+#include "Game_AliceInfo.h"
 #include "CsvReader.h"
+#include "TempData.h"
 
 // データベース
-extern Data_EnemyGroup d_enemyGroup;
+extern Data_EnemyGroup	d_enemyGroup;
 extern Data_EnemyParam	d_enemyParam;
+extern Game_AliceInfo	g_aliceInfo;
+extern TempData			g_temp;
 
 bool Scene_Battle::SetupDolls(){
-	if(!LoadPresetDolls(1)){
-		return false;
+	switch(g_temp.battleType){
+	case TEMP_BTYPE_NORMAL:
+		break;
+	case TEMP_BTYPE_EVENT:
+		break;
+	case TEMP_BTYPE_TUTORIAL:
+		if(!LoadPresetDolls(g_temp.battleID, TEMP_BTYPE_TUTORIAL)){
+			return false;
+		}
+		break;
+	case TEMP_BTYPE_EXTRA:
+		break;
 	}
 	return true;
 }
@@ -29,18 +43,28 @@ bool Scene_Battle::LoadDefaultDolls(int defaultID){
 	return true;
 }
 
-bool Scene_Battle::LoadPresetDolls(int defaultID){
+bool Scene_Battle::LoadPresetDolls(int defaultID, BYTE battleType){
 	TCHAR		fileName[MAX_PATH];
 	CsvReader	reader;
 	Game_AliceDoll_Essence	tmpDoll;
 	TCHAR		tmpName[BATTLEUNIT_NAME_BYTES];
 	BYTE		tmpAttr = DOLL_ATTR_NONE;
 	int			tmpInt = 0;
-	wsprintf(fileName, _T("dat_battle\\preset_dolls%02d.csv"), defaultID);
+	switch(battleType){
+	case TEMP_BTYPE_TUTORIAL:
+		wsprintf(fileName, _T("dat_battle\\tutorial_dolls%02d.csv"), defaultID);
+		break;
+	default:
+		wsprintf(fileName, _T("dat_battle\\preset_dolls%02d.csv"), defaultID);
+		break;
+	}
 	if(!reader.Open(fileName)){
 		return false;
 	}
-	// 最初の二行は空行
+	// 最初の二行はアリスの魔力
+	reader.Read();
+	g_aliceInfo.SetMP(reader.GetIntValue(1));
+	// 次の二行は空行
 	reader.Read();
 	reader.Read();
 	// 人形の成長レベルは全て0、全て内部レベルで強さを管理する
@@ -117,7 +141,8 @@ bool Scene_Battle::LoadEnemyGroup(){
 		if(tmpRefID != 0){
 			// IDから敵を作成する
 			LoadEnemyData(n, tmpRefID,
-				pEnemyGroup->GetEnemyDrawX(n), pEnemyGroup->GetEnemyDrawY(n));
+				pEnemyGroup->GetEnemyDrawX(n), pEnemyGroup->GetEnemyDrawY(n),
+				pEnemyGroup->GetEnemyAttr(n));
 			// 敵の数を入力
 			enemiesNum = n+1;
 		}else{
@@ -128,7 +153,7 @@ bool Scene_Battle::LoadEnemyGroup(){
 	return true;
 }
 
-bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY){
+bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY, BYTE _attr){
 	TCHAR tmpName[BATTLEUNIT_NAME_BYTES];
 	Data_EnemyParam_Each* pEnemyParam = NULL;
 	// 敵の情報を取得
@@ -149,7 +174,11 @@ bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY)
 		pEnemyParam->GetSpd(), pEnemyParam->GetMgc(),
 		pEnemyParam->GetTec());
 	// 属性
-	enemies[index].SetAttr(pEnemyParam->GetAttr());
+	if(_attr == DOLL_ATTR_RANDOM){
+		enemies[index].SetRandomAttr();
+	}else{
+		enemies[index].SetAttr(_attr);
+	}
 	// 描画位置
 	enemies[index].SetDrawPos(drawX, drawY);
 	// 経験値

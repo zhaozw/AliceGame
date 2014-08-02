@@ -59,13 +59,14 @@ bool Data_EnemyGroup::LoadDataFromCsv(){
 			}
 			// ダミー行
 			reader.NextLine();
-			// 敵のIDとその描画位置を取得する
+			// 敵のIDとその描画位置及び属性を取得する
 			for(int i=0; i<MAX_BATTLEENEMY; i++){
 				if(reader.Read() == CSV_READ_NOERROR){
 					if(reader.GetIntValue(0, 0) != 0){
 						tmpGroup.SetEnemyRefID(index, (WORD)reader.GetIntValue(0, 0));
 						tmpGroup.SetEnemyDrawX(index, (WORD)reader.GetIntValue(1, 0));
 						tmpGroup.SetEnemyDrawY(index, (WORD)reader.GetIntValue(2, 0));
+						tmpGroup.SetEnemyAttr(index, (BYTE)reader.GetIntValue(3, 0));
 						index++;
 					}
 				}

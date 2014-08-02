@@ -54,7 +54,19 @@ void BWindow_DollCommand::OpenWithActor(Game_BattleDoll* pDoll, bool _cancelable
 	Open();
 }
 
+void BWindow_DollCommand::OnOpened(){
+	Window_Selectable::OnOpened();
+	// スキルコマンドを選択可能か
+	if(pActor != NULL){
+		if(pActor->GetSkillID(0) == 0){
+			// スキルコマンド選択不可
+			select.isActive[BWND_DOLLCOMMAND_SKILL] = false;
+		}
+	}
+}
+
 void BWindow_DollCommand::Refresh(){
+	select.Reset();
 	commandIndex = 0;
 	subIndex = -1;
 	targetIndex = 0;
@@ -141,7 +153,7 @@ void BWindow_DollCommand::OnChildIsClosed(){
 		}
 		break;
 	}
-	phaze = BWND_DOLLCOMMAND_PHAZE_NONE;
+	phaze = BWND_DOLLCOMMAND_PHAZE_MAIN;
 }
 
 void BWindow_DollCommand::CheckAutoClose(){

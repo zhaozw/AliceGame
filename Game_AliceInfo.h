@@ -10,6 +10,7 @@
 
 struct Game_AliceInfo_Data{
 	int mp;				// アリスの魔力
+	int maxMP;			// 最大魔力
 	int day;			// 経過日数
 	int time;			// 現在の日数における時間(0時00分を0とした時、何分か)
 	int timeToEat;		// 次に料理が作れるまでの時間
@@ -23,6 +24,7 @@ struct Game_AliceInfo_Data{
 
 	Game_AliceInfo_Data(){
 		mp = MAX_MP;
+		maxMP = MAX_MP;
 		day = 0;
 		time = 0;
 		timeToEat = 0;
@@ -42,7 +44,7 @@ struct Game_AliceInfo_Data{
 		serial = 1;
 		savedYMD = 0;
 		savedHMS = 0;
-	}
+	};
 };
 
 class Game_AliceInfo{
@@ -60,6 +62,15 @@ public:
 	bool LoadFromBytes(LPVOID pBytes, DWORD fileSize);
 	// 現在の現実時間を代入する。
 	void GetCntTime(bool load=false);
+
+	// MPを設定する。
+	void SetMP(int p){ data.mp = p; data.maxMP = max(data.maxMP, p); };
+	// MPを増やす。上限などの判定を使用する。
+	// 指定した値だけ増やせなかった場合：false
+	bool AddMP(int p);
+	// MPを減らす。加減などの判定を使用する。
+	// 指定した値だけ減らせなかった場合：false
+	bool SubMP(int p);
 };
 
 #endif // GAME_ALICEINFO_H

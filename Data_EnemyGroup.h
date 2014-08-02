@@ -3,16 +3,19 @@
 
 #include "Static_Battle.h"
 #include "VectorList.h"
+#include "Static_AliceDoll.h"
 
 // 敵グループ内の敵一体を表す構造体
 typedef struct EnemyInGroup{
 	WORD		refID;		// 敵ID。Data_EnemyParamクラスの参照IDを指定する。
 	int			drawX;		// 描画位置の中心。
 	int			drawY;		// 基本的にy座標の昇順でデータを記録する。
+	BYTE		attr;		// 属性。-1の場合はランダムで決まる。
 	EnemyInGroup(){
-		refID = 0;
-		drawX = 0;
-		drawY = 0;
+		refID	= 0;
+		drawX	= 0;
+		drawY	= 0;
+		attr	= DOLL_ATTR_RANDOM;
 	}
 } ENEMYINGROUP;
 
@@ -51,6 +54,13 @@ public:
 	WORD	GetEnemyDrawY(int index){
 		if(IsIndex(index)) return enemy[index].drawY;
 		return 0;
+	}
+	void	SetEnemyAttr(int index, BYTE _attr){
+		if(IsIndex(index)) enemy[index].attr = _attr;
+	}
+	BYTE	GetEnemyAttr(int index){
+		if(IsIndex(index)) return enemy[index].attr;
+		return DOLL_ATTR_NONE;
 	}
 	bool	IsIndex(int index){ return index >= 0 && index < MAX_BATTLEENEMY; };
 };

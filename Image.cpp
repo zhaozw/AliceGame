@@ -169,8 +169,38 @@ bool Image::Load_Illust(){
 }
 
 bool Image::Load_Enemy(){
-	enemy.elf = LoadGraph(_T("enemyimg\\elf.png"));
+	enemy.elf = LoadGraph(_T("img_enemy\\Elf.png"));
 	if(enemy.elf == -1) return false;
+	// 妖精
+	if(LoadDivGraph(_T("img_enemy\\Fairy.png"),
+		4, 4, 1, 120, 120, enemy.fairy) != 0) return false;
+	// カタツムリ
+	if(LoadDivGraph(_T("img_enemy\\Snail.png"),
+		4, 2, 2, 120, 80, enemy.snail) != 0) return false;
+	// 蝶
+	if(LoadDivGraph(_T("img_enemy\\Butterfly.png"),
+		4, 1, 4, 240, 80, enemy.butterfly) != 0) return false;
+	// ネズミ
+	if(LoadDivGraph(_T("img_enemy\\Rat.png"),
+		4, 2, 2, 150, 100, enemy.rat) != 0) return false;
+	// カラス
+	if(LoadDivGraph(_T("img_enemy\\Crow.png"),
+		4, 2, 2, 150, 100, enemy.crow) != 0) return false;
+	// スライム
+	if(LoadDivGraph(_T("img_enemy\\Slime.png"),
+		4, 2, 2, 100, 50, enemy.slime) != 0) return false;
+	// 花
+	if(LoadDivGraph(_T("img_enemy\\Flower.png"),
+		4, 2, 2, 130, 130, enemy.flower) != 0) return false;
+	// スケルトン
+	if(LoadDivGraph(_T("img_enemy\\Skeleton.png"),
+		4, 2, 2, 160, 240, enemy.skeleton) != 0) return false;
+	// ハーピー
+	if(LoadDivGraph(_T("img_enemy\\Harpy.png"),
+		4, 2, 2, 220, 280, enemy.harpy) != 0) return false;
+	// ネクロマンサー
+	enemy.cardinal = LoadGraph(_T("img_enemy\\Cardinal.png"));
+	if(enemy.cardinal == -1) return false;
 	return true;
 }
 

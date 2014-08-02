@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 #include "VectorList.h"
+#include "Static_AliceDoll.h"
 
 // refIDがどの敵に対応するかの定数リスト
 #define		ENEMYDRAW_ELF			1
@@ -22,8 +23,8 @@ private:
 	int		iWidth, iHeight;
 	// 基本的な描画の倍率
 	float	baseExRate;
-	// 画像のハンドル
-	int		hImg;
+	// 画像のハンドル(属性ごと)
+	int		hImg[DOLL_ATTR_NUM];
 public:
 	// コンストラクタ
 	Data_EnemyDraw_Each();
@@ -37,8 +38,8 @@ public:
 	float	GetCY(){ return cy; };
 	void	SetCX(float x){ cx = x; };
 	void	SetCY(float y){ cy = y; };
-	int		GetHImg(){ return hImg; };
-	void	SetHImg(int h){ hImg = h; };
+	int		GetHImg(BYTE attr){ return hImg[attr]; };
+	void	SetHImg(BYTE attr, int h){ hImg[attr] = h; };
 	int		GetIWidth(){ return iWidth; };
 	int		GetIHeight(){ return iHeight; };
 	void	SetIWidth(int i){ iWidth = i; };
@@ -65,7 +66,7 @@ public:
 	void ReleaseList(){ drawList.Release(); };
 
 	// Imageクラスとハンドルを結びつける。
-	int	GetImgHandleByRefID(WORD refID);
+	int	GetImgHandleByRefID(WORD refID, BYTE attr);
 
 	// ベクトルの中からrefIDが該当する値を返す。
 	Data_EnemyDraw_Each* GetEnemyDraw(WORD refID);

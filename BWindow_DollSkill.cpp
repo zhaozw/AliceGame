@@ -2,6 +2,7 @@
 
 #include "BWindow_DollSkill.h"
 #include "WindowSkin.h"
+#include "Game_AliceInfo.h"
 #include "DXFont.h"
 #include "Game_BattleDoll.h"
 #include "Static_AliceDoll.h"
@@ -11,12 +12,16 @@
 #include "BWindow_DollCommand.h"
 
 extern WindowSkins			g_wndSkins;
+extern Game_AliceInfo		g_aliceInfo;
 extern DXFont				g_font;
 extern Data_SkillInfo		d_skillInfo;
 
 BWindow_DollSkill::BWindow_DollSkill() : Window_Selectable(),
 pTarget(NULL), pScene(NULL), pWndCommand(NULL){
-
+	// select.canChooseInactive = true;
+	for(int n=0; n<DOLL_SKILL_MAX; n++){
+		costMP[n] = 0;
+	}
 }
 
 void BWindow_DollSkill::MySetup(Scene_Battle* _pScene, BWindow_DollCommand* _pWndCommand){
@@ -24,7 +29,7 @@ void BWindow_DollSkill::MySetup(Scene_Battle* _pScene, BWindow_DollCommand* _pWn
 	WINDOWAREA		frameArea(
 		BWND_DOLLSKILL_X, BWND_DOLLSKILL_Y,
 		BWND_DOLLSKILL_W, BWND_DOLLSKILL_H);
-	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+5, ALIGN_CENTER);
+	WINDOWFONT		font(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+5, ALIGN_LEFT);
 	ClearContent();
 	SetGridSize(2, 4);
 	Window_Selectable::Setup_FixPadding(
@@ -34,6 +39,7 @@ void BWindow_DollSkill::MySetup(Scene_Battle* _pScene, BWindow_DollCommand* _pWn
 	pScene = _pScene;
 	pTarget = NULL;
 	pWndCommand = _pWndCommand;
+	SetAllColor(WINDOWFONT_DEFCOLOR, WINDOWFONT_DEFICOLOR, WINDOWFONT_DEFNCOLOR);
 }
 
 void BWindow_DollSkill::OnOpened(){
@@ -45,6 +51,7 @@ void BWindow_DollSkill::OnOpened(){
 		if(pOwner->GetSkillID(n) != 0){
 			d_skillInfo.GetSkillName(buf, pOwner->GetSkillID(n));
 			SetContent(buf, n, true);
+			costMP[n] = d_skillInfo.GetCostMP(pOwner->GetSkillID(n));
 		}
 	}
 	select.index = 0;
@@ -103,21 +110,26 @@ void BWindow_DollSkill::Update(){
 	case UPDATING:
 		switch(select.CheckKey()){
 		case SELECT2D_CHOOSE:
-			tmpSkillID = pOwner->GetSkillID(select.index);
-			targetType = d_skillInfo.GetTargetType(tmpSkillID);
-			if(tmpSkillID == 0) return;
-			if(targetType != ACTIONTARGET_NONE){
-				pScene->GetWndFocusedUnitPtr()->SetParam(
-					pOwner, NULL,
-					BWindow_FocusedUnit::ConvertTargetTypeToFocusType(targetType),
-					BWND_FOCUS_TYPE_SKILL);
-				OpenChildWindow((Window_Base*)pScene->GetWndFocusedUnitPtr(), true);
-				pWndCommand->SetPhaze(BWND_DOLLCOMMAND_PHAZE_TARGET);
+			if(costMP[select.index] <= g_aliceInfo.data.mp){
+				tmpSkillID = pOwner->GetSkillID(select.index);
+				targetType = d_skillInfo.GetTargetType(tmpSkillID);
+				if(tmpSkillID == 0) return;
+				if(targetType != ACTIONTARGET_NONE){
+					pScene->GetWndFocusedUnitPtr()->SetParam(
+						pOwner, NULL,
+						BWindow_FocusedUnit::ConvertTargetTypeToFocusType(targetType),
+						BWND_FOCUS_TYPE_SKILL);
+					OpenChildWindow((Window_Base*)pScene->GetWndFocusedUnitPtr(), true);
+					pWndCommand->SetPhaze(BWND_DOLLCOMMAND_PHAZE_TARGET);
+				}
+			}else{
+				// 選択不可の項目
 			}
 			break;
 		case SELECT2D_CANCEL:
 			if(cancelable){
 				select.index = SELECTRESULT_CANCELED;
+				pWndCommand->SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);
 				Close(true, false);
 				// スキルの情報を表示するウィンドウを閉じる。
 				pScene->CloseSkillAccLineWindow();
@@ -132,7 +144,17 @@ void BWindow_DollSkill::Update(){
 	}
 }
 
-void BWindow_DollSkill::DrawContent() const{
-	Window_Selectable::DrawContent();
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+void BWindow_DollSkill::DrawContentItem(int index, BYTE color) const{
+	// color値は実際にとは違うものを用いる
+	bool canUse = (g_aliceInfo.data.mp >= costMP[index]);
+	BYTE useColor = (!canUse ? WND_SELECTABLE_COLOR_INACTIVE 
+		: (index == select.index 
+		? WND_SELECTABLE_COLOR_SELECTED 
+		: WND_SELECTABLE_COLOR_ACTIVE));
+	Window_Selectable::DrawContentItem(index, useColor);
+	WINDOWAREA area = GetDrawArea(index);
+	TCHAR buf[8];
+	wsprintf(buf, _T("%d"), costMP[index]);
+	int width = GetStrWidth(buf, strlen(buf), g_font.hInfo);
+	DrawStr(area.x+area.w-width-2, area.y, buf, GetItemColor(useColor), g_font.hInfo); 
 }

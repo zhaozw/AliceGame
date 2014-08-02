@@ -26,6 +26,11 @@ void BWindow_AliceCommand::MySetup(){
 		&g_wndSkins.skin[WNDSKIN_SIMPLE],
 		frameArea, 16, font);
 	SetVisible(true);
+
+	// 現状コマンドは使用できない
+	select.isActive[1] = false;
+	select.isActive[2] = false;
+	select.isActive[3] = false;
 }
 
 void BWindow_AliceCommand::Update(){

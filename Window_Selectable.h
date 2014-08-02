@@ -32,6 +32,11 @@
 #define WND_SELECTABLE_RESULT_NONE		-1	// まだ選択されていない
 #define WND_SELECTABLE_RESULT_CANCEL	-2	// キャンセルボタンが押された
 
+// GetContentItemで使用するBYTE値。
+#define WND_SELECTABLE_COLOR_SELECTED		0
+#define WND_SELECTABLE_COLOR_ACTIVE			1
+#define WND_SELECTABLE_COLOR_INACTIVE		2
+
 typedef struct Window_Selectable_Content{
 	TCHAR	title[WND_SELECTABLE_TITLELENGTH];
 	bool	useTitle;		// 選択肢にタイトルを表示するか否か。
@@ -65,6 +70,9 @@ protected:
 	bool	cancelable;		// キャンセル可能か否か
 							// CheckCancelable関数で
 	bool	autoClose;		// 選択肢を選んだ後、自動でウィンドウを閉じるか
+	bool	canChooseInactive;	// 非アクティブな項目を選択出来るか。
+								// (これがtrueでも、文字がない選択肢は選択できない)
+
 public:
 	// コンストラクタ。
 	Window_Selectable();
@@ -94,6 +102,10 @@ public:
 		column = _column; row = _row;
 		select.column = _column; select.row = _row;
 	}
+
+	// 現在内容の入っている項目の数を取得する。
+	// 何も値が入っていない場合は0を返す。
+	int		GetContentSize() const;
 
 	// 選択肢の縦の数を現在の内容から決定する。
 	void	SetRowByContentSize(int _column);
@@ -169,14 +181,34 @@ public:
 	virtual void Update();
 
 	// 項目を選択後、自動で閉じるかどうかの判定を行う
+	// このクラスで指定しているのはダミーで、各クラスで派生する。
 	virtual void CheckAutoClose(){ autoClose = true; };
 
 	// 現在の項目がキャンセル可能であるかどうかの判定を行う
 	virtual void CheckCancelable(){ cancelable = false; };
 
+	// アクセサ
+	void SetCanChooseInactive(bool b){ select.canChooseInactive = b; };
+	bool GetCanChooseInactive(){ return select.canChooseInactive; };
+	// 現在選択中の選択肢が選択不可の項目であるか否かを返す。
+	bool CheckInactive() const;
+	// 指定した選択肢が空であるか否かを返す。
+	bool GetIsEmpty(int index) const;
+
 	// 内容の描画を行う。
 	// クラスごとに派生する。
 	virtual void DrawContent() const;
+
+	// 選択したインデックスの項目を描画する領域を返す。
+	WINDOWAREA GetDrawArea(int index) const;
+
+	// WND_SELECTABLE_COLOR_XXを入れると実際の色を返す。
+	int GetItemColor(BYTE itemType) const;
+
+	// 指定した項目の内容の描画を行う。
+	// 他のクラスから実行されうるため、分けている。
+	// 各クラスごとに派生させてもよい。
+	virtual void DrawContentItem(int index, BYTE fontColor) const;
 
 };
 

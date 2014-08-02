@@ -5,6 +5,7 @@
 #include "Data_BattleState.h"
 #include <tchar.h>
 #include <algorithm>
+#include <DxLib.h>
 
 extern Data_BattleState		d_battleState;
 
@@ -241,6 +242,10 @@ void Game_BattleUnit::SetParam(
 		SetTec(tec);
 }
 
+void Game_BattleUnit::SetRandomAttr(){
+	attr = (BYTE)GetRand(DOLL_ATTR_NUM-1);
+}
+
 bool Game_BattleUnit::Damage(int d){
 	param[BATTLEUNIT_PARAM_HP] -= d;
 	if(param[BATTLEUNIT_PARAM_HP] <= 0){
@@ -270,6 +275,6 @@ bool Game_BattleUnit::CheckDie(){
 
 int Game_BattleUnit::GetAmendedSpd(){
 	return 5000 + GetSpd() 
-		+ CheckStateLevel(STATE_SUBSPD_UP)*1000 
+		+ CheckStateLevel(STATE_SUBSPD_UP)*1000
 		- CheckStateLevel(STATE_SUBSPD_DOWN)*1000; 
 }

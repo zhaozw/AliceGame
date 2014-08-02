@@ -38,6 +38,7 @@
 #define DOLL_ATTR_MOON				2		// 月 色系統は青。
 #define DOLL_ATTR_STAR				3		// 星 色系統は黄色。
 #define DOLL_ATTR_NUM				4		// 全属性数。無属性も含める。
+#define DOLL_ATTR_RANDOM			4		// 敵グループの情報として、ランダム値。
 
 // 属性のかけら関連
 #define DOLL_ATTRSTONE_NUM			6		// 人形が持つ属性のかけらの数

@@ -3,6 +3,7 @@
 
 #include "Window_Selectable.h"
 #include "Window_LineInfo.h"
+#include "Static_AliceDoll.h"
 
 #define BWND_DOLLSKILL_W		500
 #define BWND_DOLLSKILL_H		150
@@ -31,6 +32,8 @@ private:
 	Game_BattleUnit*	pTarget;
 	// コマンドウィンドウへのポインタ
 	BWindow_DollCommand* pWndCommand;
+	// コマンドの消費MPの配列
+	int					costMP[DOLL_SKILL_MAX];
 public:
 	BWindow_DollSkill();
 
@@ -60,12 +63,12 @@ public:
 	// スキルウィンドウは常にキャンセル可能。
 	virtual void CheckCancelable(){ cancelable = true; };
 
-	// 内容の描画を行う。
-	virtual void DrawContent() const;
-
 	// ターゲットを取得する。
 	Game_BattleUnit* GetTarget(){ return pTarget; };
 
+	// 指定した項目の内容の描画を行う。
+	// 他のクラスから実行されうるため、分けている。
+	virtual void DrawContentItem(int index, BYTE fontColor) const;
 };
 
 #endif // BWINDOW_DOLLSKILL_H
