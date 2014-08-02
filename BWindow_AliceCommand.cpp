@@ -30,7 +30,6 @@ void BWindow_AliceCommand::MySetup(){
 	// 現状コマンドは使用できない
 	select.isActive[1] = false;
 	select.isActive[2] = false;
-	select.isActive[3] = false;
 }
 
 void BWindow_AliceCommand::Update(){

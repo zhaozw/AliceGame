@@ -92,19 +92,22 @@ void BWindow_BattleEnemyStatus::DrawContent() const{
 	// Šeƒpƒ‰ƒ[ƒ^‚Ì•`‰æ
 	cntY += FONTSIZE_INFO+8;
 	TCHAR paramName[][8] = {
-		"UŒ‚", "•q·", "–‚—Í", "‹ZI"};
-	for(int i=0; i<4; i++){
+		"UŒ‚", "–hŒä", "•q·", "–‚—Í", "‹ZI"};
+	for(int i=0; i<5; i++){
 		switch(i){
 		case 0:
 			param = pEnemy->GetAtk();
 			break;
 		case 1:
-			param = pEnemy->GetSpd();
+			param = pEnemy->GetDef();
 			break;
 		case 2:
-			param = pEnemy->GetMgc();
+			param = pEnemy->GetSpd();
 			break;
 		case 3:
+			param = pEnemy->GetMgc();
+			break;
+		case 4:
 			param = pEnemy->GetTec();
 			break;
 		}

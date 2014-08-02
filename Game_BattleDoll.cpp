@@ -35,7 +35,7 @@ bool Game_BattleDoll::SetParamFromReference(Game_AliceDoll_Essence* pDoll, bool 
 		index = 1+((n>=DOLL_PARAM_SPD)?n+1:n);		// HPA–hŒä—Í‚ÉŠÖ‚µ‚Ä‚¸‚ê‚é
 		tmpParam = d_dollParam.GetParamFromLv(
 			pDoll->GetType(), 
-			n, pDoll->GetPotentialLevel(n));
+			n, pDoll->GetGLevel(n));
 		SetEachParam(index, tmpParam);
 		/*
 		SetEachParam(n, d_dollParam.GetParamFromLv(pDoll->GetPotentialLevel(n),

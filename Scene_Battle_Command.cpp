@@ -5,6 +5,11 @@
 #include "Data_BattleState.h"
 #include "Static_Skill.h"
 #include "Game_UnitSubCommand.h"
+#include "Game_AliceInfo.h"
+#include "Data_SkillInfo.h"
+
+extern Game_AliceInfo g_aliceInfo;
+extern Data_SkillInfo d_skillInfo;
 
 char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
 	if(pCmd == NULL) return -1;
@@ -77,6 +82,10 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 			// 先制攻撃。
 			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
 			break;
+		case SKILL_REPAIR_QUICK:
+			// 緊急修復。
+			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
+			break;
 		}
 		break;
 	case ACTIONTYPE_ERROR:
@@ -123,7 +132,15 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 	case ACTIONTYPE_ATTACK:
 		break;
 	case ACTIONTYPE_SKILL:
-		// MPが足りない場合、「しかしMPが足りない！」に差し替え
+		if(pCmd->GetOwner()->IsDoll()){
+			if(g_aliceInfo.data.mp >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
+				// ここでMPを減らす
+				g_aliceInfo.SubMP(d_skillInfo.GetCostMP(pCmd->GetSkillID()));
+			}else{
+				// MPが足りない場合、「しかしMPが足りない！」に差し替え
+				pCmd->SetTargetType(ACTIONTARGET_NO_MP);
+			}
+		}
 		break;
 	case ACTIONTYPE_ERROR:
 		return -1;
@@ -169,10 +186,19 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 		fixType = FIXTARGET_DIE_CHANGE;
 		break;
 	case ACTIONTYPE_SKILL:
-		switch(pCmd->GetSkillID()){
-		case SKILL_LOADOFF_ATTACK:
-			fixType = FIXTARGET_DIE_CHANGE;
-			break;
+		if(pCmd->GetTargetType() == ACTIONTARGET_NO_MP){
+			fixType = FIXTARGET_NOFIX;
+		}else{
+			switch(pCmd->GetSkillID()){
+			case SKILL_LOADOFF_ATTACK:
+			case SKILL_KUNAISHOT:
+			case SKILL_KNIFESHOT:
+			case SKILL_REIGEKI:
+			case SKILL_PHOTONSHOT:
+			case SKILL_MJOLLNIR:
+				fixType = FIXTARGET_DIE_CHANGE;
+				break;
+			}
 		}
 		break;
 	case ACTIONTYPE_ERROR:
@@ -354,41 +380,140 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		// 宣言のみで何も行わない
 		break;
 	case ACTIONTYPE_SKILL:
-		switch(pCmd->GetSkillID()){
-		case SKILL_LOADOFF_ATTACK:
-			if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
-				// 通常攻撃と同様のダメージ判定
-				subCommands[subCommandIndex].SetBaseValues(
-					pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
-				subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
-				subCommandIndex++;
-			}
-			// return 1;
-			break;
-		case SKILL_HEAL1:
-			// HPを回復
-			subCommands[subCommandIndex].SetBaseValues(
-				pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
-			subCommands[subCommandIndex].SetParam(CALCHEAL_HEAL1);
+		if(pCmd->GetTargetType() == ACTIONTARGET_NO_MP){
+			subCommands[subCommandIndex].SetBaseValues(NULL, NULL, ACTIONTYPE_NO_MP);
+			subCommands[subCommandIndex].SetParam(0);
 			subCommandIndex++;
-			break;
-		case SKILL_ALLRANGE:
-			// 全体攻撃
-			isDollSide = pDefOwner->IsDoll();
-			for(int n=0; n<(isDollSide?MAX_BATTLEENEMY:NUM_BATTLEDOLL_FRONT); n++){
-				if(isDollSide){
-					pTmpTarget = GetEnemyPtr(MAX_BATTLEENEMY-n-1, true);
-				}else{
-					pTmpTarget = GetFrontDollPtr(NUM_BATTLEDOLL_FRONT-n-1, true);
-				}
-				if(pTmpTarget != NULL){
+		}else{
+			switch(pCmd->GetSkillID()){
+			case SKILL_LOADOFF_ATTACK:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
 					subCommands[subCommandIndex].SetBaseValues(
-						pDefOwner, pTmpTarget, ACTIONTYPE_DAMAGE);
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
 					subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
 					subCommandIndex++;
 				}
+				// return 1;
+				break;
+			case SKILL_HEAL1:
+				// HPを回復
+				subCommands[subCommandIndex].SetBaseValues(
+					pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
+				subCommands[subCommandIndex].SetParam(CALCHEAL_HEAL1);
+				subCommandIndex++;
+				break;
+			case SKILL_ALLRANGE:
+				// 全体攻撃
+				isDollSide = pDefOwner->IsDoll();
+				for(int n=0; n<(isDollSide?MAX_BATTLEENEMY:NUM_BATTLEDOLL_FRONT); n++){
+					if(isDollSide){
+						pTmpTarget = GetEnemyPtr(MAX_BATTLEENEMY-n-1, true);
+					}else{
+						pTmpTarget = GetFrontDollPtr(NUM_BATTLEDOLL_FRONT-n-1, true);
+					}
+					if(pTmpTarget != NULL){
+						subCommands[subCommandIndex].SetBaseValues(
+							pDefOwner, pTmpTarget, ACTIONTYPE_DAMAGE);
+						subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK);
+						subCommandIndex++;
+					}
+				}
+				break;
+			case SKILL_WIDESHOT:
+				// ばらまき弾
+				isDollSide = pDefOwner->IsDoll();
+				for(int n=0; n<(isDollSide?MAX_BATTLEENEMY:NUM_BATTLEDOLL_FRONT); n++){
+					if(isDollSide){
+						pTmpTarget = GetEnemyPtr(MAX_BATTLEENEMY-n-1, true);
+					}else{
+						pTmpTarget = GetFrontDollPtr(NUM_BATTLEDOLL_FRONT-n-1, true);
+					}
+					if(pTmpTarget != NULL){
+						subCommands[subCommandIndex].SetBaseValues(
+							pDefOwner, pTmpTarget, ACTIONTYPE_DAMAGE);
+						subCommands[subCommandIndex].SetParam(CALCDAMAGE_TECH);
+						subCommandIndex++;
+					}
+				}
+				break;
+			case SKILL_KUNAISHOT:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_TECH_TECH);
+					subCommandIndex++;
+				}
+				break;
+			case SKILL_KNIFESHOT:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_TECH_NOGUARD);
+					subCommandIndex++;
+				}
+				break;
+			case SKILL_REIGEKI:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_TECH_NOATTR);
+					subCommandIndex++;
+				}
+				break;
+			case SKILL_PHOTONSHOT:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_MAGIC_MAGIC);
+					subCommandIndex++;
+				}
+				break;
+			case SKILL_REPAIR:
+				// 修復
+				subCommands[subCommandIndex].SetBaseValues(
+					pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
+				subCommands[subCommandIndex].SetParam(CALCHEAL_MAGIC_DOUBLE);
+				subCommandIndex++;
+				break;
+			case SKILL_REPAIR_ALL:
+				// 全体修復
+				isDollSide = pDefOwner->IsDoll();
+				for(int n=0; n<(isDollSide?NUM_BATTLEDOLL_FRONT:MAX_BATTLEENEMY); n++){
+					if(isDollSide){
+						pTmpTarget = GetFrontDollPtr(NUM_BATTLEDOLL_FRONT-n-1, true);
+					}else{
+						pTmpTarget = GetEnemyPtr(MAX_BATTLEENEMY-n-1, true);
+					}
+					if(pTmpTarget != NULL){
+						subCommands[subCommandIndex].SetBaseValues(
+							pDefOwner, pTmpTarget, ACTIONTYPE_HEAL);
+						subCommands[subCommandIndex].SetParam(CALCHEAL_MAGIC);
+						subCommandIndex++;
+					}
+				}
+				break;
+			case SKILL_MJOLLNIR:
+				if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
+					// 通常攻撃と同様のダメージ判定
+					subCommands[subCommandIndex].SetBaseValues(
+						pDefOwner, pDefTarget, ACTIONTYPE_DAMAGE);
+					subCommands[subCommandIndex].SetParam(CALCDAMAGE_ATTACK_DOUBLE);
+					subCommandIndex++;
+				}
+				break;
+			case SKILL_REPAIR_QUICK:
+				// 高速修復
+				subCommands[subCommandIndex].SetBaseValues(
+					pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
+				subCommands[subCommandIndex].SetParam(CALCHEAL_MAGIC_DOUBLE);
+				subCommandIndex++;
+				break;
 			}
-			break;
 		}
 		break;
 	case ACTIONTYPE_ERROR:
@@ -445,6 +570,15 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 		case ACTIONTYPE_STATE:
 			// ステートの付加。param:適用するステートのID。
 			// if(AddStateToUnit(&dolls[n], STATE_DEATH, true, 1, true));
+			break;
+		case ACTIONTYPE_NO_MP:
+			action.Clear();
+			action.SetActor(NULL);
+			action.SetOpponent(NULL);
+			action.SetType(Game_BattleAction::TYPE_NO_MP);
+			action.ClearFlag();
+			actionStack.Push(action);
+			result = (result==0?1:result);
 			break;
 		}
 	}

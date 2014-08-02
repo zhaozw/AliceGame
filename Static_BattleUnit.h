@@ -36,6 +36,7 @@
 #define ACTIONTYPE_HEAL			1	// 回復。
 #define ACTIONTYPE_STATE		2	// ステート付加。
 									// かばうことは出来ない。
+#define ACTIONTYPE_NO_MP		99	// MPが足りない。
 
 // 行動のターゲットに関する定数
 #define ACTIONTARGET_NONE			0	// ターゲットなし
@@ -48,5 +49,6 @@
 #define ACTIONTARGET_OPPONENT_ONE	7	// 相手一体
 #define ACTIONTARGET_OPPONENT_ALL	8	// 相手全体
 #define ACTIONTARGET_SELF			9	// 自分
+#define ACTIONTARGET_NO_MP			10	// 魔力が足りない時にフラグとして使用する特殊な値。
 
 #endif // STATIC_BATTLEUNIT_H

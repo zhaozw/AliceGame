@@ -6,6 +6,7 @@
 #include "Scene_Battle.h"
 #include "WindowSkin.h"
 #include "Sprite_BattleDoll.h"
+#include "Func_Graphics.h"
 
 extern	WindowSkins	g_wndSkins;
 
@@ -219,6 +220,7 @@ void BWindow_FocusedUnit::Update(){
 	case CLOSED:
 		break;
 	}
+	Window_Base::Update();
 }
 
 void BWindow_FocusedUnit::DrawContent() const{
@@ -252,10 +254,16 @@ void BWindow_FocusedUnit::DrawCntEnemy(Game_BattleEnemy* p) const {
 	int tmpX=0, tmpY=0;
 	tmpX = p->GetDrawX();
 	tmpY = p->GetDrawY()+20;
+	int dltY = 0;
+	dltY = 10*sin(2.0*M_PI*activeCount/25); 
 	DrawBox(
-		tmpX-5, tmpY-5,
-		tmpX+5, tmpY+5,
-		GetColor(255, 0, 0), 1);
+		tmpX-5, tmpY+dltY-5,
+		tmpX+5, tmpY+dltY+5,
+		GetColor(
+		GetRainbowR(activeCount*20),
+		GetRainbowG(activeCount*20),
+		GetRainbowB(activeCount*20)
+		), 1);
 }
 
 void BWindow_FocusedUnit::DrawCntDoll(BYTE n) const {

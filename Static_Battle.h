@@ -75,12 +75,20 @@
 // ƒ_ƒ[ƒWŒvŽZ‚Ìƒ^ƒCƒv
 
 #define	CALCDAMAGE_ATTACK			0
+#define	CALCDAMAGE_TECH				1		// ‹ZI - ‘ŠŽè‚Ì–hŒä
+#define	CALCDAMAGE_TECH_TECH		2		// ‹ZI~2 - ‘ŠŽè‚Ì‹ZI - ‘ŠŽè‚Ì–hŒä
+#define	CALCDAMAGE_TECH_NOGUARD		3		// ‹ZI(–hŒä–³Ž‹)
+#define	CALCDAMAGE_TECH_NOATTR		4		// ‹ZI-–hŒä(‘®«–³Ž‹)
+#define	CALCDAMAGE_MAGIC_MAGIC		5		// –‚—Í~2 - ‘ŠŽè‚Ì–‚—Í - ‘ŠŽè‚Ì–hŒä
+#define	CALCDAMAGE_ATTACK_DOUBLE	6		// UŒ‚—Í~2 - ‘ŠŽè‚Ì(‹ZI‚©–‚—Í‚Ì‚‚¢‚Ù‚¤) - ‘ŠŽè‚Ì–hŒä
 
 //=========================================
 // ‰ñ•œ—ÊŒvŽZ‚Ìƒ^ƒCƒv
 
 #define CALCHEAL_UNDIFINED			0
 #define	CALCHEAL_HEAL1				1		// ‰ñ•œ‚ÌpŽ®1
+#define	CALCHEAL_MAGIC				2		// –‚—Í’l‚Æ“¯‚¶’l
+#define	CALCHEAL_MAGIC_DOUBLE		3		// –‚—Í‚Ì2”{
 
 //=========================================
 // í“¬‚ÌŒ‹‰Ê

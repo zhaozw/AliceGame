@@ -8,8 +8,8 @@
 #include "WindowSkin.h"
 #include <DxLib.h>
 
-extern DXFont		g_font;
-extern TempData		g_temp;
+extern DXFont			g_font;
+extern TempData			g_temp;
 extern WindowSkins		g_wndSkins;
 
 Scene_Camp::Scene_Camp():Scene_Base(),

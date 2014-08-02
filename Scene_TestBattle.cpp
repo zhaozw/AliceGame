@@ -15,7 +15,7 @@ Scene_TestBattle::Scene_TestBattle():Scene_Base(), s_main(TESTBATTLE_SELECT_NUM)
 
 bool Scene_TestBattle::Initialize(bool fSkipFrame){
 	Scene_Base::Initialize(fSkipFrame);
-	for(int n=2; n<MAX_TESTBATTLE; n++){
+	for(int n=5; n<MAX_TESTBATTLE; n++){
 		s_main.isActive[n] = false;
 	}
 	return true;
@@ -54,9 +54,9 @@ void Scene_TestBattle::Draw() const{
 		_T("はじめのいっぽ"), 
 		_T("人形と敵の属性"), 
 		_T("ステータスを確認する"), 
-		_T("アリスの魔力"), 
 		_T("魔力と技巧"), 
-		_T("戦闘テスト6"), 
+		_T("アリスの魔力"), 
+		_T("敵の攻撃パターン"), 
 		_T("戦闘テスト7"), 
 		_T("戦闘テスト8"), 
 		_T("戦闘テスト9"), 

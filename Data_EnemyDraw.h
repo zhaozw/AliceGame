@@ -6,8 +6,12 @@
 #include "Static_AliceDoll.h"
 
 // refIDがどの敵に対応するかの定数リスト
-#define		ENEMYDRAW_ELF			1
-#define		ENEMYDRAW_FIREELF		2
+#define		ENEMYDRAW_SMALLFAIRY		1
+#define		ENEMYDRAW_FAIRY				2
+#define		ENEMYDRAW_L_SNAIL			3
+#define		ENEMYDRAW_F_BUTTERFLY		4
+#define		ENEMYDRAW_SHIKABANE			5
+#define		ENEMYDRAW_WINDCROW			6
 
 
 // 敵グラフィックの描画位置と描画ハンドルを保持するクラス。

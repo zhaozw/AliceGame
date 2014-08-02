@@ -311,6 +311,7 @@ public:
 	bool Action_AssertAttack(Game_BattleAction* pAction);
 	bool Action_AssertSkill(Game_BattleAction* pAction);
 	bool Action_AssertGuard(Game_BattleAction* pAction);
+	bool Action_No_MP(Game_BattleAction* pAction);
 
 	//=========================================
 	// Game_UnitCommand‚Ì“à—e‚Ìˆ—B

@@ -26,6 +26,7 @@ public:
 		TYPE_ASSERTATTACK,	// 「○○の攻撃！」を表示する
 		TYPE_ASSERTSKILL,	// 各スキルを宣言する
 		TYPE_ASSERTGUARD,	// 「○○は身を守っている！」を表示する
+		TYPE_NO_MP,			// 「しかしMPが足りない！」を表示する
 		TYPE_UNDIFINED,
 	};
 private:

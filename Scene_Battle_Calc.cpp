@@ -245,6 +245,47 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
+		case CALCDAMAGE_TECH:
+			// 技巧に属性補正を適用する
+			from	= pAttacker->GetTec() 
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			to		= pOpponent->GetDef();
+			rate	= 1.0f;
+			break;
+		case CALCDAMAGE_TECH_TECH:
+			// 技巧の差に属性補正を適用する
+			from	= pAttacker->GetTec() * 2
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			to		= pOpponent->GetTec() + pOpponent->GetDef();
+			rate	= 1.0f;
+			break;
+		case CALCDAMAGE_TECH_NOGUARD:
+			// 防御を使用しない
+			from	= pAttacker->GetTec()
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			to		= 0;
+			rate	= 1.0f;
+			break;
+		case CALCDAMAGE_TECH_NOATTR:
+			// 属性補正を使用しない
+			from	= pAttacker->GetTec();
+			to		= pOpponent->GetDef();
+			rate	= 1.0f;
+			break;
+		case CALCDAMAGE_MAGIC_MAGIC:
+			// 魔力の差に属性補正を適用する
+			from	= pAttacker->GetMgc() * 2
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			to		= pOpponent->GetMgc() + pOpponent->GetDef();
+			rate	= 1.0f;
+			break;
+		case CALCDAMAGE_ATTACK_DOUBLE:
+			// 攻撃の2倍から魔力か技巧の高い方を引く
+			from	= pAttacker->GetAtk() * 2
+				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+			to		= max(pOpponent->GetMgc(), pOpponent->GetTec()) + pOpponent->GetDef();
+			rate	= 1.0f;
+			break;
 		}
 		// 自分のステートによるダメージの補正
 		if(pOpponent->IsState(STATE_GUARD)){
@@ -271,6 +312,14 @@ int Scene_Battle::CalcHeal(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponen
 			// 回復の術式1
 			// 最大HPの50%の回復
 			base = 0.5 * pOpponent->GetMaxHP();
+			break;
+		case CALCHEAL_MAGIC:
+			// 魔力と同値回復
+			base = pAttacker->GetMgc();
+			break;
+		case CALCHEAL_MAGIC_DOUBLE:
+			// 魔力の2倍値回復
+			base = pAttacker->GetMgc()*2;
 			break;
 		}
 		// 自分のステートによるダメージの補正

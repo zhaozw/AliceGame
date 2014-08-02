@@ -88,11 +88,23 @@ int Data_EnemyDraw::GetImgHandleByRefID(WORD refID, BYTE attr){
 	// “G‚ÌID‹y‚Ñ‘®«‚Æ‰æ‘œ‚Ì‘Î‰‚ğŒˆ‚ß‚éB
 	// “¯‚¶‰æ‘œ‚ğQÆ‚µ‚Ä‚¢‚Ä‚à‚©‚Ü‚í‚È‚¢B
 	switch(refID){
-	case ENEMYDRAW_ELF:
+	case ENEMYDRAW_SMALLFAIRY:
 		return g_image.enemy.fairy[attr];
 		break;
-	case ENEMYDRAW_FIREELF:
+	case ENEMYDRAW_FAIRY:
 		return g_image.enemy.fairy[attr];
+		break;
+	case ENEMYDRAW_L_SNAIL:
+		return g_image.enemy.snail[attr];
+		break;
+	case ENEMYDRAW_F_BUTTERFLY:
+		return g_image.enemy.butterfly[attr];
+		break;
+	case ENEMYDRAW_SHIKABANE:
+		return g_image.enemy.skeleton[attr];
+		break;
+	case ENEMYDRAW_WINDCROW:
+		return g_image.enemy.crow[attr];
 		break;
 	default:
 		break;

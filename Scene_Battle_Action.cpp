@@ -41,6 +41,9 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	case Game_BattleAction::TYPE_ASSERTGUARD:
 		Action_AssertGuard(pAction);
 		break;
+	case Game_BattleAction::TYPE_NO_MP:
+		Action_No_MP(pAction);
+		break;
 	case Game_BattleAction::TYPE_NONE:
 	case Game_BattleAction::TYPE_UNDIFINED:
 	default:
@@ -239,8 +242,6 @@ bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	d_skillInfo.GetAssertMessage(buf, pAction->GetParam(), pAction->GetActor());
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
-	// ここでMPを減らす
-	g_aliceInfo.SubMP(d_skillInfo.GetCostMP(pAction->GetParam()));
 	return true;
 }
 
@@ -253,6 +254,14 @@ bool Scene_Battle::Action_AssertGuard(Game_BattleAction* pAction){
 	// 名前の体裁を整える
 	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, nameBuf);
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("は身を守っている！"));
+	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	return true;
+}
+
+bool Scene_Battle::Action_No_MP(Game_BattleAction* pAction){
+	// メッセージウィンドウに内容を送る
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, _T("しかし、アリスの魔力が足りない！"));
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
 	return true;
 }

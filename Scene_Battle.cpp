@@ -389,7 +389,11 @@ bool Scene_Battle::CheckNextAction(){
 	case ALICE_COMMAND:
 		// アリスのコマンドウィンドウが閉じていることを確認してから次へ。
 		if(w_aliceCommand.GetState() == Window_Base::CLOSED){
-			return true;
+			if(w_aliceCommand.GetSelectIndex() == 3){
+				ReserveScene(SCENE_TESTBATTLE, 90);
+			}else{
+				return true;
+			}
 		}
 		break;
 	case ALICE_COMMAND_DO:

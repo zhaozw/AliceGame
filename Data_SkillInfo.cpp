@@ -102,6 +102,69 @@ bool Data_SkillInfo::SetSkillData(){
 		_T("%sは回復の術式を使った！"), SKILLMESSAGE_TYPE_UNIT,
 		2, ACTIONTARGET_TEAM_ONE);
 
+	// ばらまき弾
+	data[SKILL_WIDESHOT].SetData(
+		_T("ばらまき弾"),
+		_T("敵全体に向かって弾幕を放ちます。"),
+		_T("%sはばらまき弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
+		4, ACTIONTARGET_OPPONENT_ALL);
+
+	// クナイ弾
+	data[SKILL_KUNAISHOT].SetData(
+		_T("クナイ弾"),
+		_T("相手の技巧が低いほど威力が上がります。"),
+		_T("%sはクナイ弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
+		2, ACTIONTARGET_OPPONENT_ONE);
+
+	// ナイフ弾
+	data[SKILL_KNIFESHOT].SetData(
+		_T("ナイフ弾"),
+		_T("相手の防御力を無視してダメージを与えます。"),
+		_T("%sはナイフ弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
+		3, ACTIONTARGET_OPPONENT_ONE);
+
+	// 霊撃
+	data[SKILL_REIGEKI].SetData(
+		_T("霊撃"),
+		_T("属性の影響を受けない攻撃を放ちます。"),
+		_T("%sは霊撃を放った！"), SKILLMESSAGE_TYPE_UNIT,
+		3, ACTIONTARGET_OPPONENT_ONE);
+	
+	// 光弾
+	data[SKILL_PHOTONSHOT].SetData(
+		_T("光弾"),
+		_T("威力が魔力に依存する弾を放ちます。"),
+		_T("%sは光弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
+		3, ACTIONTARGET_OPPONENT_ONE);
+
+	// 修復
+	data[SKILL_REPAIR].SetData(
+		_T("修復"),
+		_T("味方一体のＨＰを回復します。"),
+		_T("%sの修復！"), SKILLMESSAGE_TYPE_UNIT,
+		3, ACTIONTARGET_TEAM_ONE);
+
+	// 全体修復
+	data[SKILL_REPAIR_ALL].SetData(
+		_T("全体修復"),
+		_T("前列の味方全体のＨＰを回復します。"),
+		_T("%sの全体修復！"), SKILLMESSAGE_TYPE_UNIT,
+		5, ACTIONTARGET_TEAM_ALL);
+
+	// ミョルニル
+	data[SKILL_MJOLLNIR].SetData(
+		_T("ミョルニル"),
+		_T("相手一体に攻撃依存の大ダメージを与えます。"),
+		_T("%sはミョルニルを使った！"), SKILLMESSAGE_TYPE_UNIT,
+		6, ACTIONTARGET_OPPONENT_ONE);
+
+	// 緊急修復
+	data[SKILL_REPAIR_QUICK].SetData(
+		_T("緊急修復"),
+		_T("誰よりも早く、味方一体のＨＰを回復します。"),
+		_T("%sの緊急修復！"), SKILLMESSAGE_TYPE_UNIT,
+		4, ACTIONTARGET_TEAM_ONE);
+
 	return true;
 }
 
