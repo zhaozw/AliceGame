@@ -50,6 +50,8 @@ typedef struct Image_Enemy{
 	int flower[DOLL_ATTR_NUM];
 	int skeleton[DOLL_ATTR_NUM];
 	int harpy[DOLL_ATTR_NUM];
+	int bird[DOLL_ATTR_NUM];
+	int parrot[DOLL_ATTR_NUM];
 	int cardinal;
 	Image_Enemy(){
 		elf = -1;
@@ -63,6 +65,8 @@ typedef struct Image_Enemy{
 			flower[n] = -1;
 			skeleton[n] = -1;
 			harpy[n] = -1;
+			bird[n] = -1;
+			parrot[n] = -1;
 		}
 		cardinal = -1;
 	}

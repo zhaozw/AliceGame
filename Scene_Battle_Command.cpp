@@ -590,6 +590,7 @@ char Scene_Battle::InterpretCommand_Check_Death(Game_UnitCommand* pCmd){
 	Sprite_Base* pSprite = NULL;
 	// 行動は何であれ、死亡したかどうかの判定を必ず行う
 	Game_BattleAction action;
+	char result=0;
 	for(int n=0; n<dollsNum; n++){
 		if(dolls[n].CheckDie()){
 			AddStateToUnit(&dolls[n], STATE_DEATH, true, 1, true);
@@ -600,7 +601,7 @@ char Scene_Battle::InterpretCommand_Check_Death(Game_UnitCommand* pCmd){
 				}
 			}
 			*/
-			return 1;
+			result = 1;
 		}
 	}
 	for(int n=0; n<enemiesNum; n++){
@@ -612,10 +613,10 @@ char Scene_Battle::InterpretCommand_Check_Death(Game_UnitCommand* pCmd){
 					pSprite->SetMorphID(SPMORPH_DISAPPEAR, true, 60);
 				}
 			}*/
-			return 1;
+			result = 1;
 		}
 	}
-	return 0;
+	return result;
 }
 
 char Scene_Battle::InterpretCommand_Post_Action(Game_UnitCommand* pCmd){

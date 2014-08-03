@@ -198,6 +198,12 @@ bool Image::Load_Enemy(){
 	// ハーピー
 	if(LoadDivGraph(_T("img_enemy\\Harpy.png"),
 		4, 2, 2, 220, 280, enemy.harpy) != 0) return false;
+	// 鳥
+	if(LoadDivGraph(_T("img_enemy\\Bird.png"),
+		4, 2, 2, 220, 280, enemy.bird) != 0) return false;
+	// オウム
+	if(LoadDivGraph(_T("img_enemy\\Parrot.png"),
+		4, 2, 2, 220, 280, enemy.parrot) != 0) return false;
 	// ネクロマンサー
 	enemy.cardinal = LoadGraph(_T("img_enemy\\Cardinal.png"));
 	if(enemy.cardinal == -1) return false;

@@ -235,7 +235,9 @@ void BWindow_FocusedUnit::DrawContent() const{
 		for(int n=0; n<MAX_BATTLEENEMY; n++){
 			if(n < pScene->GetEnemiesNum()){
 				pTmpEnemy = pScene->GetEnemyPtr(n);
-				DrawCntEnemy(pTmpEnemy);
+				if(pTmpEnemy->CanTarget()){
+					DrawCntEnemy(pTmpEnemy);
+				}
 			}
 		}
 		break;
