@@ -78,6 +78,9 @@ public:
 
 	// ベクトルの中からrefIDが該当する値を返す。
 	Data_EnemyDraw_Each* GetEnemyDraw(WORD refID);
+
+	// 大きさを返す。
+	int GetSize(){ return drawList.GetSize(); };
 };
 
 #endif // DATA_ENEMYDRAW_H

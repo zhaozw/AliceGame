@@ -6,7 +6,7 @@
 #include "Data_BattleState.h"
 
 // メッセージがあるステートの数
-#define STATEMESSAGE_STATENUM	8
+#define STATEMESSAGE_STATENUM	64
 
 // メッセージの最大文字数
 #define STATEMESSAGE_BYTES		48

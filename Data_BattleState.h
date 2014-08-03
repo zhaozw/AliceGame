@@ -132,6 +132,9 @@ public:
 
 	// 指定したIDのステートが指定したフラグを持っているかどうかを返す。
 	bool CheckFlagOfState(WORD _refID, DWORD flag);
+
+	// 大きさを返す。
+	int GetSize(){ return stateList.GetSize(); };
 };
 
 #endif // DATA_BATTLESTATE_H

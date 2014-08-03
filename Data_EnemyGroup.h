@@ -86,6 +86,10 @@ public:
 	// データベースを参照し、指定するrefIDを持っているものを返す。
 	// 該当するものがない場合はNULLを返す。
 	Data_EnemyGroup_Each* GetEnemyGroup(WORD _refID);
+
+
+	// 大きさを返す。
+	int GetSize(){ return groupList.GetSize(); };
 };
 
 #endif // DATA_ENEMYGROUP_H

@@ -156,6 +156,10 @@ public:
 	// データベースを参照し、指定するrefIDを持っているものを返す。
 	// 該当するものがない場合はNULLを返す。
 	Data_EnemyParam_Each* GetEnemyParam(WORD _refID);
+
+
+	// 大きさを返す。
+	int GetSize(){ return enemyList.GetSize(); };
 };
 
 
