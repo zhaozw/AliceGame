@@ -2,7 +2,7 @@
 #define DATA_ENEMYPARAM_H
 
 #include <Windows.h>
-#include "Static_BattleUnit.h"
+#include "Static_Battle.h"
 #include "VectorList.h"
 
 // 敵キャラの能力値のデータベースを扱うクラス。
@@ -13,68 +13,10 @@
 #define MAX_CONDITIONPARAM		3	// 条件あたりのパラメータの数
 #define MAX_ACTIONPATTERN		16	// 攻撃パターンの数
 
-/*
-// この内容はStatic_BattleUnitに移行。
-// 行動の種類に関する定数
-#define ACTIONTYPE_NONE			0	// 何もしない
-#define ACTIONTYPE_ATTACK		1	// 通常攻撃
-#define ACTIONTYPE_GUARD		2	// 防御
-#define ACTIONTYPE_SKILL		3	// 特技
-*/
-
-// 行動の対象に関する定数
-#define TARGETTYPE_NONE				0	// 対象なし（もしくは場全体）
-#define TARGETTYPE_DOLL_RANDOM		1	// 人形一体をランダムに
-#define TARGETTYPE_DOLL_ALL			2	// 人形全体
-#define TARGETTYPE_ENEMY_RANDOM		3	// 敵一体をランダムに
-#define TARGETTYPE_ENEMY_ALL		4	// 敵全体
-#define TARGETTYPE_SELF				5	// 自分
-#define TARGETTYPE_DOLL_HP_MIN		6	// HPの最も少ない人形一体
-#define TARGETTYPE_DOLL_HP_MIN2		7	// 最大HPに対するHPの比が最も少ない人形一体
-#define TARGETTYPE_ENEMY_HP_MIN		8	// HPの最も少ない敵一体
-#define TARGETTYPE_ENEMY_HP_MIN2	9	// 最大HPに対するHPの比が最も少ない敵一体
-#define TARGETTYPE_ENEMY_OTHER		10	// 自分以外の味方一体
-#define TARGETTYPE_ENEMY_OTHERS		11	// 自分以外の味方全体
-
-// 敵データのパラメータ数
-#define NUM_ENEMYPARAM_DATA			(BATTLEUNIT_PARAM_NUM-1)
-#define ENEMYPARAM_HP				0
-#define ENEMYPARAM_ATK				1
-#define ENEMYPARAM_DEF				2
-#define ENEMYPARAM_SPD				3
-#define ENEMYPARAM_MGC				4
-#define ENEMYPARAM_TEC				5
-
-// 行動パターンを取りうるか取らないかの条件。
-// 条件に合う行動を、priorityに従って選択する。
-
-// 常時行う。
-// 漏れを防ぐため、必ずこの条件を持つ行動を1つ以上持っているべき。
-#define CONDITIONTYPE_ALWAYS			0 
-// 行動を行うHPの最大値を規定する。
-// param[0] : HPが(x)%以上の時は行わない。
-#define CONDITIONTYPE_MAX_HP_RATE		1
-// 行動を行うHPの最大値を規定する。
-// param[0] : HPが(x)%以下の時は行わない。
-#define CONDITIONTYPE_MIN_HP_RATE		2
-// ターンによる。
-// [0][1] : 戦闘が始まってからのターン数を[0]で割った時の値が[1]であれば行う。
-#define CONDITIONTYPE_PERIODIC			3
-// ターンによるその2。
-// [0][1] : 敵毎に異なるターン数selfTurnを[0]で割った時の値が[1]であれば行う。
-#define CONDITIONTYPE_PERIODIC2			4
-// HPが一定範囲の場合。
-// [0] : HPが[0]%以下である場合であり、さらに
-// [1] : HPが[1]%以上である場合は行動する。
-#define CONDITIONTYPE_HP_RATE_RANGE		5
-// 味方の誰かがHPが一定割合以下である時に行う。(Pはパーティの略)
-// param[0] : HPが(x)%以上の時は行わない。
-#define CONDITIONTYPE_MAX_HP_RATE_P		6
-
 // 行動パターンに関するパラメータをまとめて指定する用
 #define ACTIONPATTERN_ACTIONTYPE	0
 #define ACTIONPATTERN_SKILLID		1
-#define ACTIONPATTERN_TARGETTYPE	2
+#define ACTIONPATTERN_ECOMMANDTARGET	2
 #define ACTIONPATTERN_PRIORITY		3
 #define ACTIONPATTERN_PARAMNUM		4
 
@@ -90,9 +32,9 @@ typedef struct EnemyActionPattern{
 	// 条件に関連するパラメータ
 	int			conditionParam[MAX_CONDITION][MAX_CONDITIONPARAM];
 	EnemyActionPattern(){
-		actionType		= ACTIONTYPE_NONE;
+		actionType		= COMMANDTYPE_NONE;
 		skillID			= 0;
-		targetType		= TARGETTYPE_NONE;
+		targetType		= ECOMMANDTARGET_NONE;
 		priority		= 0;
 		for(int j=0; j<MAX_CONDITION; j++){
 			conditionType[j] = CONDITIONTYPE_ALWAYS;

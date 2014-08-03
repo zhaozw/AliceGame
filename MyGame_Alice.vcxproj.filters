@@ -509,9 +509,6 @@
     <ClInclude Include="Scene_Camp.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Static_BattleUnit.h">
-      <Filter>ヘッダー ファイル\Header_Battle\BHeader_Static</Filter>
-    </ClInclude>
     <ClInclude Include="Static_AliceInfo.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Static</Filter>
     </ClInclude>

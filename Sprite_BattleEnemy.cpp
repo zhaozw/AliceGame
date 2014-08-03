@@ -58,7 +58,7 @@ void Sprite_BattleEnemy::UpdateRefID(){
 	// ‰æ‘œ‚Ì•\Ž¦”{—¦‚ðŽæ“¾
 	baseExRate = pDrawData->GetExRate();
 	// ‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ðŽæ“¾
-	hImg = pDrawData->GetHImg(pEnemy->GetAttr());
+	hImg = pDrawData->GetHImg(pEnemy->GetAmendedAttr());
 }
 
 void Sprite_BattleEnemy::Update(){
@@ -110,7 +110,7 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 	// ƒQ[ƒW‚ð•`‰æ
 	float rate = (float)pEnemy->GetHP()/pEnemy->GetMaxHP();
 	int color = 0;
-	switch(pEnemy->GetAttr()){
+	switch(pEnemy->GetAmendedAttr()){
 	case DOLL_ATTR_NONE:
 		color = GetColor(192, 192, 192);
 		break;

@@ -5,7 +5,7 @@
 
 // コンストラクタ
 Game_UnitCommand::Game_UnitCommand() : 
-pOwner(NULL), pTarget(NULL), actionType(ACTIONTYPE_NONE), targetType(ACTIONTARGET_NONE),
+pOwner(NULL), pTarget(NULL), actionType(COMMANDTYPE_NONE), targetType(ACTIONTARGET_NONE),
 isUsed(false){
 	Reset();
 }
@@ -28,7 +28,7 @@ bool Game_UnitCommand::SortBySpd(
 void Game_UnitCommand::Reset(){
 	pOwner = NULL;
 	pTarget = NULL;
-	actionType = ACTIONTYPE_NONE;
+	actionType = COMMANDTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
 	isUsed = false;
 	skillID = -1;
@@ -37,7 +37,7 @@ void Game_UnitCommand::Reset(){
 void Game_UnitCommand::SetEmpty(){
 	// pOwnerとisUsedは残しておく
 	pTarget = NULL;
-	actionType = ACTIONTYPE_NONE;
+	actionType = COMMANDTYPE_NONE;
 	targetType = ACTIONTARGET_NONE;
 }
 

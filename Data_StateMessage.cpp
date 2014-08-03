@@ -62,6 +62,7 @@ bool Data_StateMessage::SetStateMessages(){
 	stateMessages[STATE_DEATH].SetMessage(
 		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
 		_T("%sは立ち上がった！"));
+
 	// 防御
 	stateMessages[STATE_GUARD].SetMessage(
 		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
@@ -69,6 +70,51 @@ bool Data_StateMessage::SetStateMessages(){
 	stateMessages[STATE_GUARD].SetMessage(
 		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
 		_T("%sは身を守っている！"));
+
+	// 属性変更(無)
+	stateMessages[STATE_TMPATTR_NONE].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が無くなった！"));
+	stateMessages[STATE_TMPATTR_NONE].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が無くなった！"));
+	stateMessages[STATE_TMPATTR_NONE].SetMessage(
+		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が元に戻った！"));
+
+	// 属性変更(太陽)
+	stateMessages[STATE_TMPATTR_SUN].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは太陽の属性を得た！"));
+	stateMessages[STATE_TMPATTR_SUN].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは太陽の属性になった！"));
+	stateMessages[STATE_TMPATTR_SUN].SetMessage(
+		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が元に戻った！"));
+
+	// 属性変更(月)
+	stateMessages[STATE_TMPATTR_MOON].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは月の属性を得た！"));
+	stateMessages[STATE_TMPATTR_MOON].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは月の属性になった！"));
+	stateMessages[STATE_TMPATTR_MOON].SetMessage(
+		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が元に戻った！"));
+
+	// 属性変更(星)
+	stateMessages[STATE_TMPATTR_STAR].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは星の属性を得た！"));
+	stateMessages[STATE_TMPATTR_STAR].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは星の属性になった！"));
+	stateMessages[STATE_TMPATTR_STAR].SetMessage(
+		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sの属性が元に戻った！"));
+
 
 
 	return true;

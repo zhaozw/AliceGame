@@ -154,20 +154,24 @@ void Game_BattleUnit::SortStateByDraw(){
 }
 
 // 参照番号のステートを追加する。
-BYTE Game_BattleUnit::AddState(WORD refID, int level){
+BYTE Game_BattleUnit::AddState(WORD refID, int param, int param2){
 	int n=-1;
 	n = CheckIsState(refID);
 	if(n == -1){
 		n = GetStateNum();
 		stateArray[n].refID = refID;
 		stateArray[n].turn = 0;
-		stateArray[n].level = level;
+		stateArray[n].param = param;
+		stateArray[n].param2 = param2;
+		AutoRemoveState(refID);
 		SortStateByCalc();
 		return ADDSTATE_SUCCEED;
 	}else{
 		// 重ねがけ可能かどうか
+		// ※このあたり記述が適当。後で修正する。
 		if(d_battleState.CheckFlagOfState(refID, STATE_FLAG_CAN_MULTIPLE)){
-			stateArray[n].level += level;
+			stateArray[n].param += param;
+			stateArray[n],param2 += param2;
 			return ADDSTATE_MULTIPLIED;
 		}else{
 			// 既にそのステートになっている
@@ -176,6 +180,39 @@ BYTE Game_BattleUnit::AddState(WORD refID, int level){
 	}
 }
 	
+void Game_BattleUnit::AutoRemoveState(WORD refID){
+	// かけることに成功した場合、自動で外れるステートを判定する
+	switch(refID){
+	case STATE_DEATH:
+		RemoveState(STATE_TMPATTR_NONE, false);
+		RemoveState(STATE_TMPATTR_SUN, false);
+		RemoveState(STATE_TMPATTR_MOON, false);
+		RemoveState(STATE_TMPATTR_STAR, false);
+		break;
+	case STATE_TMPATTR_NONE:
+		RemoveState(STATE_TMPATTR_SUN, false);
+		RemoveState(STATE_TMPATTR_MOON, false);
+		RemoveState(STATE_TMPATTR_STAR, false);
+		break;
+	case STATE_TMPATTR_SUN:
+		RemoveState(STATE_TMPATTR_NONE, false);
+		RemoveState(STATE_TMPATTR_MOON, false);
+		RemoveState(STATE_TMPATTR_STAR, false);
+		break;
+	case STATE_TMPATTR_MOON:
+		RemoveState(STATE_TMPATTR_NONE, false);
+		RemoveState(STATE_TMPATTR_SUN, false);
+		RemoveState(STATE_TMPATTR_STAR, false);
+		break;
+	case STATE_TMPATTR_STAR:
+		RemoveState(STATE_TMPATTR_NONE, false);
+		RemoveState(STATE_TMPATTR_SUN, false);
+		RemoveState(STATE_TMPATTR_MOON, false);
+		break;
+	}
+}
+
+
 // 参照番号のステートに罹患している場合、それを解除する。
 void Game_BattleUnit::RemoveState(WORD refID, bool sort){
 	int n=-1;
@@ -183,18 +220,50 @@ void Game_BattleUnit::RemoveState(WORD refID, bool sort){
 	if(n != -1){
 		stateArray[n].refID = 0;
 		stateArray[n].turn = 0;
-		stateArray[n].level = 0;
+		stateArray[n].param = 0;
+		stateArray[n].param2 = 0;
 	}
+	if(sort){
+		SortStateByCalc();
+	}
+}
+
+WORD Game_BattleUnit::CheckStateTurn(){
+	Data_BattleState_Each *pState = NULL;
+	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
+		if(stateArray[n].refID != 0){
+			// ターン終了後に解除するかどうかの判定
+			pState = d_battleState.GetBattleState(stateArray[n].refID);
+			if(pState != NULL){
+				if((pState->GetFlags()
+					& STATE_FLAG_REMOVE_AT_TURNEND) != 0){
+						// RemoveState(stateArray[n].refID, false);
+						// ターン終了後の自動解除はメッセージを表示せず、
+						// 無言で解除を行う
+						// ※ことにしようと思ったけど、やっぱり文章を出す。
+						return stateArray[n].refID;
+				}
+			}
+			// ターン数で解除されるステートの解除
+			switch(stateArray[n].refID){
+			case STATE_TMPATTR_NONE:
+			case STATE_TMPATTR_SUN:
+			case STATE_TMPATTR_MOON:
+			case STATE_TMPATTR_STAR:
+				if(stateArray[n].turn >= stateArray[n].param){
+					// 戻り先で実際のステート解除が行われる
+					// RemoveState(stateArray[n].refID, false);
+					return stateArray[n].refID;
+				}
+				break;
+			}
+		}
+	}
+	return 0;
 }
 
 void Game_BattleUnit::UpdateStateTurn(){
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
-		// ターン終了後に解除するかどうかの判定
-		if((d_battleState.GetBattleState(stateArray[n].refID)->GetFlags()
-			& STATE_FLAG_REMOVE_AT_TURNEND) != 0){
-				RemoveState(stateArray[n].refID, false);
-		}
-		// ターン数を増加させる
 		if(stateArray[n].refID != 0){
 			stateArray[n].turn++;
 		}
@@ -210,14 +279,24 @@ int Game_BattleUnit::CheckIsState(WORD stateRefID){
 	return -1;
 }
 
-int Game_BattleUnit::CheckStateLevel(WORD stateRefID){
+int Game_BattleUnit::GetStateParam(WORD stateRefID){
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
 		if(stateArray[n].refID == stateRefID){
-			return stateArray[n].level;
+			return stateArray[n].param;
 		}
 	}
-	return 0;
+	return -1;
 }
+
+int Game_BattleUnit::GetStateParam2(WORD stateRefID){
+	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
+		if(stateArray[n].refID == stateRefID){
+			return stateArray[n].param2;
+		}
+	}
+	return -1;
+}
+
 
 bool Game_BattleUnit::SetName(LPTSTR _name, int nameLength){
 	// if(nameLength == -1) nameLength = strlen(name);
@@ -240,6 +319,23 @@ void Game_BattleUnit::SetParam(
 		SetSpd(spd);
 		SetMgc(mgc);
 		SetTec(tec);
+}
+
+BYTE Game_BattleUnit::GetAmendedAttr(){
+	BYTE tmpAttr = GetAttr();
+	if(IsState(STATE_TMPATTR_NONE)){
+		tmpAttr = DOLL_ATTR_NONE;
+	}
+	if(IsState(STATE_TMPATTR_SUN)){
+		tmpAttr = DOLL_ATTR_SUN;
+	}
+	if(IsState(STATE_TMPATTR_MOON)){
+		tmpAttr = DOLL_ATTR_MOON;
+	}
+	if(IsState(STATE_TMPATTR_STAR)){
+		tmpAttr = DOLL_ATTR_STAR;
+	}
+	return tmpAttr;
 }
 
 void Game_BattleUnit::SetRandomAttr(){
@@ -274,7 +370,15 @@ bool Game_BattleUnit::CheckDie(){
 }
 
 int Game_BattleUnit::GetAmendedSpd(){
-	return 5000 + GetSpd() 
-		+ CheckStateLevel(STATE_SUBSPD_UP)*1000
-		- CheckStateLevel(STATE_SUBSPD_DOWN)*1000; 
+	int amended = 5000 + GetSpd();
+	int tmp=0;
+	tmp = GetStateParam(STATE_SUBSPD_UP);
+	if(tmp != -1){
+		amended += tmp*1000;
+	}
+	tmp = GetStateParam(STATE_SUBSPD_DOWN);
+	if(tmp != -1){
+		amended -= tmp*1000;
+	}
+	return amended;
 }

@@ -1,7 +1,7 @@
 #ifndef GAME_UNITCOMMAND_H
 #define GAME_UNITCOMMAND_H
 
-#include "Static_BattleUnit.h"
+#include "Static_Battle.h"
 
 #include "Game_BattleUnit.h"
 

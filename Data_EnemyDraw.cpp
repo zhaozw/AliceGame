@@ -112,7 +112,7 @@ int Data_EnemyDraw::GetImgHandleByRefID(WORD refID, BYTE attr){
 	case ENEMYDRAW_HEALFAIRY:
 		return g_image.enemy.fairy[attr];
 		break;
-	case ENEMYDRAW_SKELETON:
+	case ENEMYDRAW_INNOCENTBONE:
 		return g_image.enemy.skeleton[attr];
 		break;
 	case ENEMYDRAW_NECROMANCER:

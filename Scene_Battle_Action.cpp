@@ -5,9 +5,12 @@
 #include "MyTask_InfoEffect.h"
 #include "Static_InfoEffect.h"
 #include "Data_SkillInfo.h"
+#include "Data_StateMessage.h"
 #include "Game_AliceInfo.h"
 
+
 extern Data_SkillInfo d_skillInfo;
+extern Data_StateMessage d_stateMessage;
 extern Game_AliceInfo g_aliceInfo;
 
 extern MyGroup* gMyTask_InfoEffect;
@@ -43,6 +46,12 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 		break;
 	case Game_BattleAction::TYPE_NO_MP:
 		Action_No_MP(pAction);
+		break;
+	case Game_BattleAction::TYPE_ADDSTATE:
+		Action_Add_State(pAction);
+		break;
+	case Game_BattleAction::TYPE_REMOVESTATE:
+		Action_Remove_State(pAction);
 		break;
 	case Game_BattleAction::TYPE_NONE:
 	case Game_BattleAction::TYPE_UNDIFINED:
@@ -240,8 +249,11 @@ bool Scene_Battle::Action_AssertAttack(Game_BattleAction* pAction){
 bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
 	// メッセージウィンドウに内容を送る
 	TCHAR buf[WND_MSG_STOCKLENGTH];
+	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, _T(""));
 	d_skillInfo.GetAssertMessage(buf, pAction->GetParam(), pAction->GetActor());
-	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	if(strlen(buf)>0){
+		w_battleMsg.AddStockMsg(buf, strlen(buf));
+	}
 	return true;
 }
 
@@ -263,5 +275,69 @@ bool Scene_Battle::Action_No_MP(Game_BattleAction* pAction){
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, _T("しかし、アリスの魔力が足りない！"));
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	return true;
+}
+
+bool Scene_Battle::Action_Add_State(Game_BattleAction* pAction){
+	Game_BattleUnit* pTarget = pAction->GetOpponent();
+	if(pTarget == NULL) return false;
+	// ステートの付加
+	int param = 0, param2 = 0;
+	// ステートごとに、paramとparam2の代入の仕方が異なる
+	switch(pAction->GetParam()){
+	case STATE_TMPATTR_NONE:
+	case STATE_TMPATTR_SUN:
+	case STATE_TMPATTR_MOON:
+	case STATE_TMPATTR_STAR:
+		param = (int)(pAction->GetFlags());
+		break;
+	default:
+		// param値を使用しない
+		break;
+	}
+	pTarget->AddState(pAction->GetParam(), param, param2);
+	// メッセージウィンドウに内容を送る
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	if(!d_stateMessage.GetStateMessage(buf, pAction->GetParam(),
+		pTarget->IsDoll() 
+		? STATEMESSAGE_INDEX_DOLL_ADDED 
+		: STATEMESSAGE_INDEX_ENEMY_ADDED,
+		pTarget)){
+			// メッセージが存在しない場合
+			return true;
+	}
+	if(strlen(buf) > 0){
+		w_battleMsg.AddStockMsg(buf, strlen(buf));
+	}
+	// スプライトを更新する
+	if(pTarget->IsDoll()){
+		// GetDollSprite((Game_BattleDoll*)pTarget)->UpdateRefID();
+	}else{
+		GetEnemySprite((Game_BattleEnemy*)pTarget)->UpdateRefID();
+	}
+	return true;
+}
+
+bool Scene_Battle::Action_Remove_State(Game_BattleAction* pAction){
+	Game_BattleUnit* pTarget = pAction->GetActor();
+	if(pTarget == NULL) return false;
+	// ステートの解除
+	pAction->GetActor()->RemoveState(pAction->GetParam());
+	// メッセージウィンドウに内容を送る
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	if(!d_stateMessage.GetStateMessage(buf, pAction->GetParam(),
+		STATEMESSAGE_INDEX_REMOVED, pAction->GetActor())){
+			// メッセージが存在しない場合
+			return true;
+	}
+	if(strlen(buf) > 0){
+		w_battleMsg.AddStockMsg(buf, strlen(buf));
+	}
+	// スプライトを更新する
+	if(pTarget->IsDoll()){
+		// GetDollSprite((Game_BattleDoll*)pTarget)->UpdateRefID();
+	}else{
+		GetEnemySprite((Game_BattleEnemy*)pTarget)->UpdateRefID();
+	}
 	return true;
 }

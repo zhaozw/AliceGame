@@ -20,7 +20,7 @@ void Data_EnemyParam_Each::Refresh(){
 	strcpy_s(name, BATTLEUNIT_NAME_BYTES-1, _T(""));
 	// 各攻撃パターンのリセット
 	for(int n=0; n<MAX_ACTIONPATTERN; n++){
-		actionPtn[n].actionType = ACTIONTYPE_ERROR;
+		actionPtn[n].actionType = COMMANDTYPE_ERROR;
 		actionPtn[n].skillID = 0;
 		actionPtn[n].targetType = ACTIONTARGET_NONE;
 		actionPtn[n].priority = 0;
@@ -46,7 +46,7 @@ void Data_EnemyParam_Each::SetActionPattern(int index, int paramIndex, int value
 	case ACTIONPATTERN_SKILLID:
 		SetActionSkillID(index, (WORD)value);
 		break;
-	case ACTIONPATTERN_TARGETTYPE:
+	case ACTIONPATTERN_ECOMMANDTARGET:
 		SetActionTarget(index, (BYTE)value);
 		break;
 	case ACTIONPATTERN_PRIORITY:
@@ -65,7 +65,7 @@ int	Data_EnemyParam_Each::GetActionPattern(int index, int paramIndex){
 	case ACTIONPATTERN_SKILLID:
 		(int)GetActionSkillID(index);
 		break;
-	case ACTIONPATTERN_TARGETTYPE:
+	case ACTIONPATTERN_ECOMMANDTARGET:
 		(int)GetActionTarget(index);
 		break;
 	case ACTIONPATTERN_PRIORITY:
@@ -206,17 +206,17 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 WORD Data_EnemyParam::GetActionTypeFromChar(TCHAR c){
 	switch(c){
 	case 'A':
-		return ACTIONTYPE_ATTACK;
+		return COMMANDTYPE_ATTACK;
 		break;
 	case 'S':
-		return ACTIONTYPE_SKILL;
+		return COMMANDTYPE_SKILL;
 		break;
 	case 'G':
-		return ACTIONTYPE_GUARD;
+		return COMMANDTYPE_GUARD;
 		break;
 	case 'W':
 	default:
-		return ACTIONTYPE_NONE;
+		return COMMANDTYPE_NONE;
 		break;
 	}
 }

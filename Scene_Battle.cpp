@@ -421,6 +421,28 @@ Game_BattleEnemy* Scene_Battle::GetMinHPRateEnemyPtr(){
 }
 
 
+Game_BattleEnemy* Scene_Battle::GetRandomOtherEnemyPtr(Game_BattleEnemy* pSelf){
+	Game_BattleEnemy* pEnemies[MAX_BATTLEENEMY];
+	Game_BattleEnemy* pTmpEnemy = NULL;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pEnemies[n] = NULL;
+	}
+	int index = 0;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = GetEnemyPtr(n);
+		if(pTmpEnemy != NULL){
+			// 自分以外
+			if(pTmpEnemy->CanTarget() && pTmpEnemy != pSelf){
+				pEnemies[index] = pTmpEnemy;
+				index++;
+			}
+		}
+	}
+	if(index == 0) return NULL;
+	return pEnemies[GetRand(index-1)];
+}
+
+
 Game_BattleDoll* Scene_Battle::GetCommandDollPtr(){
 	if(phaze != DOLLS_COMMAND) return NULL;
 	return GetFrontDollPtr(commandIndex);
@@ -795,7 +817,15 @@ bool Scene_Battle::ExecuteAction(){
 		}
 		break;
 	case AFTER_TURN:
-		return false;
+		nextAction = actionStack.Pop();
+		if(nextAction.IsEmpty()){
+			// falseを返すまで、解除するステートがないかの判定を繰り返す。
+			if(!CheckStateTurn()){
+				return false;
+			}
+		}else{
+			InterpretAction(&nextAction);
+		}
 		break;
 	case POST_BATTLE:
 		// アクションスタックの内容を順に実行する。
@@ -987,8 +1017,9 @@ void Scene_Battle::SetupBattleDo(){
 
 void Scene_Battle::SetupAfterTurn(){
 	// 本来はここに置くものではない
-	UpdateStateTurn();
-	// 
+	// UpdateStateTurn();
+	// ターン数を増やす
+	UpdateUnitTurn();
 	turn++;
 }
 

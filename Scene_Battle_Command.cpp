@@ -53,12 +53,12 @@ char Scene_Battle::InterpretCommand_NoPhaze(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -70,13 +70,13 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		break;
-	case ACTIONTYPE_SKILL:
+	case COMMANDTYPE_SKILL:
 		switch(pCmd->GetSkillID()){
 		case SKILL_LOADOFF_ATTACK:
 			// 先制攻撃。
@@ -89,7 +89,7 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 			break;
 		}
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -102,14 +102,14 @@ char Scene_Battle::InterpretCommand_After_Sort(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		AddStateToUnit(pCmd->GetOwner(), STATE_GUARD, false);
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -128,11 +128,11 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 	}
 
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		break;
-	case ACTIONTYPE_SKILL:
+	case COMMANDTYPE_SKILL:
 		if(pCmd->GetOwner()->IsDoll()){
 			if(g_aliceInfo.data.mp >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
 				// ここでMPを減らす
@@ -143,7 +143,7 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 			}
 		}
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -172,6 +172,8 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 #define FIXTARGET_TRANS_CHANGE			6
 // ターゲットのHPがMAXの場合、最もHPの減っている味方にターゲットを移す
 #define FIXTARGET_HPMAX_CHANGE			7
+// ターゲットのHPがMAXの場合、最もHPの減っている味方にターゲットを移す
+#define FIXTARGET_HPMAX_DIE_CHANGE		8
 
 // ※混乱してそもそも正しい行動が出来ない場合の補正はこれより前に行う。
 // ※全体攻撃のターゲットはアクション発生時に補正を行う。
@@ -183,12 +185,12 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 	Game_BattleUnit* pNewTarget;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		fixType = FIXTARGET_DIE_CHANGE;
 		break;
-	case ACTIONTYPE_SKILL:
+	case COMMANDTYPE_SKILL:
 		if(pCmd->GetTargetType() == ACTIONTARGET_NO_MP){
 			fixType = FIXTARGET_NOFIX;
 		}else{
@@ -206,12 +208,18 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 			case SKILL_REPAIR_QUICK:
 			case SKILL_HEAL:
 			case SKILL_QUICKHEAL:
-				fixType = FIXTARGET_HPMAX_CHANGE;
+				fixType = FIXTARGET_HPMAX_DIE_CHANGE;
+				break;
+			case SKILL_ENCHANT_SUN:
+			case SKILL_ENCHANT_MOON:
+			case SKILL_ENCHANT_STAR:
+			case SKILL_ENCHANT_NEUTRAL:
+				fixType = FIXTARGET_DIE_DISAPPEAR;
 				break;
 			}
 		}
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -292,6 +300,21 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 			}
 		}
 		break;
+	case FIXTARGET_HPMAX_DIE_CHANGE:
+		if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()
+			|| pCmd->GetTarget()->IsDead()){
+				if(pCmd->GetTarget()->IsDoll()){
+					pNewTarget = GetMinHPRateDollPtr();
+				}else{
+					pNewTarget = GetMinHPRateEnemyPtr();
+				}
+				if(pNewTarget != NULL){
+					pCmd->SetTarget(pNewTarget);
+				}else{
+					pCmd->SetEmpty();
+				}
+		}
+		break;
 	}
 	return 0;
 }
@@ -301,9 +324,9 @@ char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return -1;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		action.Clear();
 		action.SetActor(pCmd->GetOwner());
 		action.SetOpponent(pCmd->GetTarget());
@@ -311,7 +334,7 @@ char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 		actionStack.Push(action);
 		return 1;
 		break;
-	case ACTIONTYPE_SKILL:
+	case COMMANDTYPE_SKILL:
 		action.Clear();
 		action.SetActor(pCmd->GetOwner());
 		action.SetOpponent(pCmd->GetTarget());
@@ -320,7 +343,7 @@ char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 		actionStack.Push(action);
 		return 1;
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		action.Clear();
 		action.SetActor(pCmd->GetOwner());
 		action.SetOpponent(NULL);
@@ -328,7 +351,7 @@ char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 		actionStack.Push(action);
 		return 1;
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -340,13 +363,13 @@ char Scene_Battle::InterpretCommand_Pre_Action(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -389,9 +412,9 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 
 	// 本来のコマンドをsubCommandsの配列に変換する。
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		// 通常攻撃
 		if(CheckDamageAction(pDefOwner, pDefTarget, CALCDAMAGE_ATTACK) == 0){
 			subCommands[subCommandIndex].SetBaseValues(
@@ -400,10 +423,10 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			subCommandIndex++;
 		}
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		// 宣言のみで何も行わない
 		break;
-	case ACTIONTYPE_SKILL:
+	case COMMANDTYPE_SKILL:
 		if(pCmd->GetTargetType() == ACTIONTARGET_NO_MP){
 			subCommands[subCommandIndex].SetBaseValues(NULL, NULL, ACTIONTYPE_NO_MP);
 			subCommands[subCommandIndex].SetParam(0);
@@ -539,10 +562,22 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 				subCommands[subCommandIndex].SetParam(CALCHEAL_MAGIC_DOUBLE);
 				subCommandIndex++;
 				break;
+			case SKILL_ENCHANT_NEUTRAL:
+			case SKILL_ENCHANT_SUN:
+			case SKILL_ENCHANT_MOON:
+			case SKILL_ENCHANT_STAR:
+				// 3ターンの間ステートを変更(3000は3ターンの意)
+				subCommands[subCommandIndex].SetBaseValues(
+					pDefOwner, pDefTarget, ACTIONTYPE_STATE_ATTR);
+				subCommands[subCommandIndex].SetParam(
+					STATE_TMPATTR_NONE + (pCmd->GetSkillID() - SKILL_ENCHANT_NEUTRAL)
+					+ 3000);
+				subCommandIndex++;
+				break;
 			}
 		}
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}
@@ -594,8 +629,26 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 			result = (result==0?1:result);
 			break;
 		case ACTIONTYPE_STATE:
-			// ステートの付加。param:適用するステートのID。
-			// if(AddStateToUnit(&dolls[n], STATE_DEATH, true, 1, true));
+			action.Clear();
+			action.SetActor(subCommands[n].GetOwner());
+			action.SetOpponent(subCommands[n].GetTarget());
+			action.SetType(Game_BattleAction::TYPE_ADDSTATE);
+			action.ClearFlag();
+			action.SetParam(subCommands[n].GetParam());
+			action.SetFlag(0);
+			actionStack.Push(action);
+			result = (result==0?1:result);
+			break;
+		case ACTIONTYPE_STATE_ATTR:
+			action.Clear();
+			action.SetActor(subCommands[n].GetOwner());
+			action.SetOpponent(subCommands[n].GetTarget());
+			action.SetType(Game_BattleAction::TYPE_ADDSTATE);
+			action.ClearFlag();
+			action.SetParam(subCommands[n].GetParam()%1000);
+			action.SetFlag(subCommands[n].GetParam()/1000);
+			actionStack.Push(action);
+			result = (result==0?1:result);
 			break;
 		case ACTIONTYPE_NO_MP:
 			action.Clear();
@@ -649,13 +702,13 @@ char Scene_Battle::InterpretCommand_Post_Action(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
 	if(pCmd == NULL) return -1;
 	switch(pCmd->GetActionType()){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		break;
-	case ACTIONTYPE_ATTACK:
+	case COMMANDTYPE_ATTACK:
 		break;
-	case ACTIONTYPE_GUARD:
+	case COMMANDTYPE_GUARD:
 		break;
-	case ACTIONTYPE_ERROR:
+	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
 	}

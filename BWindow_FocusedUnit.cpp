@@ -312,18 +312,18 @@ Game_BattleUnit* BWindow_FocusedUnit::GetTargetAsCommandTarget(){
 	return NULL;
 }
 
-BYTE BWindow_FocusedUnit::ConvertTargetTypeToFocusType(BYTE targetType){
-	switch(targetType){
-	case ACTIONTARGET_TEAM_ONE:
+BYTE BWindow_FocusedUnit::ConvertTargetTypeToFocusType(BYTE skillTarget){
+	switch(skillTarget){
+	case SKILLTARGET_TEAM_ONE:
 		return BWND_FOCUS_TARGET_ONE_DOLL;
 		break;
-	case ACTIONTARGET_TEAM_ALL:
+	case SKILLTARGET_TEAM_ALL:
 		return BWND_FOCUS_TARGET_ALL_DOLLS;
 		break;
-	case ACTIONTARGET_OPPONENT_ONE:
+	case SKILLTARGET_OPPONENT_ONE:
 		return BWND_FOCUS_TARGET_ONE_ENEMY;
 		break;
-	case ACTIONTARGET_OPPONENT_ALL:
+	case SKILLTARGET_OPPONENT_ALL:
 		return BWND_FOCUS_TARGET_ALL_ENEMIES;
 		break;
 	default:

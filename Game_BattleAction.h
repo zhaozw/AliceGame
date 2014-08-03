@@ -27,6 +27,8 @@ public:
 		TYPE_ASSERTSKILL,	// 各スキルを宣言する
 		TYPE_ASSERTGUARD,	// 「○○は身を守っている！」を表示する
 		TYPE_NO_MP,			// 「しかしMPが足りない！」を表示する
+		TYPE_ADDSTATE,		// ステートが付加されたメッセージを表示する
+		TYPE_REMOVESTATE,	// ステートが解除されたメッセージを表示する
 		TYPE_UNDIFINED,
 	};
 private:
@@ -38,9 +40,9 @@ private:
 	Game_BattleUnit*	pOpponent;
 	// 行動の種類
 	ActionType			type;
-	// 各種フラグ
+	// 各種フラグ。好きに使って良い。
 	DWORD				flags;
-	// 各種パラメータ。
+	// 各種パラメータ。好きに使って良い。
 	int					param;
 public:
 	// コンストラクタ

@@ -2,7 +2,7 @@
 #define GAME_BATTLEUNIT_H
 
 #include <Windows.h>
-#include "Static_BattleUnit.h"
+#include "Static_Battle.h"
 
 class Game_BattleState;
 
@@ -20,15 +20,16 @@ class Game_BattleState{
 public:
 	// メンバ
 	WORD	refID;
-	// ターン数
+	// 経過ターン数
 	int		turn;
-	// 重ねがけ回数
-	int		level;
+	// パラメータ
+	// 意味合いはステートの種類によって異なる。
+	int		param, param2;
 	// コンストラクタ
 	Game_BattleState(){
 		refID = 0;
 		turn = 0;
-		level = 0;
+		param = param2 = 0;
 	}
 
 	// 並べ替え用の関数
@@ -94,6 +95,8 @@ public:
 	int GetMgc(){ return param[BATTLEUNIT_PARAM_MGC]; };
 	int GetTec(){ return param[BATTLEUNIT_PARAM_TEC]; };
 	BYTE GetAttr(){ return attr; };
+	// ステートなどによって変化した属性値を返す
+	BYTE GetAmendedAttr();
 	bool GetFront(){ return isFront; };
 	BYTE GetPosition(){ return position; };
 	void SetIsUsed(bool b){ isUsed = b; };
@@ -116,7 +119,10 @@ public:
 	// 参照番号のステートを追加する。
 	// 戻り値 : ステート付加の結果。
 	//			定数群ADDSTATE_xxxを参照。
-	BYTE AddState(WORD refID, int level=1);
+	BYTE AddState(WORD refID, int param=0, int param2=0);
+
+	// ステートが付加された際に自動で外れるステートを判定する。
+	void AutoRemoveState(WORD refID);
 	
 	// 参照番号のステートに罹患している場合、それを解除する。
 	// sort : trueを指定するとステート解除後にソートを行う。
@@ -124,6 +130,10 @@ public:
 
 	// ステートのターン経過を処理する。
 	// 一括してターン終了時に行う。
+	// ステートを解除した場合、ステートIDを返す。
+	WORD CheckStateTurn();
+
+	// 単にすべてのステートのターン数を1進める。
 	void UpdateStateTurn();
 
 	// 指定したrefIDのステートを保持しているかどうかを返す。
@@ -131,9 +141,12 @@ public:
 	// 見つからなかった場合は-1を返す。
 	int CheckIsState(WORD stateRefID);
 	
-	// 指定したrefIDのステートのレベルを返す。
-	// そのステートになっていない場合は0を返す。
-	int	CheckStateLevel(WORD stateRefID);
+	// 指定したrefIDのステートのparam値を返す。
+	// そのステートになっていない場合は-1を返す。
+	int	GetStateParam(WORD stateRefID);
+	int	GetStateParam2(WORD stateRefID);
+
+	// そのステートになっているかどうかを判断する。
 	bool IsState(WORD stateRefID){ return CheckIsState(stateRefID)!=-1; };
 
 	// 全てのパラメータをリセットする。

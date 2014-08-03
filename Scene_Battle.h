@@ -231,6 +231,8 @@ public:
 	Game_BattleDoll*	GetMinHPRateDollPtr();
 	// もっともHPの割合が低い敵のポインタを返す。
 	Game_BattleEnemy*	GetMinHPRateEnemyPtr();
+	// 敵キャラ一体(自分(pSelf)を除く)のポインタをランダムで返す。
+	Game_BattleEnemy*	GetRandomOtherEnemyPtr(Game_BattleEnemy* pSelf);
 	
 	// 人形のコマンド選択中、現在選択中の人形のポインタを返す。
 	Game_BattleDoll*	GetCommandDollPtr();
@@ -322,6 +324,8 @@ public:
 	bool Action_AssertSkill(Game_BattleAction* pAction);
 	bool Action_AssertGuard(Game_BattleAction* pAction);
 	bool Action_No_MP(Game_BattleAction* pAction);
+	bool Action_Add_State(Game_BattleAction* pAction);
+	bool Action_Remove_State(Game_BattleAction* pAction);
 
 	//=========================================
 	// Game_UnitCommandの内容の処理。
@@ -436,7 +440,11 @@ public:
 
 	// ステートのターン経過を処理する。
 	// 一括してターン終了時に行う。
-	void UpdateStateTurn();
+	// 処理中にアクションスタックに内容を追加した場合はtrueを返す。
+	bool CheckStateTurn();
+
+	// ユニット及びユニットのステートのターン数を増加させる。
+	void UpdateUnitTurn();
 
 	//=========================================
 	// 描画

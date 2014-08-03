@@ -67,7 +67,7 @@ Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy){
 		// 取れるコマンドがない場合は様子を見続ける
 		cmd.SetOwner(pEnemy);
 		cmd.SetTarget(NULL);
-		cmd.SetActionType(ACTIONTYPE_SKILL);
+		cmd.SetActionType(COMMANDTYPE_SKILL);
 		cmd.SetSkillID(SKILL_WAIT);
 		cmd.SetTargetType(ACTIONTARGET_NONE);
 	}else{
@@ -144,6 +144,11 @@ int Scene_Battle::GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index){
 				return 0;
 			}
 			break;
+		case CONDITIONTYPE_ATTR:
+			if(pEnemy->GetAmendedAttr() != pAction->conditionParam[n][0]){
+				return 0;
+			}
+			break;
 		}
 	}
 	// 優先度を返す。
@@ -168,64 +173,78 @@ Game_UnitCommand Scene_Battle::MakeEnemyCommand(Game_BattleEnemy* pEnemy, int in
 		return cmd;
 	}
 	switch(pAction->actionType){
-	case ACTIONTYPE_NONE:
+	case COMMANDTYPE_NONE:
 		cmd.SetEmpty();
 		break;
-	case ACTIONTYPE_ATTACK:
-		cmd.SetActionType(ACTIONTYPE_ATTACK);
+	case COMMANDTYPE_ATTACK:
+		cmd.SetActionType(COMMANDTYPE_ATTACK);
 		cmd.SetOwner(pEnemy);
 		cmd.SetTarget(GetRandomDollPtr());
 		cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 		break;
-	case ACTIONTYPE_SKILL:
-		cmd.SetActionType(ACTIONTYPE_SKILL);
+	case COMMANDTYPE_SKILL:
+		cmd.SetActionType(COMMANDTYPE_SKILL);
 		cmd.SetSkillID(pAction->skillID);
 		cmd.SetOwner(pEnemy);
 		switch(pAction->targetType){
-		case TARGETTYPE_NONE:
+		case ECOMMANDTARGET_NONE:
 			cmd.SetTarget(NULL);
 			cmd.SetTargetType(ACTIONTARGET_NONE);
 			break;
-		case TARGETTYPE_DOLL_RANDOM:
+		case ECOMMANDTARGET_DOLL_RANDOM:
 			cmd.SetTarget(GetRandomDollPtr());
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 			break;
-		case TARGETTYPE_DOLL_ALL:
+		case ECOMMANDTARGET_DOLL_ALL:
 			cmd.SetTarget(NULL);
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ALL);
 			break;
-		case TARGETTYPE_ENEMY_RANDOM:
+		case ECOMMANDTARGET_ENEMY_RANDOM:
 			cmd.SetTarget(GetRandomEnemyPtr());
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
-		case TARGETTYPE_ENEMY_ALL:
+		case ECOMMANDTARGET_ENEMY_ALL:
 			cmd.SetTarget(NULL);
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ALL);
 			break;
-		case TARGETTYPE_SELF:
+		case ECOMMANDTARGET_SELF:
 			cmd.SetTarget(pEnemy);
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
-		case TARGETTYPE_DOLL_HP_MIN:
+		case ECOMMANDTARGET_DOLL_HP_MIN:
 			cmd.SetTarget(GetMinHPDollPtr());
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 			break;
-		case TARGETTYPE_DOLL_HP_MIN2:
+		case ECOMMANDTARGET_DOLL_HP_MIN2:
 			cmd.SetTarget(GetMinHPRateDollPtr());
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 			break;
-		case TARGETTYPE_ENEMY_HP_MIN:
+		case ECOMMANDTARGET_ENEMY_HP_MIN:
 			cmd.SetTarget(GetMinHPEnemyPtr());
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
-		case TARGETTYPE_ENEMY_HP_MIN2:
+		case ECOMMANDTARGET_ENEMY_HP_MIN2:
 			cmd.SetTarget(GetMinHPRateEnemyPtr());
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
-	}
+		case ECOMMANDTARGET_ENEMY_OTHER:
+			cmd.SetTarget(GetRandomOtherEnemyPtr(pEnemy));
+			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
+			if(cmd.GetTarget() == NULL){
+				cmd.SetEmpty();
+			}
+			break;
+		}
+		/*
+		// ターゲットがいない場合はfalseを返す
+		// ※というのは全体攻撃を考えると不可能
+		if(cmd.GetTarget() == NULL){
+			cmd.SetEmpty();
+		}
+		*/
 		break;
-	case ACTIONTYPE_GUARD:
-		cmd.SetActionType(ACTIONTYPE_GUARD);
+	case COMMANDTYPE_GUARD:
+		cmd.SetActionType(COMMANDTYPE_GUARD);
 		cmd.SetOwner(pEnemy);
 		cmd.SetTarget(NULL);
 		cmd.SetTargetType(ACTIONTARGET_NONE);
@@ -266,28 +285,28 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		case CALCDAMAGE_ATTACK:
 			// 攻撃力に属性補正を適用する
 			from	= pAttacker->GetAtk() 
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_TECH:
 			// 技巧に属性補正を適用する
 			from	= pAttacker->GetTec() 
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_TECH_TECH:
 			// 技巧の差に属性補正を適用する
 			from	= (pAttacker->GetTec() * 2 - pOpponent->GetTec())
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_TECH_NOGUARD:
 			// 防御を使用しない
 			from	= pAttacker->GetTec()
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= 0;
 			rate	= 1.0f;
 			break;
@@ -300,14 +319,14 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		case CALCDAMAGE_MAGIC_MAGIC:
 			// 魔力の差に属性補正を適用する
 			from	= (pAttacker->GetMgc() * 2 - pOpponent->GetMgc())
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_ATTACK_DOUBLE:
 			// 攻撃の2倍から魔力か技巧の高い方を引く
 			from	= (pAttacker->GetAtk() * 2 - max(pOpponent->GetMgc(), pOpponent->GetTec()))
-				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
+				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
@@ -488,16 +507,49 @@ void Scene_Battle::SetEnemySpriteMorphByState(Game_BattleEnemy* pUnit, WORD stat
 }
 
 
-void Scene_Battle::UpdateStateTurn(){
+bool Scene_Battle::CheckStateTurn(){
+	Game_BattleAction action;
+	WORD removeStateID = 0;
 	for(int n=0; n<MAX_BATTLEDOLL; n++){
 		if(dolls[n].GetIsUsed()){
-			dolls[n].UpdateStateTurn();
+			removeStateID = dolls[n].CheckStateTurn();
+			if(removeStateID != 0){
+				// ステートを解除したことを示すアクションスタックを追加する
+				action.Clear();
+				action.SetActor((Game_BattleUnit*)&dolls[n]);
+				action.SetOpponent(NULL);
+				action.SetType(Game_BattleAction::TYPE_REMOVESTATE);
+				action.SetParam(removeStateID);
+				actionStack.Push(action);
+				return true;
+			}
 		}
 	}
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
 		if(enemies[n].GetIsUsed()){
-			enemies[n].UpdateStateTurn();
-			enemies[n].AddTurn();
+			removeStateID = enemies[n].CheckStateTurn();
+			if(removeStateID != 0){
+				// ステートを解除したことを示すアクションスタックを追加する
+				action.Clear();
+				action.SetActor((Game_BattleUnit*)&enemies[n]);
+				action.SetOpponent(NULL);
+				action.SetType(Game_BattleAction::TYPE_REMOVESTATE);
+				action.SetParam(removeStateID);
+				actionStack.Push(action);
+				return true;
+			}
 		}
 	}
+	return false;
+}
+
+void Scene_Battle::UpdateUnitTurn(){
+	// 敵のターン経過判定もここで行う。
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		if(enemies[n].GetIsUsed()){
+			enemies[n].AddTurn();
+			enemies[n].UpdateStateTurn();
+		}
+	}
+
 }

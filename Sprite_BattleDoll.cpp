@@ -113,7 +113,7 @@ void Sprite_BattleDoll::DrawInfo() const{
 	tmpY += (FONTSIZE_INFO+4);
 	// HPƒo[‚Ì•`‰æ
 	rate = (float)pDoll->GetHP()/pDoll->GetMaxHP();
-	switch(pDoll->GetAttr()){
+	switch(pDoll->GetAmendedAttr()){
 	case DOLL_ATTR_NONE:
 		fontColor = GetColor(192, 192, 192);
 		break;

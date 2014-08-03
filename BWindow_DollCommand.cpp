@@ -6,6 +6,7 @@
 #include "Scene_Battle.h"
 #include "Sprite_BattleDoll.h"
 #include "Data_SkillInfo.h"
+#include "Static_Battle.h"
 
 
 extern WindowSkins			g_wndSkins;
@@ -188,7 +189,7 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 		pFocusWindow = (BWindow_FocusedUnit*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
 		cmd.SetTarget(pFocusWindow->GetTarget());
-		cmd.SetActionType(ACTIONTYPE_ATTACK);
+		cmd.SetActionType(COMMANDTYPE_ATTACK);
 		cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 		pScene->SetCommand(cmd);
 		state = Window_Base::IDLE;
@@ -197,7 +198,7 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 	case BWND_DOLLCOMMAND_SKILL:
 		pSkillWindow = (BWindow_DollSkill*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
-		cmd.SetActionType(ACTIONTYPE_SKILL);
+		cmd.SetActionType(COMMANDTYPE_SKILL);
 		cntSkillID = pActor->GetSkillID(pSkillWindow->GetSelectIndex());
 		if(cntSkillID > 0){
 			targetType = d_skillInfo.GetTargetType(cntSkillID); // スキルのターゲット
@@ -214,7 +215,7 @@ bool BWindow_DollCommand::SetCommandAndClose(){
 		pFocusWindow = (BWindow_FocusedUnit*)pChildWindow;
 		cmd.SetOwner((Game_BattleUnit*)pActor);
 		cmd.SetTarget(NULL);
-		cmd.SetActionType(ACTIONTYPE_GUARD);
+		cmd.SetActionType(COMMANDTYPE_GUARD);
 		cmd.SetTargetType(ACTIONTARGET_NONE);
 		pScene->SetCommand(cmd);
 		state = Window_Base::IDLE;
@@ -241,17 +242,17 @@ BYTE BWindow_DollCommand::Close(bool force, bool sudden){
 
 BYTE BWindow_DollCommand::ConvertSkillTargetToTarget(BYTE skillTarget){
 	switch(skillTarget){
-	case ACTIONTARGET_TEAM_ONE:
-	case ACTIONTARGET_SELF:
+	case SKILLTARGET_TEAM_ONE:
+	case SKILLTARGET_SELF:
 		return ACTIONTARGET_DOLL_ONE;
 		break;
-	case ACTIONTARGET_TEAM_ALL:
+	case SKILLTARGET_TEAM_ALL:
 		return ACTIONTARGET_DOLL_ALL;
 		break;
-	case ACTIONTARGET_OPPONENT_ONE:
+	case SKILLTARGET_OPPONENT_ONE:
 		return ACTIONTARGET_ENEMY_ONE;
 		break;
-	case ACTIONTARGET_OPPONENT_ALL:
+	case SKILLTARGET_OPPONENT_ALL:
 		return ACTIONTARGET_ENEMY_ALL;
 		break;
 	}

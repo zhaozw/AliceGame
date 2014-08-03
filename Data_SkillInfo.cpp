@@ -1,7 +1,7 @@
 // Data_SkillText.cpp
 
 #include "Data_SkillInfo.h"
-#include "Static_BattleUnit.h"
+#include "Static_Battle.h"
 
 void Data_SkillMessage_Each::SetSkillMessage(BYTE _type, LPTSTR str, int strLen){
 	int length = 0;
@@ -79,105 +79,135 @@ bool Data_SkillInfo::SetSkillData(){
 		_T("様子を見る"),
 		_T("何もしません。"),
 		_T("%sは様子を見ている！"), SKILLMESSAGE_TYPE_UNIT,
-		0, ACTIONTARGET_NONE);
+		0, SKILLTARGET_NONE);
 
 	// 全体攻撃
 	data[SKILL_ALLRANGE].SetData(
 		_T("全体攻撃"),
 		_T("敵全体に攻撃します。"),
 		_T("%sの攻撃！"), SKILLMESSAGE_TYPE_UNIT,
-		2, ACTIONTARGET_OPPONENT_ALL);
+		2, SKILLTARGET_OPPONENT_ALL);
 
 	// 先制攻撃
 	data[SKILL_LOADOFF_ATTACK].SetData(
 		_T("先制攻撃"),
 		_T("誰よりも速く風のように素早く攻撃します。"),
 		_T("%sは風のように素早く攻撃した！"), SKILLMESSAGE_TYPE_UNIT,
-		2, ACTIONTARGET_OPPONENT_ONE);
+		2, SKILLTARGET_OPPONENT_ONE);
 
 	// 回復
 	data[SKILL_HEAL1].SetData(
 		_T("回復"),
 		_T("味方一体の体力を５０％回復します。"),
 		_T("%sは回復の術式を使った！"), SKILLMESSAGE_TYPE_UNIT,
-		2, ACTIONTARGET_TEAM_ONE);
+		2, SKILLTARGET_TEAM_ONE);
 
 	// ばらまき弾
 	data[SKILL_WIDESHOT].SetData(
 		_T("ばらまき弾"),
 		_T("敵全体に向かって弾幕を放ちます。"),
 		_T("%sはばらまき弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
-		4, ACTIONTARGET_OPPONENT_ALL);
+		4, SKILLTARGET_OPPONENT_ALL);
 
 	// クナイ弾
 	data[SKILL_KUNAISHOT].SetData(
 		_T("クナイ弾"),
 		_T("相手の技巧が低いほど威力が上がります。"),
 		_T("%sはクナイ弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
-		2, ACTIONTARGET_OPPONENT_ONE);
+		2, SKILLTARGET_OPPONENT_ONE);
 
 	// ナイフ弾
 	data[SKILL_KNIFESHOT].SetData(
 		_T("ナイフ弾"),
 		_T("相手の防御力を無視してダメージを与えます。"),
 		_T("%sはナイフ弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
-		3, ACTIONTARGET_OPPONENT_ONE);
+		3, SKILLTARGET_OPPONENT_ONE);
 
 	// 霊撃
 	data[SKILL_REIGEKI].SetData(
 		_T("霊撃"),
 		_T("属性の影響を受けない攻撃を放ちます。"),
 		_T("%sは霊撃を放った！"), SKILLMESSAGE_TYPE_UNIT,
-		3, ACTIONTARGET_OPPONENT_ONE);
+		3, SKILLTARGET_OPPONENT_ONE);
 	
 	// 光弾
 	data[SKILL_PHOTONSHOT].SetData(
 		_T("光弾"),
 		_T("威力が魔力に依存する弾を放ちます。"),
 		_T("%sは光弾を放った！"), SKILLMESSAGE_TYPE_UNIT,
-		3, ACTIONTARGET_OPPONENT_ONE);
+		3, SKILLTARGET_OPPONENT_ONE);
 
 	// 修復
 	data[SKILL_REPAIR].SetData(
 		_T("修復"),
 		_T("味方一体のＨＰを回復します。"),
 		_T("%sの修復！"), SKILLMESSAGE_TYPE_UNIT,
-		3, ACTIONTARGET_TEAM_ONE);
+		3, SKILLTARGET_TEAM_ONE);
 
 	// 全体修復
 	data[SKILL_REPAIR_ALL].SetData(
 		_T("全体修復"),
 		_T("前列の味方全体のＨＰを回復します。"),
 		_T("%sの全体修復！"), SKILLMESSAGE_TYPE_UNIT,
-		5, ACTIONTARGET_TEAM_ALL);
+		5, SKILLTARGET_TEAM_ALL);
 
 	// ミョルニル
 	data[SKILL_MJOLLNIR].SetData(
 		_T("ミョルニル"),
 		_T("相手一体に攻撃依存の大ダメージを与えます。"),
 		_T("%sはミョルニルを使った！"), SKILLMESSAGE_TYPE_UNIT,
-		6, ACTIONTARGET_OPPONENT_ONE);
+		6, SKILLTARGET_OPPONENT_ONE);
 
 	// 緊急修復
 	data[SKILL_REPAIR_QUICK].SetData(
 		_T("緊急修復"),
 		_T("誰よりも早く、味方一体のＨＰを回復します。"),
 		_T("%sの緊急修復！"), SKILLMESSAGE_TYPE_UNIT,
-		4, ACTIONTARGET_TEAM_ONE);
+		4, SKILLTARGET_TEAM_ONE);
 
 	// ヒール
 	data[SKILL_HEAL].SetData(
 		_T("ヒール"),
 		_T("味方一体のＨＰを回復します。"),
 		_T("%sはヒールの呪文を唱えた！"), SKILLMESSAGE_TYPE_UNIT,
-		0, ACTIONTARGET_TEAM_ONE);
+		0, SKILLTARGET_TEAM_ONE);
 
 	// 緊急修復
 	data[SKILL_QUICKHEAL].SetData(
 		_T("クイックヒール"),
 		_T("誰よりも早く、味方一体のＨＰを回復します。"),
 		_T("%sはクイックヒールの呪文を唱えた！"), SKILLMESSAGE_TYPE_UNIT,
-		0, ACTIONTARGET_TEAM_ONE);
+		0, SKILLTARGET_TEAM_ONE);
+
+	// 無エンチャント
+	data[SKILL_ENCHANT_NEUTRAL].SetData(
+		_T("無エンチャント"),
+		_T("味方一体に無属性を付加します。"),
+		_T("%sは無の力を呼び起こした！"), SKILLMESSAGE_TYPE_UNIT,
+		0, SKILLTARGET_TEAM_ONE);
+
+	// 太陽エンチャント
+	data[SKILL_ENCHANT_SUN].SetData(
+		_T("太陽エンチャント"),
+		_T("味方一体に太陽属性を付加します。"),
+		_T("%sは太陽の力を呼び起こした！"), SKILLMESSAGE_TYPE_UNIT,
+		0, SKILLTARGET_TEAM_ONE);
+
+	// 月エンチャント
+	data[SKILL_ENCHANT_MOON].SetData(
+		_T("月エンチャント"),
+		_T("味方一体に月属性を付加します。"),
+		_T("%sは月の力を呼び起こした！"), SKILLMESSAGE_TYPE_UNIT,
+		0, SKILLTARGET_TEAM_ONE);
+
+	// 星エンチャント
+	data[SKILL_ENCHANT_STAR].SetData(
+		_T("星エンチャント"),
+		_T("味方一体に星属性を付加します。"),
+		_T("%sは星の力を呼び起こした！"), SKILLMESSAGE_TYPE_UNIT,
+		0, SKILLTARGET_TEAM_ONE);
+
+
 	return true;
 }
 

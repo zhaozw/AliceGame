@@ -2,7 +2,7 @@
 #define STATIC_SKILL_H
 
 // 全スキルの数。
-#define MAX_SKILL			32
+#define MAX_SKILL			64
 
 // スキルの文字（バイト）数。
 #define MAX_SKILL_BYTES			24		
@@ -27,11 +27,10 @@
 #define SKILL_REPAIR_QUICK		13	// 高速修復
 #define SKILL_HEAL				14	// 修復と同じ効果
 #define SKILL_QUICKHEAL			15	// 高速修復と同じ効果
-#define SKILL_SUN_ENCHANT		16	// 自軍一体を永久的に太陽属性に変化させる
-#define SKILL_MOON_ENCHANT		17	// 自軍一体を永久的に月属性に変化させる
-#define SKILL_STAR_ENCHANT		18	// 自軍一体を永久的に星属性に変化させる
-#define SKILL_NEUTRAL_ENCHANT	19	// 自軍一体を永久的に無属性に変化させる
-#define SKILL_ATTR_ENCHANT		20	// 自軍一体の属性をランダムに変化させる
+#define SKILL_ENCHANT_NEUTRAL	16	// 3ターンの間、味方一体を無属性に変化させる
+#define SKILL_ENCHANT_SUN		17	// 3ターンの間、味方一体を太陽属性に変化させる
+#define SKILL_ENCHANT_MOON		18	// 3ターンの間、味方一体を月属性に変化させる
+#define SKILL_ENCHANT_STAR		19	// 3ターンの間、味方一体を星属性に変化させる
 
 
 

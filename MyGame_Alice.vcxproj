@@ -247,7 +247,6 @@
     <ClInclude Include="Static_AliceDoll.h" />
     <ClInclude Include="Static_AliceInfo.h" />
     <ClInclude Include="Static_Battle.h" />
-    <ClInclude Include="Static_BattleUnit.h" />
     <ClInclude Include="Static_CompileMode.h" />
     <ClInclude Include="Static_Game.h" />
     <ClInclude Include="Static_InfoEffect.h" />
