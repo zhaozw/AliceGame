@@ -431,7 +431,7 @@ public:
 	// morphSprite	: ステートの付加に成功した場合、
 	//				  対応するスプライトアクションも実行する。
 	BYTE AddStateToUnit(Game_BattleUnit* pUnit, WORD stateRefID,
-		bool showMessage=true, int level=1, bool morphSprite=true);
+		bool showMessage=true, int param=1, int param2=0, bool morphSprite=true);
 
 	// 人形または敵オブジェクトを指定すると、そのスプライトに対して
 	// ステート付加時のスプライトアクションを付加する。

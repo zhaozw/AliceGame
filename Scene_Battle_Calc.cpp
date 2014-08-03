@@ -448,14 +448,14 @@ float Scene_Battle::GetMinimumHPRate(){
 
 BYTE Scene_Battle::AddStateToUnit(
 	Game_BattleUnit* pUnit, WORD stateRefID,
-	bool showMessage, int level, bool morphSprite){
+	bool showMessage, int param, int param2, bool morphSprite){
 		TCHAR buf[WND_MSG_STOCKLENGTH];
 		BYTE result;
 		if(pUnit == NULL){
 			return ADDSTATE_ERROR;
 		}
 		// ステートの適用
-		result = pUnit->AddState(stateRefID);
+		result = pUnit->AddState(stateRefID, param, param2);
 		// メッセージの追加
 		if(showMessage){
 			switch(result){
