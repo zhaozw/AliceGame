@@ -83,6 +83,7 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
 			break;
 		case SKILL_REPAIR_QUICK:
+		case SKILL_QUICKHEAL:
 			// 緊急修復。
 			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
 			break;
@@ -169,6 +170,8 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 #define FIXTARGET_TARGET_CHANGE			5
 // ターゲットが戦闘不可ではないが行動対象にはならない場合、行動を行わない
 #define FIXTARGET_TRANS_CHANGE			6
+// ターゲットのHPがMAXの場合、最もHPの減っている味方にターゲットを移す
+#define FIXTARGET_HPMAX_CHANGE			7
 
 // ※混乱してそもそも正しい行動が出来ない場合の補正はこれより前に行う。
 // ※全体攻撃のターゲットはアクション発生時に補正を行う。
@@ -197,6 +200,13 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 			case SKILL_PHOTONSHOT:
 			case SKILL_MJOLLNIR:
 				fixType = FIXTARGET_DIE_CHANGE;
+				break;
+			case SKILL_HEAL1:
+			case SKILL_REPAIR:
+			case SKILL_REPAIR_QUICK:
+			case SKILL_HEAL:
+			case SKILL_QUICKHEAL:
+				fixType = FIXTARGET_HPMAX_CHANGE;
 				break;
 			}
 		}
@@ -260,6 +270,20 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 				pNewTarget = GetRandomDollPtr();
 			}else{
 				pNewTarget = GetRandomEnemyPtr();
+			}
+			if(pNewTarget != NULL){
+				pCmd->SetTarget(pNewTarget);
+			}else{
+				pCmd->SetEmpty();
+			}
+		}
+		break;
+	case FIXTARGET_HPMAX_CHANGE:
+		if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()){
+			if(pCmd->GetTarget()->IsDoll()){
+				pNewTarget = GetMinHPRateDollPtr();
+			}else{
+				pNewTarget = GetMinHPRateEnemyPtr();
 			}
 			if(pNewTarget != NULL){
 				pCmd->SetTarget(pNewTarget);
@@ -474,7 +498,8 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 				}
 				break;
 			case SKILL_REPAIR:
-				// 修復
+			case SKILL_HEAL:
+				// 修復・ヒール
 				subCommands[subCommandIndex].SetBaseValues(
 					pDefOwner, pDefTarget, ACTIONTYPE_HEAL);
 				subCommands[subCommandIndex].SetParam(CALCHEAL_MAGIC_DOUBLE);
@@ -507,6 +532,7 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 				}
 				break;
 			case SKILL_REPAIR_QUICK:
+			case SKILL_QUICKHEAL:
 				// 高速修復
 				subCommands[subCommandIndex].SetBaseValues(
 					pDefOwner, pDefTarget, ACTIONTYPE_HEAL);

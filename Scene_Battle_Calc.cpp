@@ -53,6 +53,7 @@ Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy){
 	// 仮に通常攻撃だけをセットする。
 	Game_UnitCommand cmd;
 	int resultIndex = 0;
+	int cntPriority = 0;
 
 	// ランダムで行動を選ぶためのインデックスの配列
 	int indexArray[MAX_ACTIONPATTERN*9];
@@ -71,23 +72,26 @@ Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy){
 		cmd.SetTargetType(ACTIONTARGET_NONE);
 	}else{
 		for(int n=0; n<MAX_ACTIONPATTERN; n++){
-			switch(max_priority - GetEnemyCommandPriority(pEnemy, n)){
-			case 0: // 最も行いやすい行動
-				for(int i=0; i<9; i++){
+			cntPriority = GetEnemyCommandPriority(pEnemy, n);
+			if(cntPriority != 0){
+				switch(max_priority - GetEnemyCommandPriority(pEnemy, n)){
+				case 0: // 最も行いやすい行動
+					for(int i=0; i<9; i++){
+						indexArray[indexArrayLength] = n;
+						indexArrayLength++;
+					}
+					break;
+				case 1: // 次に行いやすい行動
+					for(int i=0; i<3; i++){
+						indexArray[indexArrayLength] = n;
+						indexArrayLength++;
+					}
+					break;
+				case 2: // レア行動
 					indexArray[indexArrayLength] = n;
 					indexArrayLength++;
+					break;
 				}
-				break;
-			case 1: // 次に行いやすい行動
-				for(int i=0; i<3; i++){
-					indexArray[indexArrayLength] = n;
-					indexArrayLength++;
-				}
-				break;
-			case 2: // レア行動
-				indexArray[indexArrayLength] = n;
-				indexArrayLength++;
-				break;
 			}
 		}
 		// 入力された値の中から一つ選び出す
@@ -122,6 +126,24 @@ int Scene_Battle::GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index){
 				return 0;
 			}
 			break;
+		case CONDITIONTYPE_PERIODIC:
+			if(turn % pAction->conditionParam[n][0]
+				!= pAction->conditionParam[n][1]){
+				return 0;
+			}
+			break;
+		case CONDITIONTYPE_PERIODIC2:
+			if(pEnemy->GetSelfTurn() % pAction->conditionParam[n][0]
+				!= pAction->conditionParam[n][1]){
+				return 0;
+			}
+			break;
+		case CONDITIONTYPE_MAX_HP_RATE_P:
+			rate = 100.0f*GetMinimumHPRate();
+			if(rate > pAction->conditionParam[n][0]){
+				return 0;
+			}
+			break;
 		}
 	}
 	// 優先度を返す。
@@ -141,6 +163,10 @@ Game_UnitCommand Scene_Battle::MakeEnemyCommand(Game_BattleEnemy* pEnemy, int in
 	ENEMYACTIONPATTERN* pAction = pEnemy->GetActionPatternPtr(index);
 	Game_UnitCommand cmd;
 	cmd.Reset();
+	if(pAction == NULL){
+		cmd.SetEmpty();
+		return cmd;
+	}
 	switch(pAction->actionType){
 	case ACTIONTYPE_NONE:
 		cmd.SetEmpty();
@@ -181,20 +207,19 @@ Game_UnitCommand Scene_Battle::MakeEnemyCommand(Game_BattleEnemy* pEnemy, int in
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
 		case TARGETTYPE_DOLL_HP_MIN:
-			// これ以降は正しく設定されていない
-			cmd.SetTarget(GetRandomDollPtr());
+			cmd.SetTarget(GetMinHPDollPtr());
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 			break;
 		case TARGETTYPE_DOLL_HP_MIN2:
-			cmd.SetTarget(GetRandomDollPtr());
+			cmd.SetTarget(GetMinHPRateDollPtr());
 			cmd.SetTargetType(ACTIONTARGET_DOLL_ONE);
 			break;
 		case TARGETTYPE_ENEMY_HP_MIN:
-			cmd.SetTarget(GetRandomEnemyPtr());
+			cmd.SetTarget(GetMinHPEnemyPtr());
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
 		case TARGETTYPE_ENEMY_HP_MIN2:
-			cmd.SetTarget(GetRandomEnemyPtr());
+			cmd.SetTarget(GetMinHPRateEnemyPtr());
 			cmd.SetTargetType(ACTIONTARGET_ENEMY_ONE);
 			break;
 	}
@@ -254,9 +279,9 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			break;
 		case CALCDAMAGE_TECH_TECH:
 			// 技巧の差に属性補正を適用する
-			from	= pAttacker->GetTec() * 2
+			from	= (pAttacker->GetTec() * 2 - pOpponent->GetTec())
 				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
-			to		= pOpponent->GetTec() + pOpponent->GetDef();
+			to		= pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_TECH_NOGUARD:
@@ -274,16 +299,16 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			break;
 		case CALCDAMAGE_MAGIC_MAGIC:
 			// 魔力の差に属性補正を適用する
-			from	= pAttacker->GetMgc() * 2
+			from	= (pAttacker->GetMgc() * 2 - pOpponent->GetMgc())
 				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
-			to		= pOpponent->GetMgc() + pOpponent->GetDef();
+			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_ATTACK_DOUBLE:
 			// 攻撃の2倍から魔力か技巧の高い方を引く
-			from	= pAttacker->GetAtk() * 2
+			from	= (pAttacker->GetAtk() * 2 - max(pOpponent->GetMgc(), pOpponent->GetTec()))
 				* GetAttrRate(pAttacker->GetAttr(), pOpponent->GetAttr());
-			to		= max(pOpponent->GetMgc(), pOpponent->GetTec()) + pOpponent->GetDef();
+			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
 			break;
 		}
@@ -390,6 +415,18 @@ float Scene_Battle::GetAttrRate(BYTE attackerAttr, BYTE opponentAttr){
 	return 1.0;
 }
 
+float Scene_Battle::GetMinimumHPRate(){
+	Game_BattleEnemy* pTmpEnemy = NULL;
+	float minRate = 1.0;
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = GetEnemyPtr(n, true);
+		if(pTmpEnemy != NULL){
+			minRate = min(minRate, (float)pTmpEnemy->GetHP()/pTmpEnemy->GetMaxHP());
+		}
+	}
+	return max(0, minRate);
+}
+
 BYTE Scene_Battle::AddStateToUnit(
 	Game_BattleUnit* pUnit, WORD stateRefID,
 	bool showMessage, int level, bool morphSprite){
@@ -460,6 +497,7 @@ void Scene_Battle::UpdateStateTurn(){
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
 		if(enemies[n].GetIsUsed()){
 			enemies[n].UpdateStateTurn();
+			enemies[n].AddTurn();
 		}
 	}
 }

@@ -25,7 +25,13 @@
 #define SKILL_REPAIR_ALL		11	// ‘S‘ÌC•œ
 #define SKILL_MJOLLNIR			12	// ƒ~ƒ‡ƒ‹ƒjƒ‹(UŒ‚ˆË‘¶)
 #define SKILL_REPAIR_QUICK		13	// ‚‘¬C•œ
-
+#define SKILL_HEAL				14	// C•œ‚Æ“¯‚¶Œø‰Ê
+#define SKILL_QUICKHEAL			15	// ‚‘¬C•œ‚Æ“¯‚¶Œø‰Ê
+#define SKILL_SUN_ENCHANT		16	// Ž©ŒRˆê‘Ì‚ð‰i‹v“I‚É‘¾—z‘®«‚É•Ï‰»‚³‚¹‚é
+#define SKILL_MOON_ENCHANT		17	// Ž©ŒRˆê‘Ì‚ð‰i‹v“I‚ÉŒŽ‘®«‚É•Ï‰»‚³‚¹‚é
+#define SKILL_STAR_ENCHANT		18	// Ž©ŒRˆê‘Ì‚ð‰i‹v“I‚É¯‘®«‚É•Ï‰»‚³‚¹‚é
+#define SKILL_NEUTRAL_ENCHANT	19	// Ž©ŒRˆê‘Ì‚ð‰i‹v“I‚É–³‘®«‚É•Ï‰»‚³‚¹‚é
+#define SKILL_ATTR_ENCHANT		20	// Ž©ŒRˆê‘Ì‚Ì‘®«‚ðƒ‰ƒ“ƒ_ƒ€‚É•Ï‰»‚³‚¹‚é
 
 
 

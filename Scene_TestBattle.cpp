@@ -15,9 +15,6 @@ Scene_TestBattle::Scene_TestBattle():Scene_Base(), s_main(TESTBATTLE_SELECT_NUM)
 
 bool Scene_TestBattle::Initialize(bool fSkipFrame){
 	Scene_Base::Initialize(fSkipFrame);
-	for(int n=7; n<MAX_TESTBATTLE; n++){
-		s_main.isActive[n] = false;
-	}
 	return true;
 }
 

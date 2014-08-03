@@ -106,6 +106,18 @@ int Data_EnemyDraw::GetImgHandleByRefID(WORD refID, BYTE attr){
 	case ENEMYDRAW_WINDCROW:
 		return g_image.enemy.crow[attr];
 		break;
+	case ENEMYDRAW_HARPY:
+		return g_image.enemy.harpy[attr];
+		break;
+	case ENEMYDRAW_HEALFAIRY:
+		return g_image.enemy.fairy[attr];
+		break;
+	case ENEMYDRAW_SKELETON:
+		return g_image.enemy.skeleton[attr];
+		break;
+	case ENEMYDRAW_NECROMANCER:
+		return g_image.enemy.cardinal;
+		break;
 	default:
 		break;
 	}

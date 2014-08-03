@@ -165,6 +165,19 @@ bool Data_SkillInfo::SetSkillData(){
 		_T("%sの緊急修復！"), SKILLMESSAGE_TYPE_UNIT,
 		4, ACTIONTARGET_TEAM_ONE);
 
+	// ヒール
+	data[SKILL_HEAL].SetData(
+		_T("ヒール"),
+		_T("味方一体のＨＰを回復します。"),
+		_T("%sはヒールの呪文を唱えた！"), SKILLMESSAGE_TYPE_UNIT,
+		0, ACTIONTARGET_TEAM_ONE);
+
+	// 緊急修復
+	data[SKILL_QUICKHEAL].SetData(
+		_T("クイックヒール"),
+		_T("誰よりも早く、味方一体のＨＰを回復します。"),
+		_T("%sはクイックヒールの呪文を唱えた！"), SKILLMESSAGE_TYPE_UNIT,
+		0, ACTIONTARGET_TEAM_ONE);
 	return true;
 }
 

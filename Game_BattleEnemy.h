@@ -40,6 +40,9 @@ public:
 	// このキャラが人形である場合はtrueを返す。
 	virtual bool IsDoll(){ return false; };
 
+	// ターン数を1増やす。
+	void AddTurn(){ selfTurn++; };
+
 	// 全てのパラメータをリセットする。
 	virtual void Reset(int n=0);
 

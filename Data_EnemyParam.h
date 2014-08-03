@@ -33,6 +33,8 @@
 #define TARGETTYPE_DOLL_HP_MIN2		7	// 最大HPに対するHPの比が最も少ない人形一体
 #define TARGETTYPE_ENEMY_HP_MIN		8	// HPの最も少ない敵一体
 #define TARGETTYPE_ENEMY_HP_MIN2	9	// 最大HPに対するHPの比が最も少ない敵一体
+#define TARGETTYPE_ENEMY_OTHER		10	// 自分以外の味方一体
+#define TARGETTYPE_ENEMY_OTHERS		11	// 自分以外の味方全体
 
 // 敵データのパラメータ数
 #define NUM_ENEMYPARAM_DATA			(BATTLEUNIT_PARAM_NUM-1)
@@ -48,26 +50,26 @@
 
 // 常時行う。
 // 漏れを防ぐため、必ずこの条件を持つ行動を1つ以上持っているべき。
-#define CONDITIONTYPE_ALWAYS		0 
+#define CONDITIONTYPE_ALWAYS			0 
 // 行動を行うHPの最大値を規定する。
 // param[0] : HPが(x)%以上の時は行わない。
 #define CONDITIONTYPE_MAX_HP_RATE		1
 // 行動を行うHPの最大値を規定する。
 // param[0] : HPが(x)%以下の時は行わない。
 #define CONDITIONTYPE_MIN_HP_RATE		2
-
 // ターンによる。
 // [0][1] : 戦闘が始まってからのターン数を[0]で割った時の値が[1]であれば行う。
-#define CONDITIONTYPE_PERIODIC	1
-
+#define CONDITIONTYPE_PERIODIC			3
 // ターンによるその2。
 // [0][1] : 敵毎に異なるターン数selfTurnを[0]で割った時の値が[1]であれば行う。
-#define CONDITIONTYPE_PERIODIC2	2
-
+#define CONDITIONTYPE_PERIODIC2			4
 // HPが一定範囲の場合。
 // [0] : HPが[0]%以下である場合であり、さらに
 // [1] : HPが[1]%以上である場合は行動する。
-#define CONDITIONTYPE_HP		3
+#define CONDITIONTYPE_HP_RATE_RANGE		5
+// 味方の誰かがHPが一定割合以下である時に行う。(Pはパーティの略)
+// param[0] : HPが(x)%以上の時は行わない。
+#define CONDITIONTYPE_MAX_HP_RATE_P		6
 
 // 行動パターンに関するパラメータをまとめて指定する用
 #define ACTIONPATTERN_ACTIONTYPE	0

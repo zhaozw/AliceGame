@@ -12,6 +12,10 @@
 #define		ENEMYDRAW_F_BUTTERFLY		4
 #define		ENEMYDRAW_SHIKABANE			5
 #define		ENEMYDRAW_WINDCROW			6
+#define		ENEMYDRAW_HARPY				7
+#define		ENEMYDRAW_HEALFAIRY			8
+#define		ENEMYDRAW_SKELETON			9
+#define		ENEMYDRAW_NECROMANCER		10
 
 
 // 敵グラフィックの描画位置と描画ハンドルを保持するクラス。

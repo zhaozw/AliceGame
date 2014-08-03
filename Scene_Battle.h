@@ -64,6 +64,8 @@ private:
 	WORD								enemyGroup;
 	// 現在の状況を表す
 	enum BATTLEPHAZE					phaze;
+	// 経過したターン数を表す（最初は1）
+	int									turn;
 	// 戦闘の結果を表す
 	BYTE								battleResult;
 	// 味方・敵ユニットは通常の配列で表現する
@@ -221,6 +223,14 @@ public:
 	Game_BattleDoll*	GetRandomDollPtr();
 	// 敵キャラ一体のポインタをランダムで返す。
 	Game_BattleEnemy*	GetRandomEnemyPtr();
+	// もっともHPが低い人形のポインタを返す。
+	Game_BattleDoll*	GetMinHPDollPtr();
+	// もっともHPが低い敵のポインタを返す。
+	Game_BattleEnemy*	GetMinHPEnemyPtr();
+	// もっともHPの割合が低い人形のポインタを返す。
+	Game_BattleDoll*	GetMinHPRateDollPtr();
+	// もっともHPの割合が低い敵のポインタを返す。
+	Game_BattleEnemy*	GetMinHPRateEnemyPtr();
 	
 	// 人形のコマンド選択中、現在選択中の人形のポインタを返す。
 	Game_BattleDoll*	GetCommandDollPtr();
@@ -404,6 +414,10 @@ public:
 
 	// 属性ダメージの倍率を計算する。
 	float GetAttrRate(BYTE attackerAttr, BYTE opponentAttr);
+
+	// パーティ全員のHPの残存率のうち、
+	// 一番低い値を返す。既に戦闘不能のキャラは含まない。
+	float GetMinimumHPRate();
 
 	// ユニットにステートを割り当てる。
 	// pUnit		: 割り当てるユニット

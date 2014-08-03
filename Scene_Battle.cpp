@@ -68,6 +68,7 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 
 	// タスクグループの初期化
 	gMyTask_InfoEffect->DeleteAllTask();
+	turn = 1;
 	return true;
 
 }
@@ -321,6 +322,104 @@ Game_BattleEnemy* Scene_Battle::GetRandomEnemyPtr(){
 	if(index == 0) return NULL;
 	return pEnemies[GetRand(index-1)];
 }
+
+Game_BattleDoll* Scene_Battle::GetMinHPDollPtr(){
+	Game_BattleDoll* pRsltDoll = NULL;
+	Game_BattleDoll* pTmpDoll = NULL;
+	int minHP = 9999; // 最初は必ず当てはめるようにする
+
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pTmpDoll = GetFrontDollPtr(n);
+		if(pTmpDoll != NULL){
+			if(pTmpDoll->CanTarget()){
+				if(pTmpDoll->GetHP() < minHP){
+					pRsltDoll = pTmpDoll;
+					minHP = pTmpDoll->GetHP();
+				}else if(pTmpDoll->GetHP() == minHP){
+					if(GetRand(1) == 0){
+						pRsltDoll = pTmpDoll;
+						minHP = pTmpDoll->GetHP();
+					}
+				}
+			}
+		}
+	}
+	return pRsltDoll;
+}
+
+Game_BattleEnemy* Scene_Battle::GetMinHPEnemyPtr(){
+	Game_BattleEnemy* pRsltEnemy = NULL;
+	Game_BattleEnemy* pTmpEnemy = NULL;
+	int minHP = 9999; // 最初は必ず当てはめるようにする
+
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = GetEnemyPtr(n);
+		if(pTmpEnemy != NULL){
+			if(pTmpEnemy->CanTarget()){
+				if(pTmpEnemy->GetHP() < minHP){
+					pRsltEnemy = pTmpEnemy;
+					minHP = pTmpEnemy->GetHP();
+				}else if(pTmpEnemy->GetHP() == minHP){
+					if(GetRand(1) == 0){
+						pRsltEnemy = pTmpEnemy;
+						minHP = pTmpEnemy->GetHP();
+					}
+				}
+			}
+		}
+	}
+	return pRsltEnemy;
+}
+
+
+Game_BattleDoll* Scene_Battle::GetMinHPRateDollPtr(){
+	Game_BattleDoll* pRsltDoll = NULL;
+	Game_BattleDoll* pTmpDoll = NULL;
+	float minHPRate = 1.1; // 最初は必ず当てはめるようにする
+
+	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+		pTmpDoll = GetFrontDollPtr(n);
+		if(pTmpDoll != NULL){
+			if(pTmpDoll->CanTarget()){
+				if((float)pTmpDoll->GetHP()/pTmpDoll->GetMaxHP() < minHPRate){
+					pRsltDoll = pTmpDoll;
+					minHPRate = (float)pTmpDoll->GetHP()/pTmpDoll->GetMaxHP();
+				}else if((float)pTmpDoll->GetHP()/pTmpDoll->GetMaxHP() == minHPRate){
+					if(GetRand(1) == 0){
+						pRsltDoll = pTmpDoll;
+						minHPRate = (float)pTmpDoll->GetHP()/pTmpDoll->GetMaxHP();
+					}
+				}
+			}
+		}
+	}
+	return pRsltDoll;
+}
+
+Game_BattleEnemy* Scene_Battle::GetMinHPRateEnemyPtr(){
+	Game_BattleEnemy* pRsltEnemy = NULL;
+	Game_BattleEnemy* pTmpEnemy = NULL;
+	float minHPRate = 1.1; // 最初は必ず当てはめるようにする
+
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		pTmpEnemy = GetEnemyPtr(n);
+		if(pTmpEnemy != NULL){
+			if(pTmpEnemy->CanTarget()){
+				if((float)pTmpEnemy->GetHP()/pTmpEnemy->GetMaxHP() < minHPRate){
+					pRsltEnemy = pTmpEnemy;
+					minHPRate = (float)pTmpEnemy->GetHP()/pTmpEnemy->GetMaxHP();
+				}else if((float)pTmpEnemy->GetHP()/pTmpEnemy->GetMaxHP() == minHPRate){
+					if(GetRand(1) == 0){
+						pRsltEnemy = pTmpEnemy;
+						minHPRate = (float)pTmpEnemy->GetHP()/pTmpEnemy->GetMaxHP();
+					}
+				}
+			}
+		}
+	}
+	return pRsltEnemy;
+}
+
 
 Game_BattleDoll* Scene_Battle::GetCommandDollPtr(){
 	if(phaze != DOLLS_COMMAND) return NULL;
@@ -889,6 +988,8 @@ void Scene_Battle::SetupBattleDo(){
 void Scene_Battle::SetupAfterTurn(){
 	// 本来はここに置くものではない
 	UpdateStateTurn();
+	// 
+	turn++;
 }
 
 void Scene_Battle::SetupPostBattle(){
