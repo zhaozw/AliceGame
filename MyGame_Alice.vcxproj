@@ -169,6 +169,7 @@
     <ClCompile Include="WindowSkin_DrawFocus.cpp" />
     <ClCompile Include="Window_Base.cpp" />
     <ClCompile Include="Window_BattleMessage.cpp" />
+    <ClCompile Include="Window_HintMessage.cpp" />
     <ClCompile Include="Window_Info.cpp" />
     <ClCompile Include="Window_LineInfo.cpp" />
     <ClCompile Include="Window_Message.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="Window_Base.h" />
     <ClInclude Include="BWindow_BattleEnemyStatus.h" />
     <ClInclude Include="Window_BattleMessage.h" />
+    <ClInclude Include="Window_HintMessage.h" />
     <ClInclude Include="Window_Info.h" />
     <ClInclude Include="Window_LineInfo.h" />
     <ClInclude Include="Window_SimpleDollStatus.h" />

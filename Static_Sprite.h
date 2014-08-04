@@ -19,6 +19,9 @@
 // 正確には、この状態になった瞬間一回消え、その後また出てくる。
 // param値 = 消えるフレーム数
 #define		SPMORPH_BLINK			4
+// 敵が攻撃するのエフェクト。
+// 白く光る？
+#define		SPMORPH_ENEMYATTACK		5
 // 人形がダメージを受ける際のエフェクト。
 #define		SPMORPH_DAMAGE_DOLL		100
 

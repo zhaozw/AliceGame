@@ -3,6 +3,7 @@
 
 #include "Scene_Base.h"
 #include "Selectable.h"
+#include "Window_HintMessage.h"
 
 #define MAX_TESTBATTLE			10
 #define MAX_TESTBATTLE_MENU		1
@@ -10,8 +11,8 @@
 
 class Scene_TestBattle : public Scene_Base{
 public:
-	Selectable		s_main;	// メニューの選択画面
-
+	Selectable				s_main;	// メニューの選択画面
+	Window_HintMessage		w_hint;
 private:
 
 public:

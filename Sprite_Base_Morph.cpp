@@ -7,7 +7,8 @@
 #define SPMORPH_ACTIVATE_VY				20
 #define SPMORPH_DAMAGE_DOLL_TIME		30
 #define SPMORPH_DAMAGE_DOLL_SKIPTIME	15
-
+#define SPMORPH_ENEMYATTACK_TIME		5
+#define SPMORPH_ENEMYATTACK_SKIPTIME	5
 
 bool Sprite_Base::SetMorphID(BYTE id, bool force, int p){
 	if(!force && GetMorphing()){
@@ -36,6 +37,11 @@ bool Sprite_Base::SetMorphID(BYTE id, bool force, int p){
 		morphSkipTime = p;
 		morphTime = p;
 		param.param = p;
+		break;
+	case SPMORPH_ENEMYATTACK:
+		// param = Žg—p‚µ‚È‚¢
+		morphSkipTime = SPMORPH_ENEMYATTACK_TIME;
+		morphTime = SPMORPH_ENEMYATTACK_SKIPTIME;
 		break;
 	case SPMORPH_DAMAGE_DOLL:
 		morphSkipTime = SPMORPH_DAMAGE_DOLL_SKIPTIME;
@@ -70,6 +76,13 @@ void Sprite_Base::UpdateMorph(){
 		param.dy = -SPMORPH_ACTIVATE_VY*GetMorphRestRate();
 		break;
 	case SPMORPH_BLINK:
+		if(morphCount < morphTime){
+			param.hide = true;
+		}else{
+			param.hide = false;
+		}
+		break;
+	case SPMORPH_ENEMYATTACK:
 		if(morphCount < morphTime){
 			param.hide = true;
 		}else{

@@ -243,6 +243,16 @@ bool Scene_Battle::Action_AssertAttack(Game_BattleAction* pAction){
 	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, nameBuf);
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("の攻撃！"));
 	w_battleMsg.AddStockMsg(buf, strlen(buf));
+	// スプライトに対する処理を行う
+	Sprite_Base* pSprite;
+	if(pAction->GetActor()->IsDoll()){
+	}else{
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetActor());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_ENEMYATTACK, false);
+		}
+	}
 	return true;
 }
 
@@ -253,6 +263,16 @@ bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
 	d_skillInfo.GetAssertMessage(buf, pAction->GetParam(), pAction->GetActor());
 	if(strlen(buf)>0){
 		w_battleMsg.AddStockMsg(buf, strlen(buf));
+	}
+	// スプライトに対する処理を行う
+	Sprite_Base* pSprite;
+	if(pAction->GetActor()->IsDoll()){
+	}else{
+		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetActor());
+		if(pSprite != NULL){
+			// タスクを発生させる
+			pSprite->SetMorphID(SPMORPH_ENEMYATTACK, false);
+		}
 	}
 	return true;
 }
