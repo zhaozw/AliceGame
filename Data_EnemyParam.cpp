@@ -162,6 +162,16 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 				tmpEnemy.SetParam(i, reader.GetIntValue(i, 0));
 			}
 			reader.NextLine();
+			// ステートの配列を取得する
+			for(int i=0; i<MAX_INITIALSTATE; i++){
+				reader.Read();
+				tmpEnemy.SetInitialState(
+					i,
+					reader.GetIntValue(0, 0),
+					reader.GetIntValue(1, 0),
+					reader.GetIntValue(2, 0));
+			}
+			reader.NextLine();
 			// 敵の攻撃パターンを取得する
 			for(int i=0; i<MAX_ACTIONPATTERN; i++){
 				// 各行動は三行に分けて記述する。

@@ -230,79 +230,91 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 		// その場合、ターゲットの変更は後で行う。
 		break;
 	case FIXTARGET_DIE_DISAPPEAR:
-		if(pCmd->GetTarget()->IsDead()){
+		if(pCmd->GetTarget() == NULL){
 			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->IsDead()){
+				pCmd->SetEmpty();
+			}
 		}
 		break;
 	case FIXTARGET_TARGET_DISAPPEAR:
-		if(!pCmd->GetTarget()->CanTarget()){
+		if(pCmd->GetTarget() == NULL){
 			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->CanTarget()){
+				pCmd->SetEmpty();
+			}
 		}
 		break;
 	case FIXTARGET_TRANS_DISAPPEAR:
-		if(!pCmd->GetTarget()->CanTarget()){
+		if(pCmd->GetTarget() == NULL){
 			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->CanTarget()){
+				pCmd->SetEmpty();
+			}
 		}
 		break;
 	case FIXTARGET_DIE_CHANGE:
-		if(pCmd->GetTarget()->IsDead()){
-			if(pCmd->GetTarget()->IsDoll()){
-				pNewTarget = GetRandomDollPtr();
-			}else{
-				pNewTarget = GetRandomEnemyPtr();
-			}
-			if(pNewTarget != NULL){
-				pCmd->SetTarget(pNewTarget);
-			}else{
-				pCmd->SetEmpty();
+		if(pCmd->GetTarget() == NULL){
+			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->IsDead()){
+				if(pCmd->GetTarget()->IsDoll()){
+					pNewTarget = GetRandomDollPtr();
+				}else{
+					pNewTarget = GetRandomEnemyPtr();
+				}
+				if(pNewTarget != NULL){
+					pCmd->SetTarget(pNewTarget);
+				}else{
+					pCmd->SetEmpty();
+				}
 			}
 		}
 		break;
 	case FIXTARGET_TARGET_CHANGE:
-		if(!pCmd->GetTarget()->CanTarget()){
-			if(pCmd->GetTarget()->IsDoll()){
-				pNewTarget = GetRandomDollPtr();
-			}else{
-				pNewTarget = GetRandomEnemyPtr();
-			}
-			if(pNewTarget != NULL){
-				pCmd->SetTarget(pNewTarget);
-			}else{
-				pCmd->SetEmpty();
+		if(pCmd->GetTarget() == NULL){
+			pCmd->SetEmpty();
+		}else{
+			if(!pCmd->GetTarget()->CanTarget()){
+				if(pCmd->GetTarget()->IsDoll()){
+					pNewTarget = GetRandomDollPtr();
+				}else{
+					pNewTarget = GetRandomEnemyPtr();
+				}
+				if(pNewTarget != NULL){
+					pCmd->SetTarget(pNewTarget);
+				}else{
+					pCmd->SetEmpty();
+				}
 			}
 		}
 		break;
 	case FIXTARGET_TRANS_CHANGE:
-		if(!pCmd->GetTarget()->CanTarget()){
-			if(pCmd->GetTarget()->IsDoll()){
-				pNewTarget = GetRandomDollPtr();
-			}else{
-				pNewTarget = GetRandomEnemyPtr();
-			}
-			if(pNewTarget != NULL){
-				pCmd->SetTarget(pNewTarget);
-			}else{
-				pCmd->SetEmpty();
+		if(pCmd->GetTarget() == NULL){
+			pCmd->SetEmpty();
+		}else{
+			if(!pCmd->GetTarget()->CanTarget()){
+				if(pCmd->GetTarget()->IsDoll()){
+					pNewTarget = GetRandomDollPtr();
+				}else{
+					pNewTarget = GetRandomEnemyPtr();
+				}
+				if(pNewTarget != NULL){
+					pCmd->SetTarget(pNewTarget);
+				}else{
+					pCmd->SetEmpty();
+				}
 			}
 		}
 		break;
 	case FIXTARGET_HPMAX_CHANGE:
-		if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()){
-			if(pCmd->GetTarget()->IsDoll()){
-				pNewTarget = GetMinHPRateDollPtr();
-			}else{
-				pNewTarget = GetMinHPRateEnemyPtr();
-			}
-			if(pNewTarget != NULL){
-				pCmd->SetTarget(pNewTarget);
-			}else{
-				pCmd->SetEmpty();
-			}
-		}
-		break;
-	case FIXTARGET_HPMAX_DIE_CHANGE:
-		if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()
-			|| pCmd->GetTarget()->IsDead()){
+		if(pCmd->GetTarget() == NULL){
+			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()){
 				if(pCmd->GetTarget()->IsDoll()){
 					pNewTarget = GetMinHPRateDollPtr();
 				}else{
@@ -313,6 +325,26 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 				}else{
 					pCmd->SetEmpty();
 				}
+			}
+		}
+		break;
+	case FIXTARGET_HPMAX_DIE_CHANGE:
+		if(pCmd->GetTarget() == NULL){
+			pCmd->SetEmpty();
+		}else{
+			if(pCmd->GetTarget()->GetHP() == pCmd->GetTarget()->GetMaxHP()
+				|| pCmd->GetTarget()->IsDead()){
+					if(pCmd->GetTarget()->IsDoll()){
+						pNewTarget = GetMinHPRateDollPtr();
+					}else{
+						pNewTarget = GetMinHPRateEnemyPtr();
+					}
+					if(pNewTarget != NULL){
+						pCmd->SetTarget(pNewTarget);
+					}else{
+						pCmd->SetEmpty();
+					}
+			}
 		}
 		break;
 	}
@@ -705,6 +737,8 @@ char Scene_Battle::InterpretCommand_Post_Action(Game_UnitCommand* pCmd){
 	case COMMANDTYPE_NONE:
 		break;
 	case COMMANDTYPE_ATTACK:
+		break;
+	case COMMANDTYPE_SKILL:
 		break;
 	case COMMANDTYPE_GUARD:
 		break;

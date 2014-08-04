@@ -12,6 +12,7 @@
 #define MAX_CONDITION			2	// 複数条件を指定可能
 #define MAX_CONDITIONPARAM		3	// 条件あたりのパラメータの数
 #define MAX_ACTIONPATTERN		16	// 攻撃パターンの数
+#define MAX_INITIALSTATE		8	// 最初から持っているステートの最大数
 
 // 行動パターンに関するパラメータをまとめて指定する用
 #define ACTIONPATTERN_ACTIONTYPE	0
@@ -45,6 +46,17 @@ typedef struct EnemyActionPattern{
 	}
 }ENEMYACTIONPATTERN;
 
+typedef struct EnemyInitialState{
+	WORD	refID;
+	int		param;
+	int		param2;
+	EnemyInitialState(){
+		refID = 0;
+		param = 0;
+		param2 = 0;
+	}
+} ENEMYINITIALSTATE;
+
 // Data_EnemyParam_Eachクラス。
 // 敵一体についての情報を保持する。
 // 実際には、このクラスの配列を持つFlexListが作成される。
@@ -52,11 +64,13 @@ class Data_EnemyParam_Each{
 private:
 	WORD		refID;							// 参照される時のID
 	TCHAR		name[BATTLEUNIT_NAME_BYTES];	// 名前
-	int			param[NUM_ENEMYPARAM_DATA];	// 各能力値(HPを除く)
+	int			param[NUM_ENEMYPARAM_DATA];		// 各能力値(HPを除く)
 	BYTE		attr;							// 属性
 	DWORD		exp;							// 経験値
 	// 行動パターンの配列
 	ENEMYACTIONPATTERN		actionPtn[MAX_ACTIONPATTERN];
+	// 初期状態で持っているステート及びパラメータの配列
+	ENEMYINITIALSTATE		stateArray[MAX_INITIALSTATE];
 public:
 	// コンストラクタ
 	Data_EnemyParam_Each();
@@ -101,6 +115,15 @@ public:
 	int		GetMgc(){ return param[ENEMYPARAM_MGC]; };
 	int		GetTec(){ return param[ENEMYPARAM_TEC]; };
 
+	void	SetInitialState(int index, WORD refID, int param, int param2){
+		stateArray[index].refID = refID;
+		stateArray[index].param = param;
+		stateArray[index].param2 = param2;
+	};
+
+	WORD	GetInitialStateRefID(int index){ return stateArray[index].refID; };
+	int		GetInitialStateParam(int index){ return stateArray[index].param; };
+	int		GetInitialStateParam2(int index){ return stateArray[index].param2; };
 
 
 	// 行動パターンをインデックスで指定

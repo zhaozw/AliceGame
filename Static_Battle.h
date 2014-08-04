@@ -170,6 +170,12 @@
 // スキルなどで属性が変化している時に。
 // param[0] : 無：0, 太陽：1, 月：2, 星：3。
 #define CONDITIONTYPE_ATTR				7
+// actionCountの数値による(二回行動などのため)。
+// [0][1] : actionCountの値を[0]で割った時の値が[1]であれば行う。
+#define CONDITIONTYPE_PERIODIC3			8
+
+// [0][1] : selfTurnとactionCountの和を[0]で割った時の値が[1]であれば行う。
+#define CONDITIONTYPE_PERIODIC4			9
 
 //==========================================
 // ユニットに対して適用するアクションに関する定数。

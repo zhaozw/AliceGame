@@ -33,8 +33,11 @@ bool Scene_Battle::SetEnemyCommands(){
 	for(int n=0; n<enemiesNum; n++){
 		pEnemy = GetEnemyPtr(n);
 		if(pEnemy != NULL){
-			cmd = GetEnemyCommand(pEnemy);
-			SetCommand(cmd);
+			for(int n=0; n<(pEnemy->IsState(STATE_DOUBLEACTION)?2:1); n++){
+				cmd = GetEnemyCommand(pEnemy, n);
+				SetCommand(cmd);
+				pEnemy->AddActionCount();
+			}
 		}
 	}
 	return true;
@@ -49,8 +52,7 @@ bool Scene_Battle::GetCommandWindowIsCancelable(int currentIndex){
 	return false;
 }
 
-Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy){
-	// ‰¼‚É’ÊíUŒ‚‚¾‚¯‚ğƒZƒbƒg‚·‚éB
+Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy, BYTE multiAttack){
 	Game_UnitCommand cmd;
 	int resultIndex = 0;
 	int cntPriority = 0;
@@ -76,13 +78,13 @@ Game_UnitCommand Scene_Battle::GetEnemyCommand(Game_BattleEnemy* pEnemy){
 			if(cntPriority != 0){
 				switch(max_priority - GetEnemyCommandPriority(pEnemy, n)){
 				case 0: // Å‚às‚¢‚â‚·‚¢s“®
-					for(int i=0; i<9; i++){
+					for(int i=0; i<4; i++){
 						indexArray[indexArrayLength] = n;
 						indexArrayLength++;
 					}
 					break;
 				case 1: // Ÿ‚És‚¢‚â‚·‚¢s“®
-					for(int i=0; i<3; i++){
+					for(int i=0; i<2; i++){
 						indexArray[indexArrayLength] = n;
 						indexArrayLength++;
 					}
@@ -146,6 +148,19 @@ int Scene_Battle::GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index){
 			break;
 		case CONDITIONTYPE_ATTR:
 			if(pEnemy->GetAmendedAttr() != pAction->conditionParam[n][0]){
+				return 0;
+			}
+			break;
+		case CONDITIONTYPE_PERIODIC3:
+			if(pEnemy->GetActionCount() % pAction->conditionParam[n][0]
+				!= pAction->conditionParam[n][1]){
+				return 0;
+			}
+			break;
+		case CONDITIONTYPE_PERIODIC4:
+			if((pEnemy->GetActionCount()+pEnemy->GetSelfTurn()) 
+				% pAction->conditionParam[n][0]
+				!= pAction->conditionParam[n][1]){
 				return 0;
 			}
 			break;
@@ -324,8 +339,8 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			rate	= 1.0f;
 			break;
 		case CALCDAMAGE_ATTACK_DOUBLE:
-			// UŒ‚‚Ì2”{‚©‚ç–‚—Í‚©‹ZI‚Ì‚‚¢•û‚ğˆø‚­
-			from	= (pAttacker->GetAtk() * 2 - max(pOpponent->GetMgc(), pOpponent->GetTec()))
+			// UŒ‚‚Ì2.5”{‚©‚ç–‚—Í‚©‹ZI‚Ì‚‚¢•û‚ğˆø‚­
+			from	= (2.5f * pAttacker->GetAtk() - max(pOpponent->GetMgc(), pOpponent->GetTec()))
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		=  pOpponent->GetDef();
 			rate	= 1.0f;

@@ -375,7 +375,8 @@ public:
 	bool GetCommandWindowIsCancelable(int currentIndex);
 
 	// ポインタを使用し、敵のコマンドを算出する。
-	Game_UnitCommand GetEnemyCommand(Game_BattleEnemy* pEnemy);
+	// multiAttack : 2回攻撃の2回目の時は1が入る
+	Game_UnitCommand GetEnemyCommand(Game_BattleEnemy* pEnemy, BYTE multiAttack);
 
 	// 指定した敵のあるコマンドの優先順位を返す。
 	// (インデックスに相当するコマンドが存在しない場合、

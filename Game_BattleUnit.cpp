@@ -76,6 +76,7 @@ void Game_BattleUnit::Reset(int n){
 	attr = DOLL_ATTR_NONE;
 	isFront = true;
 	position = n;
+	actionCount = 0;
 	isUsed = false;
 
 	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){

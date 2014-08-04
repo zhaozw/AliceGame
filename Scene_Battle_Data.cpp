@@ -183,6 +183,15 @@ bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY,
 	enemies[index].SetDrawPos(drawX, drawY);
 	// 経験値
 	enemies[index].SetExp(pEnemyParam->GetExp());
+	// 初期ステート
+	for(int n=0; n<MAX_INITIALSTATE; n++){
+		if(pEnemyParam->GetInitialStateRefID(n) != 0){
+			enemies[index].AddState(
+				pEnemyParam->GetInitialStateRefID(n),
+				pEnemyParam->GetInitialStateParam(n),
+				pEnemyParam->GetInitialStateParam2(n));
+		}
+	}
 	// その他固定値
 	enemies[index].SetFront(true);
 	enemies[index].SetPosition(index);

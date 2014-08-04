@@ -57,7 +57,7 @@ void Scene_TestBattle::Draw() const{
 		_T("アリスの魔力・挑戦編"), 
 		_T("敵の攻撃パターン"), 
 		_T("敵の攻撃パターン・挑戦編"), 
-		_T("ボス戦に挑もう(未完成)"), 
+		_T("ボス戦に挑もう"), 
 	};
 
 	TCHAR	menuTitle[MAX_TESTBATTLE_MENU][128] = {

@@ -53,6 +53,7 @@ protected:
 	BYTE		attr;							// 属性
 	bool		isFront;						// 前に出ているか否か
 	BYTE		position;						// 前列・後列における位置
+	int			actionCount;					// コマンドを行った回数。
 	bool		isUsed;							// 使用されているか
 
 	// 現在受けているステートのリスト
@@ -135,6 +136,12 @@ public:
 
 	// 単にすべてのステートのターン数を1進める。
 	void UpdateStateTurn();
+
+	// actionCount値を1増やす。
+	void AddActionCount(){ actionCount++; };
+
+	// actionCount値を取得する。
+	int GetActionCount(){ return actionCount; };
 
 	// 指定したrefIDのステートを保持しているかどうかを返す。
 	// 見つかった場合は配列のインデックス、
