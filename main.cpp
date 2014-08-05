@@ -191,8 +191,15 @@ bool WinMain_Initialize(){
 	SetUseBackCulling(TRUE);
 
 	// シフトなどのキーをボタンに割り当て
-	SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_11, KEY_INPUT_LSHIFT);
-	SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_12, KEY_INPUT_RSHIFT);
+	// SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_11, KEY_INPUT_LSHIFT);
+	// SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_12, KEY_INPUT_RSHIFT);
+	// 複数キーを一つのボタンに対応させる
+	SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_A, 
+		KEY_INPUT_Z, KEY_INPUT_RETURN);
+	SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_B,
+		KEY_INPUT_X, KEY_INPUT_BACK);
+	SetJoypadInputToKeyInput(DX_INPUT_PAD1, PAD_INPUT_C,
+		KEY_INPUT_C, KEY_INPUT_SPACE, KEY_INPUT_LSHIFT, KEY_INPUT_RSHIFT);
 
 #ifdef MYGAME_USE_LUA
 	// LuaのVMを作成する
