@@ -16,6 +16,20 @@ private:
 	float	baseExRate;	// 基本的な表示倍率
 	int		hImg;		// 画像のハンドル
 	bool	enabled;	// 有効なスプライトか否か
+
+    //*** 追加モーフで使用する変数群
+    bool morphSettleFlag; // モーフの後始末をするかのフラグ
+    int morphSettleID; // 前回実行していたモーフが何なのかを保持するためのもの
+
+    int morphScreen; // 演出で使うかもしれないスクリーンへのハンドル
+
+    void MorphSettle(); // 後始末用関数
+
+    // モーフ専用関数群
+    void MorphEnemyAttack() const;
+
+    //***
+
 public:
 	// コンストラクタ
 	Sprite_BattleEnemy();

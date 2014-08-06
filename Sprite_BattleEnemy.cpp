@@ -12,6 +12,9 @@ extern Data_EnemyDraw		d_enemyDraw;
 extern Image				g_image;
 extern DXFont				g_font;
 
+// モーフで何かやったあと際描画先を戻すのに必要なのでextern
+extern int hDrawWindow;
+
 Sprite_BattleEnemy::Sprite_BattleEnemy(){
 	Sprite_Base::Sprite_Base();
 	pEnemy = NULL;
@@ -21,6 +24,10 @@ Sprite_BattleEnemy::Sprite_BattleEnemy(){
 	hImg = 0;
 	enabled = false;
 	visible = false;
+
+    morphSettleFlag = false;
+    morphSettleID = SPMORPH_NONE;
+    morphScreen = -1;
 }
 
 bool Sprite_BattleEnemy::AttachBattleEnemy(Game_BattleEnemy* _pEnemy){
@@ -66,7 +73,31 @@ void Sprite_BattleEnemy::Update(){
 		UpdateRefID();
 	}
 
+    // モーフが実行された瞬間の初期化処理
+    if (GetMorphing() && !morphSettleFlag){
+        switch (morphID){
+        case SPMORPH_ENEMYATTACK:
+            [&](){
+                if (morphScreen == -1){
+                    int w, h;
+                    GetGraphSize(hImg, &w, &h);
+                    morphScreen = MakeScreen(w, h, true);
+                }
+            }();
+            break;
+        }
+
+        morphSettleID = morphID;
+        morphSettleFlag = true;
+    }
+
 	Sprite_Base::Update();
+
+    // モーフが実行されていなければ後始末を行う
+    // GetMorphinig()がfalseにならずにそのまま次が実行される場合後始末ができないバグの温床
+    if (!GetMorphing() && morphSettleFlag){
+        MorphSettle();
+    }
 }
 
 void Sprite_BattleEnemy::Draw() const{
@@ -78,11 +109,20 @@ void Sprite_BattleEnemy::Draw() const{
 	if(visible){
 		// 表示状態の判定
 		if(!param.hide){
-			// 本体の描画
-			DrawRotaGraph3F(
-				GetX(), GetY(), cx, cy,
-				baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
-				hImg, 1, 0);
+            // モーフ専用の処理があればそちらへ渡す
+            switch (morphID){
+            case SPMORPH_ENEMYATTACK:
+                MorphEnemyAttack();
+                break;
+
+            default :
+                // 本体の描画
+                DrawRotaGraph3F(
+                    GetX(), GetY(), cx, cy,
+                    baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
+                    hImg, 1, 0);
+                break;
+            }
 		}
 		// HPの描画
 		DrawHPGauge((int)GetX(), (int)GetY());
@@ -146,4 +186,60 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH)),
 		(int)(GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2), hpStr,
 		GetColor(255, 255, 255), g_font.hTinyInfo);
+}
+
+// モーフの後処理関数
+void Sprite_BattleEnemy::MorphSettle()
+{
+    // 必要ならswitch文に処理を追加
+    /*
+    switch (morphSettleID){
+    default :
+        break;
+    }
+    */
+
+    // 使用したスクリーンを削除
+    if (morphScreen){
+        DeleteGraph(morphScreen);
+        morphScreen = -1;
+    }
+
+    // 後始末が済んだ
+    morphSettleID = SPMORPH_NONE;
+    morphSettleFlag = false;
+
+    return;
+}
+
+// SPMORPH_ENEMYATTACK専用描画関数
+void Sprite_BattleEnemy::MorphEnemyAttack() const
+{
+    if (morphScreen == -1){
+        DrawRotaGraph3F(
+            GetX(), GetY(), cx, cy,
+            baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
+            hImg, 1, 0);
+        return;
+    }
+
+    // モーフ用スクリーンを初期化＋hImgを描画
+    SetDrawScreen(morphScreen);
+    ClearDrawScreen();
+    DrawGraph(0, 0, hImg, true);
+
+    // パラメータによって白くする
+    GraphFilter(morphScreen, DX_GRAPH_FILTER_HSB, 0, 0, 0, param.param);
+
+    SetDrawScreen(hDrawWindow);
+    
+    // 本体の描画
+    DrawRotaGraph3F(
+        GetX(), GetY(), cx, cy,
+        baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
+        morphScreen, 1, 0);
+
+
+
+    return;
 }

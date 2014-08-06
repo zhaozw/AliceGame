@@ -7,8 +7,8 @@
 #define SPMORPH_ACTIVATE_VY				20
 #define SPMORPH_DAMAGE_DOLL_TIME		30
 #define SPMORPH_DAMAGE_DOLL_SKIPTIME	15
-#define SPMORPH_ENEMYATTACK_TIME		5
-#define SPMORPH_ENEMYATTACK_SKIPTIME	5
+#define SPMORPH_ENEMYATTACK_TIME		40
+#define SPMORPH_ENEMYATTACK_SKIPTIME	20
 
 bool Sprite_Base::SetMorphID(BYTE id, bool force, int p){
 	if(!force && GetMorphing()){
@@ -84,9 +84,18 @@ void Sprite_Base::UpdateMorph(){
 		break;
 	case SPMORPH_ENEMYATTACK:
 		if(morphCount < morphTime){
-			param.hide = true;
+            float rate = min(1.0f,GetMorphRate());
+            float div = 2.0f; // 演出の回数　好きな数に
+            float d = 1.0f / div;
+            float nd = fmodf(rate , d);
+            
+            rate = nd * div;
+
+            param.param = (int)PARAM(rate*255.0f);
+            param.dy = PARAM(rate*8.0f); // yの増加分は好きな数値に
 		}else{
-			param.hide = false;
+            param.dy = 0;
+            param.param = 0;
 		}
 		break;
 	}
