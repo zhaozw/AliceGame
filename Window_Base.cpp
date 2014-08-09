@@ -3,6 +3,14 @@
 #include "Window_Base.h"
 #include <DxLib.h>
 
+WINDOWAREA GetWindowArea(int _x, int _y, int _w, int _h){
+	WINDOWAREA area;
+	area.x = _x;
+	area.y = _y;
+	area.w = _w;
+	area.h = _h;
+	return area;
+}
 
 Window_Base::Window_Base() : frameArea(), contentArea(){
 	// ‘S‚Ä‚Ìƒƒ“ƒo‚Ì‰Šú‰»

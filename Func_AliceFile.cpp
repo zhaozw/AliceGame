@@ -200,3 +200,102 @@ bool NewGame(){
 void GenerateInitialDoll(){
 	// g_dollList.list.In
 }
+
+// 2014夏コミの体験版に関するクラス。
+AliceFile_140816::AliceFile_140816(){
+	Reset();
+}
+
+void AliceFile_140816::Reset(){
+	data.firstHint = false;
+	for(int n=0; n<ALICEFILE_140816_TUTORIAL; n++){
+		data.tutorialBattle[n] = false;
+	}
+	data.tutorialHint = false;
+	for(int n=0; n<10; n++){
+		data.forFuture[n] = 0;
+	}
+}
+
+// 体験版のデータを保存する。
+bool AliceFile_140816::Save(){
+	// ファイルを開く
+	std::basic_ofstream<TCHAR> fout;
+	fout.open(ALICEFILE_140816_FILENAME,
+		std::ios::out|std::ios::binary|std::ios::trunc);
+	if(!fout){
+		_RPTF0(_CRT_WARN, "書き出し用ファイルが開けませんでした。\n");
+		return false;
+	}
+
+	// 現在のデータのコピーを取り、暗号化
+	ALICEFILE_140816_DATA copiedData;
+	copiedData = data;
+	int dataSize = sizeof(ALICEFILE_140816_DATA)*sizeof(char);
+	void* pData = static_cast<void*>(&copiedData);
+	BYTE* byte_casted_data = static_cast<BYTE*>(pData);		// 上の行と合わせて無理やりバイト列に変換
+
+	// データに対して直接排他的論理和を行う
+	int pos;
+	TCHAR code[ALICEFILE_140816_XORCODE_LENGTH+1];
+	strcpy_s(code, ALICEFILE_140816_XORCODE_LENGTH+1, ALICEFILE_140816_XORCODE);
+	TCHAR code2[ALICEFILE_140816_XORCODE2_LENGTH+1];
+	strcpy_s(code2, ALICEFILE_140816_XORCODE2_LENGTH+1, ALICEFILE_140816_XORCODE2);
+	for(int i=0; i<dataSize; i++){
+		pos = ((i+3)%strlen(ALICEFILE_140816_XORCODE)); // ちょっとずらした位置で暗号化
+		byte_casted_data[i] = byte_casted_data[i]^code[pos];
+		pos = ((i+7)%strlen(ALICEFILE_140816_XORCODE2)); 
+		byte_casted_data[i] = byte_casted_data[i]^code2[pos];
+	}
+
+	// 実際の書き出し
+	fout.write((char*)&copiedData, dataSize);
+
+	// 書き出し終了
+	fout.close();
+	return true;
+}
+
+// 体験版のデータをロードする。
+bool AliceFile_140816::Load(){
+	// ファイルを開く
+	std::basic_ifstream<TCHAR> fin;
+	fin.open(ALICEFILE_140816_FILENAME,
+		std::ios::in|std::ios::binary);
+	if(!fin){
+		_RPTF0(_CRT_WARN, "読み込み用ファイルが開けませんでした。\n");
+		return false;
+	}
+
+	// ファイルから内容を読み込む
+	ALICEFILE_140816_DATA loadedData;
+	int dataSize = sizeof(ALICEFILE_140816_DATA)*sizeof(char);
+	fin.read((char*)&loadedData, dataSize);
+	if(!fin){
+		_RPTF0(_CRT_WARN, "ファイルの内容が読み込めませんでした。\n");
+		return false;
+	}
+
+	// 復号
+	void* pData = static_cast<void*>(&loadedData);
+	BYTE* byte_casted_data = static_cast<BYTE*>(pData);		// 上の行と合わせて無理やりバイト列に変換
+	// データに対して直接排他的論理和を行う
+	int pos;
+	TCHAR code[ALICEFILE_140816_XORCODE_LENGTH+1];
+	strcpy_s(code, ALICEFILE_140816_XORCODE_LENGTH+1, ALICEFILE_140816_XORCODE);
+	TCHAR code2[ALICEFILE_140816_XORCODE2_LENGTH+1];
+	strcpy_s(code2, ALICEFILE_140816_XORCODE2_LENGTH+1, ALICEFILE_140816_XORCODE2);
+	for(int i=0; i<dataSize; i++){
+		pos = ((i+3)%strlen(ALICEFILE_140816_XORCODE)); // ちょっとずらした位置で暗号化
+		byte_casted_data[i] = byte_casted_data[i]^code[pos];
+		pos = ((i+7)%strlen(ALICEFILE_140816_XORCODE2)); 
+		byte_casted_data[i] = byte_casted_data[i]^code2[pos];
+	}
+
+	// 復号後のデータをコピーする
+	data = loadedData;
+
+	// 読み込み終了
+	fin.close();
+	return true;
+}

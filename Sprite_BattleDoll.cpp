@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "DXFont.h"
 #include "Func_Graphics.h"
+#include "Scene_Battle.h"
 
 extern		Image	g_image;
 extern		DXFont	g_font;
@@ -17,6 +18,7 @@ Sprite_BattleDoll::Sprite_BattleDoll(){
 	width		=	SPRITE_BATTLEDOLL_WIDTH;
 	height		=	SPRITE_BATTLEDOLL_HEIGHT;
 	drawScreen	=	0;
+	pScene		=	NULL;
 }
 
 bool Sprite_BattleDoll::SetupDrawScreen(){
@@ -68,17 +70,27 @@ void Sprite_BattleDoll::DrawDoll() const{
 	SetDrawScreen(drawScreen);
 
 	// 人形を描画する
-	int koma = 0;
+	int koma = DOLL_FACE_NORMAL;
 	// 表情の判定
 	if(pDoll->IsDead()){
-		koma = 1;
+		koma = DOLL_FACE_DAMAGE;
+	}else if(pDoll->GetHPRate() < 0.25){
+		koma = DOLL_FACE_DAMAGE;
+	}else if(pScene->GetCommandDollPtr() == pDoll){
+		koma = DOLL_FACE_ATTACK;
+	}else if(pScene->GetBattleResult() == BATTLERESULT_VICTORY){
+		koma = DOLL_FACE_HAPPY;
 	}
+	
 	// 人形の描画
 	DrawGraph(
 		SPRITE_BATTLEDOLL_MARGIN,
 		SPRITE_BATTLEDOLL_MARGIN,
-		g_image.illust.doll_dummy[koma], 1);
-
+		g_image.icon.doll[pDoll->GetDollType()-1][koma][pDoll->GetAmendedAttr()], 1);
+    // パラメータによって白くする
+	if(pDoll->IsDead()){
+	  GraphFilter(drawScreen, DX_GRAPH_FILTER_HSB, 0, 0, -255, -96);
+	}
 
 	// 描画対象を元に戻す
 	SetDrawScreen(hDrawWindow);

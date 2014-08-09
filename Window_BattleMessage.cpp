@@ -32,10 +32,16 @@ void Window_BattleMessage::Setup(Scene_Battle* _pParent){
 	// 親となるシーンの指定
 	pParent = _pParent;
 	// メッセージの自動進行設定
+	/*
 	SetReadType(
 		F_READTYPE_QUICK | 
 		F_READTYPE_DIRECTQUICK | 
 		F_READTYPE_PUSH | 
+		F_READTYPE_BLANKLINE);
+		*/
+	SetReadType(
+		F_READTYPE_QUICK | 
+		F_READTYPE_DIRECTQUICK | 
 		F_READTYPE_BLANKLINE);
 }
 

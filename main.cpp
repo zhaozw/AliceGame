@@ -61,6 +61,9 @@
 #include "Data_StateMessage.h"
 #include "Data_SkillInfo.h"
 
+// 体験版のデータ
+#include "Func_AliceFile.h"
+
 // 後で消す
 #include "GlobalData.h"
 
@@ -89,6 +92,9 @@ TempData	g_temp;
 // オブジェクトのうち、グローバル変数として表現されるもの
 Game_AliceInfo	g_aliceInfo;
 Game_DollList	g_dollList;
+
+// 体験版のデータ
+AliceFile_140816 g_trialAliceFile;
 
 // データベースクラス
 Data_DollParam		d_dollParam;
@@ -430,6 +436,11 @@ bool WinMain_LoadResource(){
 	// タスク群
 	if(!Create_MyTaskList()) return false;
 
+	// トライアル版データ
+	if(!g_trialAliceFile.Load()){
+		g_trialAliceFile.Reset();
+	}
+
 	return true;
 }
 
@@ -468,7 +479,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	// プログラムの終了時にメモリリークを表示する
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-#endif // MYGAME_USE_CHECKMEMORY	
+#endif // MYGAME_USE_CHECKMEMORY
 	// ゲームの初期化
 	if(!WinMain_Initialize()) return -1;
 	// リソースを読み込む

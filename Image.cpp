@@ -219,15 +219,21 @@ bool Image::Load_Icon(){
 
 	// 人形アイコンの読み込み
 	for(int t=0; t<DOLL_TYPE_MAX; t++){
-		sprintf_s(fileName, MAX_PATH-1, _T("img\\icon_doll%02d.png"), t+1);
+		sprintf_s(fileName, MAX_PATH-1, _T("img_illust\\doll%02d_icon.png"), t+1);
 		if((icon.doll_group[t] = LoadGraph(fileName, 1)) == -1){
 			return false;
 		}
-		for(int h=0; h<DOLL_FACE_NUM; h++){
-			for(int w=0; w<DOLL_ATTR_NUM; w++){
+		for(int h=0; h<DOLL_ATTR_NUM; h++){
+			for(int w=0; w<DOLL_FACE_NUM; w++){
+				// 今のところ、属性の差分はない
+				icon.doll[t][w][h] = DerivationGraph(
+					WIDTH_DOLLICON*w, 0,
+					WIDTH_DOLLICON, HEIGHT_DOLLICON, icon.doll_group[t]);
+				/*
 				icon.doll[t][w][h] = DerivationGraph(
 					WIDTH_DOLLICON*w, HEIGHT_DOLLICON*h,
 					WIDTH_DOLLICON, HEIGHT_DOLLICON, icon.doll_group[t]);
+					*/
 			}
 		}
 	}

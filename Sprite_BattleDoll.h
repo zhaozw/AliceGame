@@ -16,10 +16,10 @@
 // 描画スクリーンの余白の大きさ
 #define SPRITE_BATTLEDOLL_MARGIN	50
 // 描画スクリーンの幅と高さ
-#define	SPRITE_BATTLEDOLL_SCREENWIDTH	(WIDTH_DOLLILLUST+SPRITE_BATTLEDOLL_MARGIN*2)
-#define SPRITE_BATTLEDOLL_SCREENHEIGHT	(HEIGHT_DOLLILLUST+SPRITE_BATTLEDOLL_MARGIN*2)
+#define	SPRITE_BATTLEDOLL_SCREENWIDTH	(WIDTH_DOLLICON+SPRITE_BATTLEDOLL_MARGIN*2)
+#define SPRITE_BATTLEDOLL_SCREENHEIGHT	(HEIGHT_DOLLICON+SPRITE_BATTLEDOLL_MARGIN*2)
 // 描画時の拡大倍率
-#define SPRITE_BATTLEDOLL_DRAWWIDTH		240
+#define SPRITE_BATTLEDOLL_DRAWWIDTH		200
 // 略称
 #define SP_B_DW	SPRITE_BATTLEDOLL_DRAWWIDTH
 #define SP_B_SW	SPRITE_BATTLEDOLL_SCREENWIDTH
@@ -33,12 +33,16 @@
 #define SPRITE_BATTLEDOLL_DX		160
 #define SPRITE_BATTLEDOLL_DY		0
 
+class Scene_Battle;
+
 // バトルシーンにおいて人形一体を表示するスプライト。
 // 戦闘シーンにおいて人形一体を参照する。
 // 特定の人形を常に参照するわけではなく、
 // 戦闘における隊列に基づいて入れ替えがある度に参照を変える。
 class Sprite_BattleDoll : public Sprite_Base{
 protected:
+	// シーンへの参照。
+	Scene_Battle*				pScene;
 	// 位置のインデックス。
 	WORD						position;
 	// 人形への参照。
@@ -68,6 +72,8 @@ public:
 	void ResetDollPtr(){ pDoll = NULL; enabled = false; };
 	// 描画用スクリーンを作成する。
 	bool SetupDrawScreen();
+	// シーンへのポインタを渡す。
+	void SetScenePtr(Scene_Battle* p){ pScene = p; };
 	// 更新
 	virtual void Update();
 

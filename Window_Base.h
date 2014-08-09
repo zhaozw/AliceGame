@@ -38,6 +38,9 @@ typedef struct WindowArea{
 	};
 } WINDOWAREA;
 
+// WINDOWAREA構造体を取得する関数
+WINDOWAREA GetWindowArea(int _x, int _y, int _w, int _h);
+
 class Window_Base{
 public:
 	// ウィンドウの状態を表すenum型の変数。
@@ -183,6 +186,7 @@ public:
 	// アクセサ
 	WINDOWSTATE GetState() const{ return state; } ; 
 	bool GetActive() const; // activeCountを増加させる状態にあるか
+	bool GetClosed() const{ return state == CLOSED; };
 	int GetOpenTime() const; // スキンのopenTimeを取得する。
 	// エリア関係のアクセサ
 	int GetPositionX() const{ return frameArea.x; };

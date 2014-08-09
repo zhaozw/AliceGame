@@ -12,12 +12,14 @@
 #include "Game_BattleUnit.h"
 #include "Game_BattleDoll.h"
 #include "Sprite_BattleDoll.h"
+#include "Func_AliceFile.h"
 
 extern TempData		g_temp;
 extern DXFont		g_font;
 extern DXInput		g_input;
 extern KeyConfig	g_key;
 extern MyGroup*		gMyTask_InfoEffect;
+extern AliceFile_140816		g_trialAliceFile;
 
 Scene_Battle::Scene_Battle():Scene_Base(){
 	phaze = PRE_BATTLE;
@@ -74,7 +76,14 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 }
 
 bool Scene_Battle::Terminate(){
-
+	if(g_temp.battleType == TEMP_BTYPE_TUTORIAL){
+		switch(battleResult){
+		case BATTLERESULT_VICTORY:
+			g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] = true;
+			g_trialAliceFile.Save();
+			break;
+		}
+	}
 	return true;
 }
 
@@ -246,6 +255,7 @@ bool Scene_Battle::SetupSprite(){
 	for(int i=0; i<NUM_BATTLEDOLL_FRONT; i++){
 		s_dolls[i].SetPosition(i);
 		s_dolls[i].SetVisible(true);
+		s_dolls[i].SetScenePtr(this);
 		if(!s_dolls[i].SetupDrawScreen()){
 			return false;
 		}

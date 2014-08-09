@@ -128,7 +128,8 @@ void Window_Message_DrawMsg::ClearAll(){
 		ClearLine(l);
 	}
 	// データを配置する位置を初期化
-	index = 0;
+	// 最初にインクリメントするため最初のインデックスを-1している
+	index = WND_MSG_DRAWLINE-1;
 }
 
 void Window_Message_DrawMsg::DrawLine(
@@ -139,6 +140,14 @@ void Window_Message_DrawMsg::DrawLine(
 			lines[tmpIndex].DrawContent(hFont, fontWidth, x, y, count);
 		}
 }
+
+void Window_Message_DrawMsg::DrawLineByIndex(
+	int hFont, int fontWidth, int x, int y,
+	int index, int count) const{
+		if(index < 0 || index >= WND_MSG_DRAWLINE) return;
+		lines[index].DrawContent(hFont, fontWidth, x, y, count);
+}
+
 
 int Window_Message_DrawMsg::GetLineLength(int historyCount) const {
 	int tmpIndex = SeamLess(index-historyCount, WND_MSG_DRAWLINE);
@@ -287,6 +296,7 @@ bool Window_Message::AddStockMsg(LPTSTR str, int strlen){
 }
 
 void Window_Message::Update(){
+	Update_Common();
 	bool flag = false;
 	switch(state){
 	case UPDATING:
@@ -307,8 +317,6 @@ void Window_Message::Update(){
 		case WNDSUBSTATE_READING:
 			// テキストを読んでいる状態
 			UpdateLine();
-			// クラス独自の更新
-			ExUpdate();
 			// 改行判定
 			CheckNewLine(
 				((g_input.pushedKey & g_key.input[BTN_CHOOSE]) != 0),
@@ -339,6 +347,8 @@ void Window_Message::Update(){
 	case IDLE:
 		break;
 	}
+	// クラス独自の更新
+	ExUpdate();
 }
 
 void Window_Message::ExUpdate(){
@@ -407,7 +417,7 @@ bool Window_Message::CheckNewLine(bool chooseKey, bool skipKey){
 		}
 		// 次に文章がある場合のスキップ
 		if(readTypeFlag & F_READTYPE_PUSH){
-			if(CheckStockMsg()){
+			if(CheckStockMsg() && clickWaitCount > 4){ // 待ち時間については要検討
 				flag = true;
 			}
 		}
@@ -452,7 +462,7 @@ bool Window_Message::CheckNewLine(bool chooseKey, bool skipKey){
 }
 
 bool Window_Message::CheckStockMsg(){
-	return false;
+	return !StockIsEmpty();
 }
 
 int Window_Message::GetLineLength(){
@@ -470,10 +480,10 @@ void Window_Message::DrawLine(int dx, int dy, int historyCount) const{
 		(historyCount==0 ? linePos : -1), historyCount);
 }
 
-void Window_Message::DrawCurrentLine(int dx, int dy) const{
+void Window_Message::DrawLineByIndex(int dx, int dy, int drawIndex) const{
+	// 指定した一行を描画する
+	drawMsg.DrawLineByIndex(windowFont.hFont, fontWidth,
+		frameArea.x+dx, frameArea.y+dy,
+		drawIndex, (drawIndex==drawMsg.GetIndex() ? linePos : -1));
 }
 
-void Window_Message::DrawHistoryLine(int dx, int dy, int historyCount) const{
-	if(historyCount >= WND_MSG_DRAWLINE) return;
-	int tmpIndex = SeamLess(drawMsg.GetIndex()-historyCount, WND_MSG_DRAWLINE);
-}

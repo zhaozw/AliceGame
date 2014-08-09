@@ -215,6 +215,7 @@
 #define BATTLERESULT_NONE			0	// ‚Ü‚¾Ÿ”s‚ªŒˆ‚µ‚Ä‚¢‚È‚¢
 #define BATTLERESULT_VICTORY		1	// Ÿ‚Á‚½
 #define BATTLERESULT_LOSE			2	// ‘S–Å‚µ‚½
+#define BATTLERESULT_ESCAPE			3	// “¦‚°‚½
 
 
 

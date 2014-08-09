@@ -96,6 +96,10 @@ public:
 	// 指定した行を描画する。
 	void DrawLine(int hFont, int hFontWidth,
 		int x, int y, int count=-1, int historyCount=0) const;
+	// 指定した行を描画する。
+	// 最新行からの履歴ではなく、直接値を指定する。
+	void DrawLineByIndex(int hFont, int hFontWidth,
+		int x, int y, int index, int count=-1) const;
 	// 空の行に描画する内容を追加する。
 	// 行の長さについての確認は行わない。
 	bool ImportLine(LPTSTR buf);
@@ -260,6 +264,8 @@ public:
 	// アクセサ
 	void SetReadType(WORD flag){ readTypeFlag = flag; };
 	WORD GetReadType(){ return readTypeFlag; };
+	void SetMessageSpeed(float spd){ messageSpeed = spd; };
+	float GetMessageSpeed(){ return messageSpeed; };
 	
 	// 内容1行の描画を行う。
 	// dx, dy : ウィンドウの左上に対する位置
@@ -267,9 +273,10 @@ public:
 	//					1以上の場合、それより指定した数だけ古い行を描画する。
 	//					無効な数値の場合は描画しない。
 	void DrawLine(int dx, int dy, int historyCount=0) const;
-	void DrawCurrentLine(int dx, int dy) const;
-	void DrawHistoryLine(int dx, int dy, int historyCount=1) const;
 
+	// historyCountではなく、インデックスをそのまま使って
+	// 描画する行を指定する。
+	void DrawLineByIndex(int dx, int dy, int index) const;
 };
 
 // StockMessageとDrawMessageの紛らわしいところの補足

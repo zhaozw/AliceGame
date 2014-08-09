@@ -6,7 +6,7 @@
 #include "Window_HintMessage.h"
 
 #define MAX_TESTBATTLE			10
-#define MAX_TESTBATTLE_MENU		1
+#define MAX_TESTBATTLE_MENU		2
 #define TESTBATTLE_SELECT_NUM	(MAX_TESTBATTLE+MAX_TESTBATTLE_MENU)
 
 class Scene_TestBattle : public Scene_Base{
@@ -25,8 +25,12 @@ public:
 	
 	// 更新処理
 	virtual int Update();
+
 	// 描画処理
 	virtual void Draw() const;
+	
+	// ヒントウィンドウを開く
+	bool OpenHintWindow();
 
 
 };

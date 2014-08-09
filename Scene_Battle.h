@@ -128,6 +128,10 @@ public:
 	virtual void Draw() const;
 
 	//=========================================
+	// 純粋なアクセサ
+	BYTE GetBattleResult(){ return battleResult; };
+
+	//=========================================
 	// シーン全体の制御
 	// Scene_Battle.cppに記述する。
 

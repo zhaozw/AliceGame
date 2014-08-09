@@ -239,7 +239,5 @@ void Sprite_BattleEnemy::MorphEnemyAttack() const
         baseExRate*param.xScale, baseExRate*param.yScale, param.angle,
         morphScreen, 1, 0);
 
-
-
     return;
 }

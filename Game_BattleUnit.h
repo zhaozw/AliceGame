@@ -107,6 +107,8 @@ public:
 	int GetRawParam(BYTE index);			// 補正なしのパラメータを取得する。
 	int GetCalcParam(BYTE index);			// 補正ありのパラメータを取得する。
 
+	float GetHPRate(){ return (float)GetHP()/GetMaxHP(); };
+
 	// 現在のステートの数を返す。
 	// 内部で、ステートを処理の優先度順に並べ替える。
 	int GetStateNum();

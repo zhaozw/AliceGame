@@ -170,7 +170,7 @@ void Scene_DollCreate::Draw() const{
 			DrawDollIcon(400+n*128, 420, index, DOLL_ATTR_NONE, DOLL_FACE_NORMAL);
 		}else{
 			SetDrawBright(128, 128, 128);
-			DrawDollIcon(400+n*128, 420, index, DOLL_ATTR_NONE, DOLL_FACE_NONE);
+			DrawDollIcon(400+n*128, 420, index, DOLL_ATTR_NONE, DOLL_FACE_DAMAGE);
 		}
 		ResetDrawARGB();
 	}

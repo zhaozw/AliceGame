@@ -45,11 +45,12 @@
 #define DOLL_ATTRSTONE_CREATE		3		// 人形作成時の属性のかけらの数
 
 // 表情
-#define DOLL_FACE_NONE				0		// 未解放アイコン（シルエット？）
-#define DOLL_FACE_NORMAL			1		// 通常
-#define DOLL_FACE_FUN				2		// 笑顔
-#define DOLL_FACE_SAD				3		// ダメージ
-#define DOLL_FACE_NUM				4		// 全表情数。
+#define DOLL_FACE_NORMAL			0		// 通常
+#define DOLL_FACE_ATTACK			1		// 攻撃
+#define DOLL_FACE_DAMAGE			2		// ダメージ
+#define DOLL_FACE_FUN				3		// 笑顔
+#define DOLL_FACE_HAPPY				4		// 勝利
+#define DOLL_FACE_NUM				5		// 全表情数。
 
 
 // レベル関連

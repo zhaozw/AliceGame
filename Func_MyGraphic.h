@@ -24,8 +24,8 @@
 #define HEIGHT_DOLLILLUST	512
 
 // 人形のアイコンの画像サイズ
-#define WIDTH_DOLLICON		96
-#define HEIGHT_DOLLICON		128
+#define WIDTH_DOLLICON		384
+#define HEIGHT_DOLLICON		384
 
 // ステータス画面用に人形の種類を描画する。
 void DrawDollType(int x, int y, BYTE type, int color);

@@ -76,7 +76,7 @@ typedef struct Image_Enemy{
 // 各種アイコン系の画像を保持する。
 typedef struct Image_Icon{
 	int doll_group[DOLL_TYPE_MAX];
-	int doll[DOLL_TYPE_MAX][DOLL_ATTR_NUM][DOLL_FACE_NUM];
+	int doll[DOLL_TYPE_MAX][DOLL_FACE_NUM][DOLL_ATTR_NUM];
 	int attrstone_group;
 	int attrstone[DOLL_GROUP_NUM][DOLL_ATTR_NUM];
 	int state_group;

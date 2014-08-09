@@ -54,6 +54,45 @@ bool NewGame();
 // 初期状態の人形をリストに加える。
 void GenerateInitialDoll();
 
+// 2014年度夏コミのバージョンにおけるデータを保持するクラス。
+// グローバル変数g_aliceFile140816から参照される。
+
+#define ALICEFILE_140816_TUTORIAL			10
+#define ALICEFILE_140816_FILENAME			"SaveData\\Trial_ver140806.dat"
+#define ALICEFILE_140816_XORCODE			"aZkw7QQn"
+#define ALICEFILE_140816_XORCODE_LENGTH		8
+#define ALICEFILE_140816_XORCODE2			"3kkNniHnkkN"
+#define ALICEFILE_140816_XORCODE2_LENGTH	11
+
+typedef struct AliceFile_140816_Data{
+	bool	firstHint;				// 最初のヒントメッセージ。
+								// 見ていればtrueで、次回以降は自動での表示を行わない。
+	bool	tutorialBattle[ALICEFILE_140816_TUTORIAL];	
+								// チュートリアルバトルをクリアしたか否か。
+								// クリアしていればtrue。
+	bool	tutorialHint;		// チュートリアルのヒントの表示。
+								// trueなら毎回見る。falseなら初回のみ見る。
+	int		forFuture[10];		// 将来的に使用できるデータ領域。
+								// 使用されていない時はすべて0である。
+}ALICEFILE_140816_DATA;
+
+class AliceFile_140816{
+public:
+	// データ
+	ALICEFILE_140816_DATA	data;
+public:
+	// コンストラクタ
+	AliceFile_140816();
+
+	// 内容を保存する。
+	bool Save();
+
+	// 内容を読み込む。
+	bool Load();
+
+	// 内容のリセット
+	void Reset();
+};
 
 
 #endif // FUNC_ALICEFILE_H
