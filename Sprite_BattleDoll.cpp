@@ -151,6 +151,7 @@ void Sprite_BattleDoll::DrawInfo() const{
 		fontColor, 1);
 	tmpY += BATTLEDOLL_HPGAUGE_HEIGHT+4;
 	// HP/Å‘åHP‚Ì•`‰æ
+	/*
 	wsprintf(hpStr, _T("%d/%d"), pDoll->GetHP(), pDoll->GetMaxHP());
 	DrawStringToHandle(
 		GetIX() 
@@ -158,6 +159,10 @@ void Sprite_BattleDoll::DrawInfo() const{
 		hpStr, strlen(hpStr), g_font.hTinyInfo, SPRITE_BATTLEDOLL_WIDTH) - 10,
 		tmpY, hpStr,
 		GetColor(255, 255, 255), g_font.hTinyInfo);
+		*/
+	DrawFraction(pDoll->GetHP(), pDoll->GetMaxHP(),
+		GetIX()+SPRITE_BATTLEDOLL_WIDTH-8, tmpY+2, g_image.chars.num_hp, 
+		NUM_HP_WIDTH-5, 3, 0x02, false, false);
 	tmpY += (FONTSIZE_TINYINFO+4);
 	// ‰¼‚ÉƒAƒCƒRƒ“‚ð•`‰æ
 	// DrawGraph(GetIX(), GetIY(), g_image.icon.state[0], 1);

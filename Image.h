@@ -7,6 +7,15 @@
 #define IMAGE_SIZE_ROW_NUMBER		3	// 数字画像の配列の縦
 #define NUMBER_I_WIDTH				16
 #define NUMBER_I_HEIGHT				24
+#define NUM_HP_WIDTH				16
+#define NUM_HP_HEIGHT				16
+#define NUM_DAMAGE_S_WIDTH			24	
+#define NUM_DAMAGE_S_HEIGHT			24	
+#define NUM_DAMAGE_M_WIDTH			24	
+#define NUM_DAMAGE_M_HEIGHT			24	
+#define NUM_DAMAGE_L_WIDTH			36	
+#define NUM_DAMAGE_L_HEIGHT			36	
+
 #define IMAGE_SIZE_STATEICON		24
 
 #include "WindowSkin.h"
@@ -29,6 +38,22 @@ typedef struct Image_Window{
 typedef struct Image_Chars{
 	int dummy_number_i;
 	int number_i[IMAGE_SIZE_NUMBER];
+	int num_damage;
+	int num_hp[IMAGE_SIZE_NUMBER];			// HP表示用
+	int num_damage_l[IMAGE_SIZE_NUMBER];	// ダメージ(弱点)表示用
+	int num_damage_m[IMAGE_SIZE_NUMBER];	// ダメージ(通常)表示用
+	int num_damage_s[IMAGE_SIZE_NUMBER];	// ダメージ(耐性)表示用
+	Image_Chars(){
+		dummy_number_i = -1;
+		num_damage = -1;
+		for(int n=0; n<IMAGE_SIZE_NUMBER; n++){
+			number_i[n] = -1;
+			num_hp[n] = -1;
+			num_damage_l[n] = -1;
+			num_damage_m[n] = -1;
+			num_damage_s[n] = -1;
+		}
+	};
 }IMAGE_CHARS;
 
 // イラストに関する画像を保持する。

@@ -18,6 +18,7 @@ struct MYCOLOR3{
 
 // int型の配列を渡すと指定した位置に数値の描画を行う。
 // 戻り値 : 描画した幅。
+// 実はnArrayの要素に10が入っているとそれをスラッシュとして扱う。
 int const DrawIntArray(int x, int y, int* image, int* nArray, int num, int wid,
 	BYTE align=2, bool useComme=true, bool zerofill=false, float rate=1.0f);
 
@@ -31,6 +32,11 @@ void const DrawNum(int num, int x, int y, int* image,
 	int wid, int dig, 
 	BYTE align=2, bool zerofill=false, bool useComme=true,
 	float rate=1.0f);
+
+// 分数を描画する。右揃えの時とてもめんどくさいので、専用の関数にする。
+void const DrawFraction(int num, int num2, int x, int y, int* image,
+	int wid, int dig, BYTE align = 0x02, bool zerofill = false, bool useComme = false,
+	float rate = 1.0f);
 
 // A～Zの並びを持つ画像を用いて、DXライブラリで画像を描画する。
 // 領域のチェックなどは行わないため、要注意。

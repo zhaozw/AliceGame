@@ -172,6 +172,12 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 		y+BATTLEENEMY_HPGAUGE_HEIGHT/2 - 2,
 		color, 1);
 	// HPÇêîílÇ≈ï`âÊ
+	DrawFraction(pEnemy->GetHP(), pEnemy->GetMaxHP(),
+		(int)(GetX()+BATTLEENEMY_HPGAUGE_WIDTH/2),
+		(int)(GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2)+2,
+		g_image.chars.num_hp, 
+		NUM_HP_WIDTH-5, 4, 0x02, false, false);
+	/*
 	TCHAR	hpStr[16];
 	wsprintf(hpStr, _T("%d/%d"), pEnemy->GetHP(), pEnemy->GetMaxHP());
 	DrawStringToHandle(
@@ -186,6 +192,7 @@ void Sprite_BattleEnemy::DrawHPGauge(int x, int y) const{
 		hpStr, strlen(hpStr), g_font.hTinyInfo, BATTLEENEMY_HPGAUGE_WIDTH)),
 		(int)(GetY()+BATTLEENEMY_HPGAUGE_HEIGHT/2), hpStr,
 		GetColor(255, 255, 255), g_font.hTinyInfo);
+		*/
 }
 
 // ÉÇÅ[ÉtÇÃå„èàóùä÷êî

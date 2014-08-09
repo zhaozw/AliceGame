@@ -37,7 +37,7 @@ bool Image::Load(){
 
 bool Image::Load_WndSkin(){
 	// ウィンドウ画像の読み込み
-	window.image = LoadGraph(_T("sysimg\\Window.png"), 1);
+	window.image = LoadGraph(_T("img_system\\Window.png"), 1);
 	// ウィンドウスキン画像への割り当て
 
 	// ウィンドウ枠のサイズ、中心部の幅と高さ
@@ -102,12 +102,14 @@ bool Image::Load_WndSkin(){
 bool Image::Load_Chars(){
 	int srcX = 0, srcY = 0;		// DerivationGraph時の基準位置
 	int width=0, height=0;		// DerivationGraph時の幅と高さ
-	int hImage;					// DerivationGraph時のハンドル
+	int hSrcImage;				// DerivationGraph時のハンドル
+	int* hImgArray;				// 読み込む対象のハンドル
 
-	chars.dummy_number_i = LoadGraph(_T("sysimg\\number_i.png"));
+	chars.dummy_number_i = LoadGraph(_T("img_system\\number_i.png"));
+	chars.num_damage = LoadGraph(_T("img_system\\num_damage.png"));
 
 	// 数字画像を同じフォーマットで読み込む
-	for(int n=0; n<1; n++){
+	for(int n=0; n<5; n++){
 		switch(n){
 		case 0:
 			// number_i
@@ -115,7 +117,44 @@ bool Image::Load_Chars(){
 			srcY = 0;
 			width = NUMBER_I_WIDTH;
 			height = NUMBER_I_HEIGHT;
-			hImage = chars.dummy_number_i;
+			hSrcImage = chars.dummy_number_i;
+			hImgArray = chars.number_i;
+			break;
+		case 1:
+			// num_hp
+			srcX = 0;
+			srcY = 0;
+			width = NUM_HP_WIDTH;
+			height = NUM_HP_HEIGHT;
+			hSrcImage = chars.num_damage;
+			hImgArray = chars.num_hp;
+			break;
+		case 2:
+			// num_damage_s
+			srcX = 0;
+			srcY = 48;
+			width = NUM_DAMAGE_S_WIDTH;
+			height = NUM_DAMAGE_S_HEIGHT;
+			hSrcImage = chars.num_damage;
+			hImgArray = chars.num_damage_s;
+			break;
+		case 3:
+			// num_damage_m
+			srcX = 0;
+			srcY = 120;
+			width = NUM_DAMAGE_M_WIDTH;
+			height = NUM_DAMAGE_M_HEIGHT;
+			hSrcImage = chars.num_damage;
+			hImgArray = chars.num_damage_m;
+			break;
+		case 4:
+			// num_damage_l
+			srcX = 0;
+			srcY = 192;
+			width = NUM_DAMAGE_L_WIDTH;
+			height = NUM_DAMAGE_L_HEIGHT;
+			hSrcImage = chars.num_damage;
+			hImgArray = chars.num_damage_l;
 			break;
 		}
 
@@ -123,18 +162,18 @@ bool Image::Load_Chars(){
 		for(int w=0; w<IMAGE_SIZE_COLUMN_NUMBER; w++){
 			for(int h=0; h<IMAGE_SIZE_ROW_NUMBER; h++){
 				if(w!=(IMAGE_SIZE_COLUMN_NUMBER-1) || h!=(IMAGE_SIZE_ROW_NUMBER-1)){
-					chars.number_i[w+h*IMAGE_SIZE_COLUMN_NUMBER]
+					hImgArray[w+h*IMAGE_SIZE_COLUMN_NUMBER]
 						= DerivationGraph(
 							srcX+w*width,
 							srcY+h*height,
-							width, height, hImage);
+							width, height, hSrcImage);
 				}else{
 					for(int i=0; i<2; i++){
-						chars.number_i[w+h*IMAGE_SIZE_COLUMN_NUMBER+i]
+						hImgArray[w+h*IMAGE_SIZE_COLUMN_NUMBER+i]
 							= DerivationGraph(
 								srcX+w*width+i*width/2,
 								srcY+h*height,
-								width/2, height, hImage);
+								width/2, height, hSrcImage);
 					}
 				}
 			}
@@ -227,13 +266,8 @@ bool Image::Load_Icon(){
 			for(int w=0; w<DOLL_FACE_NUM; w++){
 				// 今のところ、属性の差分はない
 				icon.doll[t][w][h] = DerivationGraph(
-					WIDTH_DOLLICON*w, 0,
+					WIDTH_DOLLICON*w,HEIGHT_DOLLICON*h,
 					WIDTH_DOLLICON, HEIGHT_DOLLICON, icon.doll_group[t]);
-				/*
-				icon.doll[t][w][h] = DerivationGraph(
-					WIDTH_DOLLICON*w, HEIGHT_DOLLICON*h,
-					WIDTH_DOLLICON, HEIGHT_DOLLICON, icon.doll_group[t]);
-					*/
 			}
 		}
 	}

@@ -45,17 +45,19 @@ int const DrawNumArray(int x, int y, int* image, int* nArray, int digit, int wid
 
 		// 実際の描画
 		for(int i=(digit-drawDigit); i<digit; i++){
-			if(commePos<=0){
+			if(useComme && commePos<=0){
 				// コンマの描画
-				DrawGraph(drawX, y, image[10], 1);
+				DrawGraph(drawX, y, image[11], 1);
 				commePos += 3;
 				drawX += (int)(wid*rate/2);
 			}
 			// 数値の描画
-			DrawGraph(drawX, y, image[nArray[i]], 1);
+			if(nArray[i] >= 0 && nArray[i] <= 10){ // 10はスラッシュとして扱う
+				DrawGraph(drawX, y, image[nArray[i]], 1);
+			}
 			// 描画すべき位置をずらす
 			drawX += (int)(wid*rate);
-			commePos--;
+			if(useComme) commePos--;
 		}
 		return drawWid;
 }
@@ -126,6 +128,65 @@ void const DrawNum(int num, int x, int y, int* image,
 		// 実際の描画
 		DrawNumArray(x, y, image, nArray, dig, wid, align, useComme, zerofill, rate);
 }
+
+void const DrawFraction(int num, int num2, int x, int y, int* image,
+	int wid, int dig, BYTE align, bool zerofill, bool useComme,
+	float rate){
+		// この数字の配列に値を入れる
+		int nArray[17];
+
+		int pos = 0;
+		// 数値を各桁に小分けする
+		int tmpNum=0;
+		int tmpDiv=0;
+		int tmpDigitNum=0;
+		bool isShow = zerofill;
+		// 桁ごとに代入する
+		tmpNum = num;
+		if(tmpNum > LONG_MAX) tmpNum = LONG_MAX;
+		for(int i=0;i<dig;i++){
+			tmpDiv = 1;
+			for(int j=i+1;j<dig;j++){
+				tmpDiv *= 10;
+			}
+			tmpDigitNum = (num/tmpDiv)%10;
+			if((tmpDigitNum>0) || (i==dig-1)){
+				isShow = true;
+			}
+			if(isShow){
+				nArray[pos] = tmpDigitNum;
+				tmpNum -= nArray[pos]*tmpDiv;
+				pos++;
+			}
+		}
+		// スラッシュの使用
+		nArray[pos] = 10;
+		pos++;
+		isShow = zerofill;
+		tmpDiv = 1;
+		// 桁ごとに代入する
+		tmpNum = num2;
+		if(tmpNum > LONG_MAX) tmpNum = LONG_MAX;
+		for(int i=0;i<dig;i++){
+			tmpDiv = 1;
+			for(int j=i+1;j<dig;j++){
+				tmpDiv *= 10;
+			}
+			tmpDigitNum = (num2/tmpDiv)%10;
+			if((tmpDigitNum>0) || (i==dig-1)){
+				isShow = true;
+			}
+			if(isShow){
+				nArray[pos] = tmpDigitNum;
+				tmpNum -= nArray[pos]*tmpDiv;
+				pos++;
+			}
+		}
+		// 実際の描画
+		// 桁は元の桁数×2＋スラッシュの1文字分となる
+		DrawNumArray(x, y, image, nArray, pos, wid, align, false, true, rate);
+}
+
 
 void DrawStr(LPTSTR text, int x, int y, int wid, int* image){
 	int length = strlen(text);
