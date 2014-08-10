@@ -27,6 +27,8 @@ Sound::Sound(){
 bool Sound::LoadMusic(){
 	// ŠeBGM‚Ì“Ç‚İ‚İ‚ğs‚¤B
 	if(!LoadBGM(BGM_DUMMY, _T("bgm\\dummy.ogg"), 1)) return false;
+	if(!LoadBGM(BGM_MENU, _T("bgm\\Menu.ogg"), 1)) return false;
+	if(!LoadBGM(BGM_BATTLE, _T("bgm\\Battle.ogg"), 1)) return false;
 	return true;
 }
 

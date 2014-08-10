@@ -73,10 +73,12 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	TCHAR nameBuf[BATTLEUNIT_NAME_BYTES];
 	TCHAR numBuf[4]; // 数字表示用
+	int value = 0;
 	// 名前を取得する
 	pAction->GetOpponent()->GetName(nameBuf, BATTLEUNIT_NAME_BYTES);
 	// 数値を取得する
-	wsprintf(numBuf, _T("%d"), pAction->GetParam());
+	value = pAction->GetParam()%10000;
+	wsprintf(numBuf, _T("%d"), value);
 	// 名前の体裁を整える
 	strcpy_s(buf, WND_MSG_STOCKLENGTH-1, nameBuf);
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("に"));
@@ -84,7 +86,7 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("のダメージ！"));
 	AddStockMessage(buf);
 	// ダメージを適用する
-	pAction->GetOpponent()->Damage(pAction->GetParam());
+	pAction->GetOpponent()->Damage(value);
 	// ダメージの数値を表示する
 	if(pAction->GetOpponent()->IsDoll()){
 		// 位置を取得
@@ -94,9 +96,23 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 			pTask = gMyTask_InfoEffect->Call();
 			pDoll = (Sprite_BattleDoll*)pSprite;
 			if(pTask!=NULL){
-				new (pTask) MyTask_InfoEffect(
-					pDoll->GetDollX(), pDoll->GetDollY()+40,
-					INFO_DAMAGENUM_DOLL, pAction->GetParam(), 0);
+				switch(pAction->GetParam()/10000){
+				case 0:
+					new (pTask) MyTask_InfoEffect(
+						pDoll->GetDollX(), pDoll->GetDollY()+40,
+						INFO_DAMAGENUM_DOLL, value, 0);
+					break;
+				case 1: // 弱点
+					new (pTask) MyTask_InfoEffect(
+						pDoll->GetDollX(), pDoll->GetDollY()+40,
+						INFO_DAMAGENUM_DOLL_STRONG, value, 0);
+					break;
+				case 2: // 抵抗
+					new (pTask) MyTask_InfoEffect(
+						pDoll->GetDollX(), pDoll->GetDollY()+40,
+						INFO_DAMAGENUM_DOLL_RESIST, value, 0);
+					break;
+				}
 			}
 		}
 	}else{
@@ -106,9 +122,23 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 			// タスクを発生させる
 			pTask = gMyTask_InfoEffect->Call();
 			if(pTask!=NULL){
-				new (pTask) MyTask_InfoEffect(
-					pSprite->GetIX(), pSprite->GetIY(),
-					INFO_DAMAGENUM_ENEMY, pAction->GetParam(), 0);
+				switch(pAction->GetParam()/10000){
+				case 0:
+					new (pTask) MyTask_InfoEffect(
+						pSprite->GetIX(), pSprite->GetIY(),
+						INFO_DAMAGENUM_ENEMY, value, 0);
+					break;
+				case 1:
+					new (pTask) MyTask_InfoEffect(
+						pSprite->GetIX(), pSprite->GetIY(),
+						INFO_DAMAGENUM_ENEMY_STRONG, value, 0);
+					break;
+				case 2:
+					new (pTask) MyTask_InfoEffect(
+						pSprite->GetIX(), pSprite->GetIY(),
+						INFO_DAMAGENUM_ENEMY_RESIST, value, 0);
+					break;
+				}
 			}
 		}
 	}
@@ -125,9 +155,7 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 			// タスクを発生させる
 			pSprite->SetMorphID(SPMORPH_BLINK, false, 8);
 		}
-	}
-
-	
+	}	
 	return true;
 }
 

@@ -209,7 +209,7 @@ AliceFile_140816::AliceFile_140816(){
 void AliceFile_140816::Reset(){
 	data.firstHint = false;
 	for(int n=0; n<ALICEFILE_140816_TUTORIAL; n++){
-		data.tutorialBattle[n] = false;
+		data.tutorialBattle[n] = 0;
 	}
 	data.tutorialHint = false;
 	for(int n=0; n<10; n++){

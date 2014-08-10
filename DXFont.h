@@ -6,6 +6,7 @@
 #define FONTSIZE_STR		24
 #define FONTSIZE_STR_L		32
 #define FONTSIZE_TINYINFO	16
+#define FONTSIZE_TALK		28
 
 // 関数名の短縮
 #ifndef ABBR_GETDRAWSTRINGWIDTHTOHANDLE
@@ -32,6 +33,7 @@ public:
 	int hStr;		// 文字。名前の描画にも用いる。
 	int hStrL;		// 大きいサイズの文字。名前の描画にも用いる。
 	int hTinyInfo;	// 戦闘中のHP描画など。小さい文字。
+	int hTalk;		// 会話文など。
 public:
 	// コンストラクタ。
 	// 全てのハンドルに-1を代入する。

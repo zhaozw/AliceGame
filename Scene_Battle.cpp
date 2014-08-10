@@ -13,6 +13,7 @@
 #include "Game_BattleDoll.h"
 #include "Sprite_BattleDoll.h"
 #include "Func_AliceFile.h"
+#include "Sound.h"
 
 extern TempData		g_temp;
 extern DXFont		g_font;
@@ -20,6 +21,7 @@ extern DXInput		g_input;
 extern KeyConfig	g_key;
 extern MyGroup*		gMyTask_InfoEffect;
 extern AliceFile_140816		g_trialAliceFile;
+extern Sound		g_sound;
 
 Scene_Battle::Scene_Battle():Scene_Base(){
 	phaze = PRE_BATTLE;
@@ -79,15 +81,19 @@ bool Scene_Battle::Terminate(){
 	if(g_temp.battleType == TEMP_BTYPE_TUTORIAL){
 		switch(battleResult){
 		case BATTLERESULT_VICTORY:
-			g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] = true;
+			g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] = 0x02;
 			g_trialAliceFile.Save();
 			break;
 		}
 	}
+	g_sound.StopBGM(BGM_BATTLE);
 	return true;
 }
 
 int Scene_Battle::Update(){
+	if(sceneTime == 2){
+		g_sound.PlayBGM(BGM_BATTLE, false);
+	}
 	bool result = true;
 	// ウィンドウやスプライトなどのアップデートを行う。
 	UpdateObjects();
@@ -136,6 +142,9 @@ void Scene_Battle::UpdateObjects(){
 	w_battleDollStatus.Update();
 	w_battleEnemyStatus.Update();
 	w_skillAccLine.Update();
+
+	// 説明ウィンドウのアップデート
+	w_hintMessage.UpdateA();
 
 	// エフェクトのアップデート
 	Update_MyTask_InfoEffect();
@@ -229,6 +238,9 @@ void Scene_Battle::Draw() const{
 
 	// 前情報の描画
 	DrawBattleInfo();
+
+	// 説明ウィンドウの描画
+	w_hintMessage.Draw();
 
 	// フェードの描画
 	ResetDrawARGB();
@@ -510,6 +522,12 @@ bool Scene_Battle::CheckNextAction(){
 		// すぐさま次のフェイズに移行する
 		return true;
 		break;
+	case TALK_BEFORE_BATTLE:
+		// メッセージが出ている間は次に進まない
+		if(w_hintMessage.GetClosed()){
+			return true;
+		}
+		break;
 	case PRE_BATTLE:
 		// ウィンドウやオブジェクトが全て待機状態になっていることを確認してから次へ。
 		if(!w_battleMsg.IsReady()){
@@ -659,6 +677,10 @@ bool Scene_Battle::CheckNextAction(){
 		}
 		return true;
 		break;
+	case TALK_AFTER_BATTLE:
+		// 即座に次に進む。
+		return true;
+		break;
 	}
 	return false;
 }
@@ -670,6 +692,10 @@ bool Scene_Battle::ExecuteAction(){
 	bool				loop = false;
 	switch(phaze){
 	case BEFORE_BATTLE:
+		// すぐさま次のフェイズに移行する。
+		return false;
+		break;
+	case TALK_BEFORE_BATTLE:
 		// すぐさま次のフェイズに移行する。
 		return false;
 		break;
@@ -845,6 +871,10 @@ bool Scene_Battle::ExecuteAction(){
 		}
 		InterpretAction(&nextAction);
 		break;
+	case TALK_AFTER_BATTLE:
+		// すぐさま次のフェイズに移行する。
+		return false;
+		break;
 	case END_BATTLE:
 		// そこから動かない
 		return true;
@@ -857,6 +887,9 @@ void Scene_Battle::NextPhaze(){
 	// 変化前のphaze値でswitch分岐
 	switch(phaze){
 	case BEFORE_BATTLE:
+		phaze = TALK_BEFORE_BATTLE;
+		break;
+	case TALK_BEFORE_BATTLE:
 		phaze = PRE_BATTLE;
 		break;
 	case PRE_BATTLE:
@@ -891,6 +924,9 @@ void Scene_Battle::NextPhaze(){
 		phaze = ALICE_COMMAND;
 		break;
 	case POST_BATTLE:
+		phaze = TALK_AFTER_BATTLE;
+		break;
+	case TALK_AFTER_BATTLE:
 		phaze = END_BATTLE;
 		break;
 	}
@@ -901,6 +937,9 @@ void Scene_Battle::NextPhaze(){
 	// 変化後のphaze値でswitch分岐
 	switch(phaze){
 	case BEFORE_BATTLE:
+		break;
+	case TALK_BEFORE_BATTLE:
+		SetupTalkBeforeBattle();
 		break;
 	case PRE_BATTLE:
 		SetupPreBattle();
@@ -932,6 +971,9 @@ void Scene_Battle::NextPhaze(){
 	case POST_BATTLE:
 		SetupPostBattle();
 		break;
+	case TALK_AFTER_BATTLE:
+		SetupTalkAfterBattle();
+		break;
 	case END_BATTLE:
 		// 即座にシーン移動
 		break;
@@ -943,7 +985,23 @@ int Scene_Battle::GetNextScene(){
 	return SCENE_TESTBATTLE;
 }
 
+void Scene_Battle::SetupTalkBeforeBattle(){
+	TCHAR buf[MAX_PATH];
+	if((g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] == 0x00)
+		|| g_trialAliceFile.data.tutorialHint){
+		wsprintf(buf, _T("dat_text\\tutorial_battle%02d.txt"), g_temp.battleID);
+		// チュートリアルであれば、おもむろにウィンドウを表示する
+		w_hintMessage.OpenAndPlay(buf, WND_HINT_ALICE);
+	}
+}
+
 void Scene_Battle::SetupPreBattle(){
+	// チュートリアルを見た。
+	if(g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] == 0x00){
+		g_trialAliceFile.data.tutorialBattle[g_temp.battleID-1] = 0x01;
+	}
+	g_trialAliceFile.Save();
+
 	Game_BattleAction action;
 	// スタックなので逆順に積んでいく。
 
@@ -957,6 +1015,7 @@ void Scene_Battle::SetupPreBattle(){
 	action.SetParam(0);
 	actionStack.Push(action);
 	ExecuteAction(); // 最初の1フレームでIDLEにならないように
+
 }
 
 void Scene_Battle::SetupAliceCommand(){
@@ -1059,4 +1118,9 @@ void Scene_Battle::SetupPostBattle(){
 		ExecuteAction(); // 最初の1フレームでIDLEにならないように
 		break;
 	}
+}
+
+void Scene_Battle::SetupTalkAfterBattle(){
+	// チュートリアルであれば、おもむろにウィンドウを表示する
+	// w_hintMessage.OpenAndPlay(_T("dat_text\\tutorial_first.txt"), WND_HINT_ALICE);
 }

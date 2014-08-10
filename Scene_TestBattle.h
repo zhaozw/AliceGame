@@ -6,14 +6,15 @@
 #include "Window_HintMessage.h"
 
 #define MAX_TESTBATTLE			10
-#define MAX_TESTBATTLE_MENU		2
+#define MAX_TESTBATTLE_MENU		3
 #define TESTBATTLE_SELECT_NUM	(MAX_TESTBATTLE+MAX_TESTBATTLE_MENU)
 
 class Scene_TestBattle : public Scene_Base{
-public:
+protected:
 	Selectable				s_main;	// メニューの選択画面
 	Window_HintMessage		w_hint;
-private:
+	float					backX;	// 背景画像の描画位置の指標
+	float 					backY;
 
 public:
 	// コンストラクタ

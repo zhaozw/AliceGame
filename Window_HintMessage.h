@@ -135,6 +135,7 @@ public:
 	virtual bool CheckIsIdle();
 
 	// •`‰æ
+	virtual void DrawFrameBack() const;		// ”wŒi‚ÌlŒ`‚È‚Ç‚Ì•`‰æ
 	virtual void DrawContent() const;
 
 };

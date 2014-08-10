@@ -67,8 +67,11 @@ void GenerateInitialDoll();
 typedef struct AliceFile_140816_Data{
 	bool	firstHint;				// 最初のヒントメッセージ。
 								// 見ていればtrueで、次回以降は自動での表示を行わない。
-	bool	tutorialBattle[ALICEFILE_140816_TUTORIAL];	
+	BYTE	tutorialBattle[ALICEFILE_140816_TUTORIAL];	
 								// チュートリアルバトルをクリアしたか否か。
+								// 未挑戦なら0(説明表示)、
+								// 未クリアなら1(説明は表示しない)、
+								// クリアしていれば2。
 								// クリアしていればtrue。
 	bool	tutorialHint;		// チュートリアルのヒントの表示。
 								// trueなら毎回見る。falseなら初回のみ見る。

@@ -12,25 +12,28 @@
 // そのメンバ変数であるskinとしてWindowSkinを列挙する形で保持する。
 // 各WindowSkinへの参照をウインドウが保持することで参照を行う。
 
-#define MAX_WNDSKIN		2
-#define WNDSKIN_SIMPLE	0
-#define WNDSKIN_NONE	1
+#define MAX_WNDSKIN					3
+#define WNDSKIN_SIMPLE				0
+#define WNDSKIN_NONE				1
+#define WNDSKIN_BALLOON				2
 
 class Window_Base;
 class WindowSkin;
 
 
 // ウィンドウスキン
-#define MAX_WNDIMGINDEX			9
-#define WNDIMGINDEX_TOPLEFT		0
-#define WNDIMGINDEX_TOP			1
-#define WNDIMGINDEX_TOPRIGHT	2
-#define WNDIMGINDEX_LEFT		3
-#define WNDIMGINDEX_CENTER		4
-#define WNDIMGINDEX_RIGHT		5
-#define WNDIMGINDEX_BOTTOMLEFT	6
-#define WNDIMGINDEX_BOTTOM		7
-#define WNDIMGINDEX_BOTTOMRIGHT	8
+#define MAX_WNDIMGINDEX					9
+#define WNDIMGINDEX_TOPLEFT				0
+#define WNDIMGINDEX_TOP					1
+#define WNDIMGINDEX_TOPRIGHT			2
+#define WNDIMGINDEX_LEFT				3
+#define WNDIMGINDEX_CENTER				4
+#define WNDIMGINDEX_RIGHT				5
+#define WNDIMGINDEX_BOTTOMLEFT			6
+#define WNDIMGINDEX_BOTTOM				7
+#define WNDIMGINDEX_BOTTOMRIGHT			8
+#define WNDIMGINDEX_NOFRAME				0
+#define WNDIMGINDEX_HEADER_CENTER		3
 
 class WindowSkin{
 public:

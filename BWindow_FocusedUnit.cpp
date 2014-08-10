@@ -7,8 +7,10 @@
 #include "WindowSkin.h"
 #include "Sprite_BattleDoll.h"
 #include "Func_Graphics.h"
+#include "Image.h"
 
 extern	WindowSkins	g_wndSkins;
+extern	Image		g_image;	
 
 BWindow_FocusedUnit::BWindow_FocusedUnit() : Window_Base(),
 	s_target(MAX_BATTLEENEMY, 0, false, true){
@@ -101,7 +103,7 @@ bool BWindow_FocusedUnit::SetDefaultEnemyIndex(){
 			continue;
 		}
 		if(pScene->GetAttrAffinity(
-			pOwner->GetAttr(), pTmpTarget->GetAttr()) == ATTRAFFINITY_STRONG){
+			pOwner->GetAmendedAttr(), pTmpTarget->GetAmendedAttr()) == ATTRAFFINITY_STRONG){
 				s_target.index = n;
 				return true;
 		}
@@ -116,7 +118,7 @@ bool BWindow_FocusedUnit::SetDefaultEnemyIndex(){
 			continue;
 		}
 		if(pScene->GetAttrAffinity(
-			pOwner->GetAttr(), pTmpTarget->GetAttr()) != ATTRAFFINITY_WEAK){
+			pOwner->GetAmendedAttr(), pTmpTarget->GetAmendedAttr()) != ATTRAFFINITY_WEAK){
 				s_target.index = n;
 				return true;
 		}
@@ -257,7 +259,11 @@ void BWindow_FocusedUnit::DrawCntEnemy(Game_BattleEnemy* p) const {
 	tmpX = p->GetDrawX();
 	tmpY = p->GetDrawY()+20;
 	int dltY = 0;
-	dltY = 10*sin(2.0*M_PI*activeCount/25); 
+	dltY = 8*sin(2.0*M_PI*activeCount/35); 
+	
+	DrawRotaGraph(tmpX, tmpY+dltY, 1.0, 0,
+		g_image.icon.cursor[1], 1);
+	/*
 	DrawBox(
 		tmpX-5, tmpY+dltY-5,
 		tmpX+5, tmpY+dltY+5,
@@ -266,16 +272,23 @@ void BWindow_FocusedUnit::DrawCntEnemy(Game_BattleEnemy* p) const {
 		GetRainbowG(activeCount*20),
 		GetRainbowB(activeCount*20)
 		), 1);
+		*/
 }
 
 void BWindow_FocusedUnit::DrawCntDoll(BYTE n) const {
 	int tmpX=0, tmpY=0;
 	tmpX = SPRITE_BATTLEDOLL_IX+n*SPRITE_BATTLEDOLL_DX+SPRITE_BATTLEDOLL_WIDTH/2;
-	tmpY = SPRITE_BATTLEDOLL_IY-20;
+	tmpY = SPRITE_BATTLEDOLL_IY-20 + 8*sin(2.0*M_PI*activeCount/35);
+
+	DrawRotaGraph(tmpX, tmpY, 1.0, 0,
+		g_image.icon.cursor[0], 1);
+
+	/*
 	DrawBox(
 		tmpX-5, tmpY-5,
 		tmpX+5, tmpY+5,
 		GetColor(255, 0, 0), 1);
+		*/
 }
 
 void BWindow_FocusedUnit::OpenWithParam(

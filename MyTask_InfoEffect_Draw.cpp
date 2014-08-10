@@ -6,8 +6,11 @@
 #include <DxLib.h>
 #include "DXFont.h"
 #include "Func_Math.h"
+#include "Image.h"
+#include "Func_Graphics.h"
 
 extern DXFont	g_font;
+extern Image	g_image;
 
 #define INFOEFFECT_STRSIZE		32
 
@@ -21,31 +24,49 @@ void MyTask_InfoEffect::Draw() const{
 		a = PARAM(12*(GetLifeTime()-existTime));
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
 		f = min(0, 0.4*existTime*(existTime-20));
-		wsprintf(str, "%d", param);
-		w = GetDrawStringWidthToHandle(str, strlen(str), g_font.hStrL);
-		DrawStringToHandle(x - w/2 + 1, 
-			y + f - FONTSIZE_INFO + 2,
-			str, GetColor(32, 32, 32),
-			g_font.hStrL);
-		DrawStringToHandle(x - w/2, 
-			y + f - FONTSIZE_INFO,
-			str, GetColor(255, 255, 255),
-			g_font.hStrL);
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_m,
+			NUM_DAMAGE_M_WIDTH-8, 4, 1, false, false);
+		break;
+	case INFO_DAMAGENUM_ENEMY_STRONG:
+		a = PARAM(12*(GetLifeTime()-existTime));
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
+		f = min(0, 0.4*existTime*(existTime-20));
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_l,
+			NUM_DAMAGE_L_WIDTH-12, 4, 1, false, false);
+		break;
+	case INFO_DAMAGENUM_ENEMY_RESIST:
+		a = PARAM(12*(GetLifeTime()-existTime));
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
+		f = min(0, 0.4*existTime*(existTime-20));
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_s,
+			NUM_DAMAGE_S_WIDTH-8, 4, 1, false, false);
 		break;
 	case INFO_DAMAGENUM_DOLL:
 		a = PARAM(12*(GetLifeTime()-existTime));
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
 		f = min(0, 0.4*existTime*(existTime-20));
-		wsprintf(str, "%d", param);
-		w = GetDrawStringWidthToHandle(str, strlen(str), g_font.hStrL);
-		DrawStringToHandle(x - w/2 + 1, 
-			y + f - FONTSIZE_INFO + 2,
-			str, GetColor(32, 32, 32),
-			g_font.hStrL);
-		DrawStringToHandle(x - w/2, 
-			y + f - FONTSIZE_INFO,
-			str, GetColor(255, 255, 255),
-			g_font.hStrL);
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_m,
+			NUM_DAMAGE_M_WIDTH-8, 4, 1, false, false);
+		break;
+	case INFO_DAMAGENUM_DOLL_STRONG:
+		a = PARAM(12*(GetLifeTime()-existTime));
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
+		f = min(0, 0.4*existTime*(existTime-20));
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_l,
+			NUM_DAMAGE_L_WIDTH-12, 4, 1, false, false);
+		break;
+	case INFO_DAMAGENUM_DOLL_RESIST:
+		a = PARAM(12*(GetLifeTime()-existTime));
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
+		f = min(0, 0.4*existTime*(existTime-20));
+		DrawNum(param, x, y+f,
+			g_image.chars.num_damage_s,
+			NUM_DAMAGE_S_WIDTH-8, 4, 1, false, false);
 		break;
 	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);

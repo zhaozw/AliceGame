@@ -31,7 +31,8 @@
 // ウィンドウに関する画像を保持する。
 typedef struct Image_Window{
 	int image; // ウィンドウのダミー画像
-	int simple[MAX_WNDIMGINDEX];
+	int simple[MAX_WNDIMGINDEX];	// シンプル
+	int balloon[1];					// 吹き出し
 }IMAGE_WINDOW;
 
 // 文字に関する画像を保持する。
@@ -105,8 +106,12 @@ typedef struct Image_Icon{
 	int attrstone_group;
 	int attrstone[DOLL_GROUP_NUM][DOLL_ATTR_NUM];
 	int state_group;
+	int cursor[2];
+	int tile;
+	int cleared;
 	int	state[64];
 	int attr_graph;
+	Image_Icon(){};
 }IMAGE_ICON_; // IMAGE_ICONだと組み込みの定数とかぶるので
 
 // 各種背景系（画面全体）の画像を保持する。

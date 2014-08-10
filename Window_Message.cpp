@@ -96,7 +96,8 @@ bool Window_Message_DrawLine::Import(LPTSTR buf, int strLen){
 	return true;
 }
 
-void Window_Message_DrawLine::DrawContent(int hFont, int fontWidth,
+void Window_Message_DrawLine::DrawContent(
+	int hFont, int hColor, int fontWidth,
 	int x, int y, int count) const{
 	// 一行分の内容を描画する。
 	int strLength = (count == -1 ? GetStrLength() : count);
@@ -104,7 +105,7 @@ void Window_Message_DrawLine::DrawContent(int hFont, int fontWidth,
 	int tmpDrawX = x;
 	for(int n=0; n<strLength; n++){
 		DrawStringToHandle(tmpDrawX, y, chars[n].character, 
-			GetColor(255, 255, 255), hFont);
+			hColor, hFont);
 		if(chars[n].flags & F_MSGCHAR_ONE_BYTE){
 			tmpDrawX += fontWidth/2;
 		}else{
@@ -133,19 +134,19 @@ void Window_Message_DrawMsg::ClearAll(){
 }
 
 void Window_Message_DrawMsg::DrawLine(
-	int hFont, int fontWidth, int x, int y,
+	int hFont, int hColor, int fontWidth, int x, int y,
 	int count, int historyCount) const{
 		int tmpIndex = SeamLess(index-historyCount, WND_MSG_DRAWLINE);
 		if(tmpIndex < WND_MSG_DRAWLINE){
-			lines[tmpIndex].DrawContent(hFont, fontWidth, x, y, count);
+			lines[tmpIndex].DrawContent(hFont, hColor, fontWidth, x, y, count);
 		}
 }
 
 void Window_Message_DrawMsg::DrawLineByIndex(
-	int hFont, int fontWidth, int x, int y,
+	int hFont, int hColor, int fontWidth, int x, int y,
 	int index, int count) const{
 		if(index < 0 || index >= WND_MSG_DRAWLINE) return;
-		lines[index].DrawContent(hFont, fontWidth, x, y, count);
+		lines[index].DrawContent(hFont, hColor, fontWidth, x, y, count);
 }
 
 
@@ -176,7 +177,7 @@ void Window_Message_StockLine::Clear(){
 	strcpy_s(chars, WND_MSG_STOCKLENGTH, _T(""));
 }
 
-bool Window_Message_StockLine::IsEmpty(){
+bool Window_Message_StockLine::IsEmpty() const{
 	return (strlen(chars) == 0);
 }
 
@@ -197,6 +198,7 @@ void Window_Message_StockMsg::ClearAll(){
 	}
 	// データを配置する位置を初期化
 	index = 0;
+	emptyIndex = 0;
 }
 
 bool Window_Message_StockMsg::AddMsg(LPTSTR str, int strlen){
@@ -282,6 +284,7 @@ void Window_Message::ResetAll(){
 	fontWidth = 0;
 	messageSpeed = WND_MSG_DEFSPD;
 	readTypeFlag = F_READTYPE_QUICK;
+	skipToEmpty = false;
 }
 
 bool Window_Message::AddStockMsg(LPTSTR str, int strlen){
@@ -379,9 +382,15 @@ void Window_Message::NewLine(bool force){
 void Window_Message::UpdateLine(){
 	// 現在の行が最後までいった場合はクリック待ち状態になる。
 	lineCount++;
-	if(readTypeFlag & F_READTYPE_NOWAIT){
-		// 瞬間表示
-		linePos = GetLineLength();
+	if((readTypeFlag & F_READTYPE_NOWAIT)
+		|| skipToEmpty){
+			// 瞬間表示
+			linePos = GetLineLength();
+			if(stockMsg.IsEmpty() && skipToEmpty){
+				// 末端まで表示してスキップを終了
+				lineCount = 9999;
+				skipToEmpty = false;
+			}
 	}else{
 		linePos = messageSpeed * lineCount;
 	}
@@ -425,6 +434,10 @@ bool Window_Message::CheckNewLine(bool chooseKey, bool skipKey){
 		if(readTypeFlag & F_READTYPE_FLOOD){
 			flag = true;
 		}
+		// 常時スキップ
+		if(skipToEmpty){
+			flag = true;
+		}
 		// ストックが空行であってもキーで進めるか
 		if(!(readTypeFlag & F_READTYPE_BLANKLINE)){
 			if(StockIsEmpty()){
@@ -442,6 +455,12 @@ bool Window_Message::CheckNewLine(bool chooseKey, bool skipKey){
 						// 即座に改行
 						flag = true;
 					}
+				}
+			}
+			// ページ終わりまで進む
+			if((readTypeFlag & F_READTYPE_SKIPTOEMPTY) != 0x0000){
+				if(lineCount > 1 && chooseKey){
+					skipToEmpty = true;
 				}
 			}
 			if((readTypeFlag & F_READTYPE_AUTOQUICK) != 0x0000){
@@ -465,7 +484,7 @@ bool Window_Message::CheckStockMsg(){
 	return !StockIsEmpty();
 }
 
-int Window_Message::GetLineLength(){
+int Window_Message::GetLineLength() const{
 	return drawMsg.GetLineLength();
 }
 
@@ -475,15 +494,15 @@ void Window_Message::DrawContent() const{
 
 void Window_Message::DrawLine(int dx, int dy, int historyCount) const{
 	// 指定した一行を描画する
-	drawMsg.DrawLine(windowFont.hFont, fontWidth,
+	drawMsg.DrawLine(windowFont.hFont, windowFont.color, fontWidth,
 		frameArea.x+dx, frameArea.y+dy,
 		(historyCount==0 ? linePos : -1), historyCount);
 }
 
 void Window_Message::DrawLineByIndex(int dx, int dy, int drawIndex) const{
 	// 指定した一行を描画する
-	drawMsg.DrawLineByIndex(windowFont.hFont, fontWidth,
-		frameArea.x+dx, frameArea.y+dy,
+	drawMsg.DrawLineByIndex(windowFont.hFont, windowFont.color, fontWidth,
+		frameArea.x+contentArea.x+dx, frameArea.y+contentArea.y+dy,
 		drawIndex, (drawIndex==drawMsg.GetIndex() ? linePos : -1));
 }
 

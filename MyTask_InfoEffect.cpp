@@ -36,9 +36,13 @@ bool MyTask_InfoEffect::Update(){
 void MyTask_InfoEffect::SetLifeTime(){
 	switch(typeID){
 	case INFO_DAMAGENUM_ENEMY:
+	case INFO_DAMAGENUM_ENEMY_STRONG:
+	case INFO_DAMAGENUM_ENEMY_RESIST:
 		lifeTime = INFO_DAMAGENUM_ENEMY_LIFETIME;
 		break;
 	case INFO_DAMAGENUM_DOLL:
+	case INFO_DAMAGENUM_DOLL_STRONG:
+	case INFO_DAMAGENUM_DOLL_RESIST:
 		lifeTime = INFO_DAMAGENUM_DOLL_LIFETIME;
 		break;
 	default:

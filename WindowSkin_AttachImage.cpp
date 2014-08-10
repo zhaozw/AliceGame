@@ -17,6 +17,13 @@ bool WindowSkins::AttachImages(){
 		WindowSkin::FT_NOIMAGE, WindowSkin::OT_EXPAND_Y, 5)){
 		return false;
 	}
+	if(!skin[WNDSKIN_BALLOON].AttachImage(
+		g_image.window.balloon, WNDSKIN_BALLOON, 0,
+		WindowSkin::FT_NOFRAME, WindowSkin::OT_EXPAND_Y, 5)){
+		return false;
+	}
+
+
 	return true;
 }
 

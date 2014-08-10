@@ -33,7 +33,7 @@ class Scene_Base;
 										// 空行を挿入して次の行に進む。
 										// フラグを指定しない場合、
 										// ストックがない場合ページ送りをしない。
-										// 
+#define F_READTYPE_SKIPTOEMPTY	0x0100	// 決定キーを押したときページ終わりまで進む。
 
 
 // メッセージスピード
@@ -71,10 +71,11 @@ public:
 	int GetStrLength() const;
 	// 自身の内容を描画する。
 	// hFont	: 描画に用いるフォント
+	// hColor	: 基本となるフォントの色
 	// fontWidth: フォントの幅
 	// x, y		: 描画位置(絶対座標)
 	// count	: 描画する文字数。-1を指定すると全ての文字を描画。
-	void DrawContent(int hFont, int fontWidth, int x, int y, int count=-1) const;
+	void DrawContent(int hFont, int hColor, int fontWidth, int x, int y, int count=-1) const;
 };
 
 // バトルメッセージウィンドウで表示するメッセージ全体の情報を保持するクラス。
@@ -94,11 +95,11 @@ public:
 	// 現在の行の文字数を求める
 	int GetLineLength(int historyCount=0) const;
 	// 指定した行を描画する。
-	void DrawLine(int hFont, int hFontWidth,
+	void DrawLine(int hFont, int hColor, int hFontWidth,
 		int x, int y, int count=-1, int historyCount=0) const;
 	// 指定した行を描画する。
 	// 最新行からの履歴ではなく、直接値を指定する。
-	void DrawLineByIndex(int hFont, int hFontWidth,
+	void DrawLineByIndex(int hFont, int hColor, int hFontWidth,
 		int x, int y, int index, int count=-1) const;
 	// 空の行に描画する内容を追加する。
 	// 行の長さについての確認は行わない。
@@ -117,7 +118,7 @@ public:
 	// 内容のクリア
 	void Clear();
 	// 中身が空かどうかを返す
-	bool IsEmpty();
+	bool IsEmpty() const;
 	// 文字列のポインタを渡す
 	TCHAR*		GetCharsPtr(){ return chars; };
 };
@@ -149,7 +150,7 @@ public:
 	bool ReadLine(LPTSTR buf, bool discard);
 
 	// 現在の行が空かどうかをチェックする。
-	bool IsEmpty(){ return lines[index].IsEmpty(); };
+	bool IsEmpty() const{ return lines[index].IsEmpty(); };
 
 	// 現在の内容をストックから除外する。
 	void DiscardLine();
@@ -190,6 +191,10 @@ protected:
 	int						fontWidth;
 	// 1フレームあたりに勧める文字数
 	float					messageSpeed;
+	// 現在ストックされている内容をすべて一気に表示するフラグ
+	// 会話ウィンドウなどに使用する
+	// 全て表示し終わったあと、自動でfalseになる
+	bool					skipToEmpty;
 
 public:
 	// コンストラクタ
@@ -218,7 +223,7 @@ public:
 		return drawMsg.GetLineLength(historyCount) == 0; };
 
 	// stockMsgが空かどうかを返す。
-	bool StockIsEmpty(){ return stockMsg.IsEmpty(); };
+	bool StockIsEmpty() const{ return stockMsg.IsEmpty(); };
 
 	// 内容のアップデートを行う。
 	virtual void Update();			// クラスごとに派生するアップデート関数。
@@ -256,7 +261,7 @@ public:
 	bool CheckStockMsg();
 
 	// 現在の行の文字数を取得する。
-	int GetLineLength();
+	int GetLineLength() const;
 	int GetClickWaitCount(){ return clickWaitCount; };
 	void SetClickWaitTime(int t){ clickWaitTime = t; };
 	int GetClickWaitTime(){ return clickWaitTime; };

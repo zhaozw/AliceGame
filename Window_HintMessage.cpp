@@ -8,11 +8,13 @@
 #include "DXFont.h"
 #include "DXInput.h"
 #include "KeyConfig.h"
+#include "Image.h"
 
 extern WindowSkins		g_wndSkins;
 extern DXFont			g_font;
 extern DXInput			g_input;
 extern KeyConfig		g_key;
+extern Image			g_image;
 
 Window_HintMessage::Window_HintMessage() : Window_Message(){
 	// ウィンドウの情報をクリアする。
@@ -28,6 +30,8 @@ void Window_HintMessage::Clear(){
 	isError = false;
 	isTerminated = false;
 	ClearBuffer();
+	drawMsg.ClearAll();
+	stockMsg.ClearAll();
 }
 
 void Window_HintMessage::ClearBuffer(){
@@ -58,23 +62,23 @@ bool Window_HintMessage::OpenAndPlay(LPTSTR fileName, WORD _typeID){
 bool Window_HintMessage::SetupByTypeID(WORD _typeID, bool check){
 	switch(_typeID){
 	case WND_HINT_SHANGHAI:
-		Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE],
-			GetWindowArea(100, 200, WND_WIDTH-200, WND_HEIGHT-400),
-			GetWindowArea(16, 16, WND_WIDTH-200-32, WND_HEIGHT-400-32),
+		Setup(&g_wndSkins.skin[WNDSKIN_BALLOON],
+			GetWindowArea(200, 150, 600, 300),
+			GetWindowArea(90, 85, 440, 130),
 			true);
-		SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
-		SetColor(GetColor(255,255,192));
-		SetFontWidth(FONTSIZE_INFO);
+		SetFont(g_font.hTalk, FONTSIZE_TALK, FONTSIZE_TALK+8);
+		SetColor(GetColor(128, 48, 32));
+		SetFontWidth(FONTSIZE_TALK);
 		SetMessageSpeed(0.4);
 		break;
 	case WND_HINT_ALICE:
-		Setup(&g_wndSkins.skin[WNDSKIN_SIMPLE],
-			GetWindowArea(100, 200, WND_WIDTH-200, WND_HEIGHT-400),
-			GetWindowArea(16, 16, WND_WIDTH-200-32, WND_HEIGHT-400-32),
+		Setup(&g_wndSkins.skin[WNDSKIN_BALLOON],
+			GetWindowArea(200, 150, 600, 300),
+			GetWindowArea(90, 85, 440, 130),
 			true);
-		SetFont(g_font.hInfo, FONTSIZE_INFO, FONTSIZE_INFO+4);
-		SetColor(GetColor(255,255,192));
-		SetFontWidth(FONTSIZE_INFO);
+		SetFont(g_font.hTalk, FONTSIZE_TALK, FONTSIZE_TALK+8);
+		SetColor(GetColor(128, 48, 32));
+		SetFontWidth(FONTSIZE_TALK);
 		SetMessageSpeed(0.4);
 		break;
 	default:
@@ -86,7 +90,7 @@ bool Window_HintMessage::SetupByTypeID(WORD _typeID, bool check){
 	// 共通の設定
 	// 最後の行以外はクリック待ちをしない
 	readTypeFlag = 
-		F_READTYPE_QUICK | F_READTYPE_AUTOQUICK | F_READTYPE_PUSH;
+		F_READTYPE_SKIPTOEMPTY | F_READTYPE_AUTOQUICK | F_READTYPE_PUSH;
 	typeID = _typeID;
 	return true;
 }
@@ -142,9 +146,11 @@ BYTE Window_HintMessage::NewPage(){
 		// コマンドの判定
 		switch(CheckCommand(tmpBuf)){
 		case WND_HINT_CHKCMD_NEWPAGE:
+			drawMsg.ClearAll();
 			isEnd = true;
 			break;
 		case WND_HINT_CHKCMD_END:
+			drawMsg.ClearAll();
 			isFileEnd = true;
 			isEnd = true;
 			break;
@@ -246,7 +252,6 @@ void Window_HintMessage::ExUpdate(){
 			// 次のページを読み込む。
 			switch(NewPage()){
 			case WND_HINT_NEWPAGE_OK:
-				drawMsg.ClearAll();
 				state = UPDATING;
 				break;
 			case WND_HINT_NEWPAGE_OVERFLOW:
@@ -254,7 +259,6 @@ void Window_HintMessage::ExUpdate(){
 				state = UPDATING;
 				break;
 			case WND_HINT_NEWPAGE_END:
-				drawMsg.ClearAll();
 				isTerminated = true; // すぐさま閉じるのではなく、最後の文章を表示して閉じる
 				state = UPDATING;
 				break;
@@ -264,6 +268,8 @@ void Window_HintMessage::ExUpdate(){
 				break;
 			}
 		}else{
+			// 内容をクリアしてから閉じる
+			Clear();
 			Close();
 		}
 		break;
@@ -285,11 +291,49 @@ bool Window_HintMessage::CheckIsIdle(){
 	return false;
 }
 
+void Window_HintMessage::DrawFrameBack() const{
+	if(!GetActive()) return;
+	int tmpY = 0;
+	switch(typeID){
+	case WND_HINT_ALICE:
+	case WND_HINT_SHANGHAI:
+		// キャラクターの描画
+		tmpY = -15*sin(2.0*M_PI*activeCount/400);
+		DrawRotaGraphF(
+			frameArea.x-50, frameArea.y+frameArea.h/2+tmpY,
+			0.8, 0, g_image.icon.doll[0][3][0], 1);
+	}
+}
+
 void Window_HintMessage::DrawContent() const{
 	if(!GetActive()) return;
-	for(int n=0; n<WND_MSG_DRAWLINE; n++){
-		if(n <= drawMsg.GetIndex() || true){
-			DrawLineByIndex(10, 10+25*n, n);
+	bool waitClick = false;
+	if(state == UPDATING ){
+		if(linePos >= GetLineLength()){
+			if(StockIsEmpty()){
+				waitClick = true;
+			}
+		}
+	}
+		
+
+	switch(typeID){
+	case WND_HINT_ALICE:
+	case WND_HINT_SHANGHAI:
+		// 文章の描画
+		for(int n=0; n<WND_MSG_DRAWLINE; n++){
+			if(n <= drawMsg.GetIndex() || true){
+				DrawLineByIndex(0, windowFont.lineHeight*n, n);
+			}
+		}
+		// クリック待ち記号の描画
+		if(waitClick){
+			DrawGraph(
+				frameArea.x + contentArea.x + contentArea.w - 16,
+				frameArea.y + contentArea.y 
+				+ contentArea.h + 8 + 6*sin(2*M_PI*activeCount/30),
+				g_image.icon.cursor[0], 1);
+			// DrawBox(0, 0, 20, 20, GetColor(255, 0, 0), 1);
 		}
 	}
 }

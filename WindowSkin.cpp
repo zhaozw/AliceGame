@@ -136,7 +136,7 @@ void WindowSkin::Draw_FT_NoFrame(int _cx, int _cy, int _w, int _h, float _exRate
 	y1 = _cy - _exRateY*_h/2; 
 	x2 = _cx + _exRateX*_w/2; 
 	y2 = _cy + _exRateY*_h/2;
-	DrawExtendGraph(x1, y1, x2, y2, wndImgArray[WNDIMGINDEX_CENTER], 1);
+	DrawExtendGraph(x1, y1, x2, y2, wndImgArray[WNDIMGINDEX_NOFRAME], 1);
 }
 
 void WindowSkin::Draw_FT_Header(int _cx, int _cy, int _w, int _h, float _exRateX, float _exRateY) const{
@@ -167,5 +167,5 @@ void WindowSkin::Draw_FT_Header(int _cx, int _cy, int _w, int _h, float _exRateX
 	y1 = _cy - (_h/2-frameSize)*_exRateY;
 	x2 = _cx + _exRateX*_w/2; 
 	y2 = _cy + _exRateY*_h/2;
-	DrawExtendGraph(x1, y1, x2, y2, wndImgArray[WNDIMGINDEX_CENTER], 1);
+	DrawExtendGraph(x1, y1, x2, y2, wndImgArray[WNDIMGINDEX_HEADER_CENTER], 1);
 }

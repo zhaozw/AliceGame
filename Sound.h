@@ -10,6 +10,8 @@ class Sound;
 
 // ゲームで使用するBGMのIDを列挙する。
 #define BGM_DUMMY		0
+#define BGM_MENU		1
+#define BGM_BATTLE		2
 
 // ゲームで使用するSEの最大数を定義する。
 #define MYGAME_MAX_SE	30

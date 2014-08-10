@@ -174,11 +174,15 @@ public:
 	// 内容の描画を行う。
 	// クラスごとに派生する。
 	virtual void DrawContent() const;
+	// 枠の後ろの描画を行う。
+	// 基本的には何も行わないが、ウィンドウの後ろに何かを描画したい場合
+	// クラスを派生させて描画する。
+	virtual void DrawFrameBack() const{};
 	// ウィンドウスキンへの参照を利用して枠の描画を行う。
 	// 基本的にクラスごとには派生しない。
 	void DrawFrame() const;  
 	// ウィンドウ全体の描画を行う。
-	void Draw() const{ if(visible){ DrawFrame(); DrawContent(); }; };
+	void Draw() const{ if(visible){ DrawFrameBack(); DrawFrame(); DrawContent(); }; };
 
 	// 可視性の設定
 	void SetVisible(bool b){ visible = b; };

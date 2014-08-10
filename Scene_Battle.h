@@ -17,6 +17,7 @@
 #include "BWindow_FocusedUnit.h"
 #include "BWindow_BattleDollStatus.h"
 #include "BWindow_BattleEnemyStatus.h"
+#include "Window_hintMessage.h"
 
 
 #include "Sprite_BattleDoll.h"
@@ -46,6 +47,7 @@ public:
 
 	enum BATTLEPHAZE{
 		BEFORE_BATTLE,		// 戦闘前（PRE_BATTLEの前に入るダミー）
+		TALK_BEFORE_BATTLE,	// 戦闘前の会話
 		PRE_BATTLE,			// 戦闘前
 		ALICE_COMMAND,		// アリスのコマンドを選択
 		ALICE_COMMAND_DO,	// アリスのコマンドを実行
@@ -56,6 +58,7 @@ public:
 		BATTLE_DO,			// 戦闘
 		AFTER_TURN,			// ターン終了時
 		POST_BATTLE,		// 戦闘終了
+		TALK_AFTER_BATTLE,	// 戦闘後の会話
 		END_BATTLE,			// シーン終了(即座にフェードアウトしてシーン移動)
 	};
 
@@ -106,6 +109,8 @@ private:
 	BWindow_BattleEnemyStatus			w_battleEnemyStatus;
 	// 特技の説明を表示するウィンドウ
 	Window_LineInfo						w_skillAccLine;
+	// 開始時ウィンドウ
+	Window_HintMessage					w_hintMessage;
 
 	// 情報表示用ウィンドウの状態。
 	// 0なら開いていない、それ以外なら開いている。
@@ -161,16 +166,18 @@ public:
 	// 次のフェイズに移行した際の処理。
 	// 関数NextPhazeから実行される。
 	// 各フェイズごとに実行するアクションをセットする。
-	void SetupPreBattle();		// PRE_BATTLEになった時
-	void SetupAliceCommand();	// アリスのコマンドウィンドウを開く
-	void SetupAliceCommandDo(); // アリスのコマンドを実行する
-	void SetupDollsCommand();	// 人形のコマンドウィンドウを開く 
-	void SetupEnemiesCommand();	// 敵のコマンドを決定する。(即座に終わる)
-	void SetupBeforeSort();		// ソート前のコマンド判定を行う。
-	void SetupAfterSort();		// ソート後、ターン開始時。ステートの判定など。
-	void SetupBattleDo();		// 戦闘。
-	void SetupAfterTurn();		// ターン終了時。ステートの判定など。
-	void SetupPostBattle();		// 戦闘終了時。battleResultの内容によって分岐。
+	void SetupTalkBeforeBattle();	// 戦闘前の会話
+	void SetupPreBattle();			// PRE_BATTLEになった時
+	void SetupAliceCommand();		// アリスのコマンドウィンドウを開く
+	void SetupAliceCommandDo();		// アリスのコマンドを実行する
+	void SetupDollsCommand();		// 人形のコマンドウィンドウを開く 
+	void SetupEnemiesCommand();		// 敵のコマンドを決定する。(即座に終わる)
+	void SetupBeforeSort();			// ソート前のコマンド判定を行う。
+	void SetupAfterSort();			// ソート後、ターン開始時。ステートの判定など。
+	void SetupBattleDo();			// 戦闘。
+	void SetupAfterTurn();			// ターン終了時。ステートの判定など。
+	void SetupPostBattle();			// 戦闘終了時。battleResultの内容によって分岐。
+	void SetupTalkAfterBattle();	// 戦闘後の会話
 
 
 	// 必要なオブジェクト群のアップデートを行う。

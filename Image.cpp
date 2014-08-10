@@ -38,6 +38,7 @@ bool Image::Load(){
 bool Image::Load_WndSkin(){
 	// ウィンドウ画像の読み込み
 	window.image = LoadGraph(_T("img_system\\Window.png"), 1);
+	window.balloon[WNDIMGINDEX_NOFRAME] = LoadGraph(_T("img_system\\Window_Balloon.png"), 1);
 	// ウィンドウスキン画像への割り当て
 
 	// ウィンドウ枠のサイズ、中心部の幅と高さ
@@ -283,7 +284,7 @@ bool Image::Load_Icon(){
 	}
 
 	// ステートアイコンの読み込み
-	icon.state_group = LoadGraph(_T("img\\state_icon.png"));
+	icon.state_group = LoadGraph(_T("img\\state_icon.bmp"));
 	for(int h=0; h<4; h++){
 		for(int w=0; w<8; w++){
 			icon.state[w+h*8] = DerivationGraph(
@@ -291,6 +292,13 @@ bool Image::Load_Icon(){
 				IMAGE_SIZE_STATEICON, IMAGE_SIZE_STATEICON, icon.state_group);
 		}
 	}
+
+	// カーソルの読み込み
+	LoadDivGraph(_T("img\\cursor.bmp"), 2, 2, 1, 32, 32, icon.cursor);
+
+	// メニュー画面背景
+	icon.tile = LoadGraph(_T("img\\tile.bmp"));
+	icon.cleared = LoadGraph(_T("img\\cleared.png"));
 
 	// 属性関係画像の読み込み
 	icon.attr_graph = LoadGraph(_T("img\\attr_graph.png"));

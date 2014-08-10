@@ -296,6 +296,11 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 		float gRate = 1.0;	// 定数も含めた倍率
 		int damage;			// 計算結果
 		bool canMinus = false;	// 負数を認めるか否か
+		int attr = 0;		// 相性により値が変化する。
+							// 相性が良い場合に1を、悪い場合に2を代入し、
+							// それに10000をかけた値をダメージに加える。
+							// すると、10000以上のダメージは属性の符号とみなす。
+		
 		switch(param){
 		case CALCDAMAGE_ATTACK:
 			// 攻撃力に属性補正を適用する
@@ -303,6 +308,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		case CALCDAMAGE_TECH:
 			// 技巧に属性補正を適用する
@@ -310,6 +316,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		case CALCDAMAGE_TECH_TECH:
 			// 技巧の差に属性補正を適用する
@@ -317,6 +324,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= pOpponent->GetDef();
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		case CALCDAMAGE_TECH_NOGUARD:
 			// 防御を使用しない
@@ -324,6 +332,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		= 0;
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		case CALCDAMAGE_TECH_NOATTR:
 			// 属性補正を使用しない
@@ -337,6 +346,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		case CALCDAMAGE_ATTACK_DOUBLE:
 			// 攻撃の2.5倍から魔力か技巧の高い方を引く
@@ -344,6 +354,7 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 				* GetAttrRate(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			to		=  pOpponent->GetDef();
 			rate	= 1.0f;
+			attr = GetAttrAffinity(pAttacker->GetAmendedAttr(), pOpponent->GetAmendedAttr());
 			break;
 		}
 		// 自分のステートによるダメージの補正
@@ -352,11 +363,11 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			gRate *= 0.5;
 		}
 
-		damage = (int)(gRate*(rate*(from-to)+fix));
+		damage = min(DAMAGE_MAX, (int)(gRate*(rate*(from-to)+fix))) + attr*10000;
 		if(canMinus){
-			return min(DAMAGE_MAX, damage);
+			return damage;
 		}else{
-			return min(DAMAGE_MAX, max(0, damage));
+			return max(0, damage);
 		}
 }
 
