@@ -31,6 +31,8 @@
 #define SKILL_ENCHANT_SUN		17	// 3ターンの間、味方一体を太陽属性に変化させる
 #define SKILL_ENCHANT_MOON		18	// 3ターンの間、味方一体を月属性に変化させる
 #define SKILL_ENCHANT_STAR		19	// 3ターンの間、味方一体を星属性に変化させる
+#define SKILL_SUPERGUARD		20	// 超防御
+#define SKILL_WALL_ALICE		21	// ウォール・アリス（全員を超防御にする）
 
 
 

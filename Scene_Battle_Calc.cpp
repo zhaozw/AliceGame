@@ -33,10 +33,12 @@ bool Scene_Battle::SetEnemyCommands(){
 	for(int n=0; n<enemiesNum; n++){
 		pEnemy = GetEnemyPtr(n);
 		if(pEnemy != NULL){
-			for(int n=0; n<(pEnemy->IsState(STATE_DOUBLEACTION)?2:1); n++){
-				cmd = GetEnemyCommand(pEnemy, n);
-				SetCommand(cmd);
-				pEnemy->AddActionCount();
+			if(pEnemy->CanAct()){
+				for(int i=0; i<(pEnemy->IsState(STATE_DOUBLEACTION)?2:1); i++){
+					cmd = GetEnemyCommand(pEnemy, i);
+					SetCommand(cmd);
+					pEnemy->AddActionCount();
+				}
 			}
 		}
 	}
@@ -109,6 +111,8 @@ int Scene_Battle::GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index){
 	ENEMYACTIONPATTERN*	pAction;
 	pAction = pEnemy->GetActionPatternPtr(index);
 	float rate;
+	int count = 0;
+	Game_BattleUnit* pUnit = NULL;
 	if(pAction == NULL) return 0;
 	// ここで行動条件の判定を行う
 	// 条件を満たしていないものがあれば0を返す
@@ -161,6 +165,19 @@ int Scene_Battle::GetEnemyCommandPriority(Game_BattleEnemy* pEnemy, int index){
 			if((pEnemy->GetActionCount()+pEnemy->GetSelfTurn()) 
 				% pAction->conditionParam[n][0]
 				!= pAction->conditionParam[n][1]){
+				return 0;
+			}
+		case CONDITIONTYPE_ENEMYNUM_MORE:
+			count = 0;
+			for(int i=0; i<MAX_BATTLEENEMY; i++){
+				pUnit = (Game_BattleUnit*)GetEnemyPtr(i);
+				if(pUnit != NULL){
+					if(!pUnit->IsDead()){
+						count++;
+					}
+				}
+			}
+			if(count < pAction->conditionParam[n][0]){
 				return 0;
 			}
 			break;
@@ -362,13 +379,18 @@ int Scene_Battle::CalcDamage(Game_BattleUnit* pAttacker, Game_BattleUnit* pOppon
 			// 防御
 			gRate *= 0.5;
 		}
-
-		damage = min(DAMAGE_MAX, (int)(gRate*(rate*(from-to)+fix))) + attr*10000;
-		if(canMinus){
-			return damage;
-		}else{
-			return max(0, damage);
+		if(pOpponent->IsState(STATE_SUPERGUARD)){
+			// 鉄壁の守り
+			gRate *= 0.1;
 		}
+
+		// ダメージ計算
+		damage = min(DAMAGE_MAX, (int)(gRate*(rate*(from-to)+fix)));
+		// 負の数は禁止
+		damage = max(0, damage);
+		// 属性の補正を付与
+		damage += attr*10000;
+		return damage;
 }
 
 int Scene_Battle::CalcHeal(Game_BattleUnit* pAttacker, Game_BattleUnit* pOpponent,
@@ -536,6 +558,8 @@ void Scene_Battle::SetEnemySpriteMorphByState(Game_BattleEnemy* pUnit, WORD stat
 bool Scene_Battle::CheckStateTurn(){
 	Game_BattleAction action;
 	WORD removeStateID = 0;
+	WORD calcStateID = 0;
+	// ステートの解除判定
 	for(int n=0; n<MAX_BATTLEDOLL; n++){
 		if(dolls[n].GetIsUsed()){
 			removeStateID = dolls[n].CheckStateTurn();
@@ -566,10 +590,53 @@ bool Scene_Battle::CheckStateTurn(){
 			}
 		}
 	}
+	// ステートの処理判定
+	for(int n=0; n<MAX_BATTLEDOLL; n++){
+		if(dolls[n].GetIsUsed()){
+			for(int i=0; i<BATTLEUNIT_STATE_MAX; i++){
+				calcStateID = dolls[n].GetStateID(i);
+				if(!dolls[n].GetStateCheckedAtTurnEnd(i)){
+					dolls[n].StateCheckedAtTurnEnd(i);
+					if(calcStateID != 0){
+						if(CalcUnitState((Game_BattleUnit*)&dolls[n],
+							calcStateID, 
+							dolls[n].GetStateParamByIndex(i),
+							dolls[n].GetStateParam2ByIndex(i))){
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		if(enemies[n].GetIsUsed()){
+			for(int i=0; i<BATTLEUNIT_STATE_MAX; i++){
+				calcStateID = enemies[n].GetStateID(i);
+				if(!enemies[n].GetStateCheckedAtTurnEnd(i)){
+					enemies[n].StateCheckedAtTurnEnd(i);
+					if(calcStateID != 0){
+						if(CalcUnitState((Game_BattleUnit*)&enemies[n],
+							calcStateID, 
+							enemies[n].GetStateParamByIndex(i),
+							enemies[n].GetStateParam2ByIndex(i))){
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
 	return false;
 }
 
 void Scene_Battle::UpdateUnitTurn(){
+	// 敵のターン経過判定もここで行う。
+	for(int n=0; n<MAX_BATTLEDOLL; n++){
+		if(dolls[n].GetIsUsed()){
+			dolls[n].UpdateStateTurn();
+		}
+	}
 	// 敵のターン経過判定もここで行う。
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
 		if(enemies[n].GetIsUsed()){
@@ -579,3 +646,51 @@ void Scene_Battle::UpdateUnitTurn(){
 	}
 
 }
+
+void Scene_Battle::ResetUnitState(){
+	// ステートのフラグを解除する。
+	for(int n=0; n<MAX_BATTLEDOLL; n++){
+		if(dolls[n].GetIsUsed()){
+			dolls[n].ResetStateTurn();
+		}
+	}
+	for(int n=0; n<MAX_BATTLEENEMY; n++){
+		if(enemies[n].GetIsUsed()){
+			enemies[n].ResetStateTurn();
+		}
+	}
+
+}
+
+bool Scene_Battle::CalcUnitState(
+	Game_BattleUnit* pUnit, WORD id, int param, int param2){
+	Game_BattleAction action;
+	int value;
+	action.Clear();
+	switch(id){
+	case STATE_AUTOHEAL:
+		if(!pUnit->IsDead()){
+			// HPを(param)%だけ回復させる
+			if(pUnit->GetHPRate() < 1.0){
+				value = (int)((float)param/100*pUnit->GetMaxHP());
+				action.Clear();
+				action.SetType(Game_BattleAction::TYPE_HEAL);
+				action.SetActor(pUnit);
+				action.SetOpponent(pUnit);
+				action.SetParam(value);
+				actionStack.Push(action);
+			}
+			// ステートの継続を宣言
+			action.Clear();
+			action.SetType(Game_BattleAction::TYPE_KEEPSTATE);
+			action.SetActor(pUnit);
+			action.SetOpponent(pUnit);
+			action.SetParam(id);
+			actionStack.Push(action);
+			return true;
+		}
+		break;
+	}
+	return false;
+}
+

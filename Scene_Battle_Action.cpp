@@ -53,6 +53,9 @@ bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	case Game_BattleAction::TYPE_REMOVESTATE:
 		Action_Remove_State(pAction);
 		break;
+	case Game_BattleAction::TYPE_KEEPSTATE:
+		Action_Keep_State(pAction);
+		break;
 	case Game_BattleAction::TYPE_NONE:
 	case Game_BattleAction::TYPE_UNDIFINED:
 	default:
@@ -72,7 +75,7 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 	// ダメージをメッセージウィンドウに表示する
 	TCHAR buf[WND_MSG_STOCKLENGTH];
 	TCHAR nameBuf[BATTLEUNIT_NAME_BYTES];
-	TCHAR numBuf[4]; // 数字表示用
+	TCHAR numBuf[8]; // 数字表示用
 	int value = 0;
 	// 名前を取得する
 	pAction->GetOpponent()->GetName(nameBuf, BATTLEUNIT_NAME_BYTES);
@@ -179,54 +182,7 @@ bool Scene_Battle::Action_Heal(Game_BattleAction* pAction){
 	strcat_s(buf, WND_MSG_STOCKLENGTH-1, _T("回復した！"));
 	AddStockMessage(buf);
 	// ダメージを適用する
-	pAction->GetOpponent()->Heal(pAction->GetParam());
-	/*
-	// ダメージの数値を表示する
-	if(pAction->GetOpponent()->IsDoll()){
-		// 位置を取得
-		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
-		if(pSprite != NULL){
-			// タスクを発生させる
-			pTask = gMyTask_InfoEffect->Call();
-			pDoll = (Sprite_BattleDoll*)pSprite;
-			if(pTask!=NULL){
-				new (pTask) MyTask_InfoEffect(
-					pDoll->GetDollX(), pDoll->GetDollY()+40,
-					INFO_DAMAGENUM_DOLL, pAction->GetParam(), 0);
-			}
-		}
-	}else{
-		// 位置を取得
-		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
-		if(pSprite != NULL){
-			// タスクを発生させる
-			pTask = gMyTask_InfoEffect->Call();
-			if(pTask!=NULL){
-				new (pTask) MyTask_InfoEffect(
-					pSprite->GetIX(), pSprite->GetIY(),
-					INFO_DAMAGENUM_ENEMY, pAction->GetParam(), 0);
-			}
-		}
-	}
-	*/
-	/*
-	// スプライトに対する処理を行う
-	if(pAction->GetOpponent()->IsDoll()){
-		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
-		if(pSprite != NULL){
-			// タスクを発生させる
-			pSprite->SetMorphID(SPMORPH_DAMAGE_DOLL, false, 8);
-		}
-	}else{
-		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetOpponent());
-		if(pSprite != NULL){
-			// タスクを発生させる
-			pSprite->SetMorphID(SPMORPH_BLINK, false, 8);
-		}
-	}
-	*/
-
-	
+	pAction->GetOpponent()->Heal(pAction->GetParam());	
 	return true;
 }
 
@@ -386,6 +342,23 @@ bool Scene_Battle::Action_Remove_State(Game_BattleAction* pAction){
 		// GetDollSprite((Game_BattleDoll*)pTarget)->UpdateRefID();
 	}else{
 		GetEnemySprite((Game_BattleEnemy*)pTarget)->UpdateRefID();
+	}
+	return true;
+}
+
+
+bool Scene_Battle::Action_Keep_State(Game_BattleAction* pAction){
+	Game_BattleUnit* pActor = pAction->GetActor();
+	if(pActor == NULL) return false;
+	// メッセージウィンドウに内容を送る
+	TCHAR buf[WND_MSG_STOCKLENGTH];
+	if(!d_stateMessage.GetStateMessage(buf, pAction->GetParam(),
+		STATEMESSAGE_INDEX_KEEP, pActor)){
+			// メッセージが存在しない場合
+			return true;
+	}
+	if(strlen(buf) > 0){
+		w_battleMsg.AddStockMsg(buf, strlen(buf));
 	}
 	return true;
 }

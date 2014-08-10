@@ -29,6 +29,7 @@ public:
 		TYPE_NO_MP,			// 「しかしMPが足りない！」を表示する
 		TYPE_ADDSTATE,		// ステートが付加されたメッセージを表示する
 		TYPE_REMOVESTATE,	// ステートが解除されたメッセージを表示する
+		TYPE_KEEPSTATE,		// ステートが継続されているメッセージを表示する
 		TYPE_UNDIFINED,
 	};
 private:

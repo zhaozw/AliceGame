@@ -189,6 +189,7 @@ void Game_BattleUnit::AutoRemoveState(WORD refID){
 		RemoveState(STATE_TMPATTR_SUN, false);
 		RemoveState(STATE_TMPATTR_MOON, false);
 		RemoveState(STATE_TMPATTR_STAR, false);
+		RemoveState(STATE_AUTOHEAL, false);
 		break;
 	case STATE_TMPATTR_NONE:
 		RemoveState(STATE_TMPATTR_SUN, false);
@@ -257,10 +258,23 @@ WORD Game_BattleUnit::CheckStateTurn(){
 					return stateArray[n].refID;
 				}
 				break;
+			case STATE_AUTOHEAL:
+				if(stateArray[n].turn >= stateArray[n].param2){
+					// 戻り先で実際のステート解除が行われる
+					// RemoveState(stateArray[n].refID, false);
+					return stateArray[n].refID;
+				}
+				break;
 			}
 		}
 	}
 	return 0;
+}
+
+void Game_BattleUnit::ResetStateTurn(){
+	for(int n=0; n<BATTLEUNIT_STATE_MAX; n++){
+		stateArray[n].checkAtTurnEnd = false;
+	}
 }
 
 void Game_BattleUnit::UpdateStateTurn(){

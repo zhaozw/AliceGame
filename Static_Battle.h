@@ -176,6 +176,8 @@
 
 // [0][1] : selfTurnとactionCountの和を[0]で割った時の値が[1]であれば行う。
 #define CONDITIONTYPE_PERIODIC4			9
+// [0] : 敵の数が[0]体以上であれば行う。
+#define CONDITIONTYPE_ENEMYNUM_MORE		10
 
 //==========================================
 // ユニットに対して適用するアクションに関する定数。

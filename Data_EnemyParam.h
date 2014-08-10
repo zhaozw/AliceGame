@@ -15,11 +15,11 @@
 #define MAX_INITIALSTATE		8	// 最初から持っているステートの最大数
 
 // 行動パターンに関するパラメータをまとめて指定する用
-#define ACTIONPATTERN_ACTIONTYPE	0
-#define ACTIONPATTERN_SKILLID		1
-#define ACTIONPATTERN_ECOMMANDTARGET	2
-#define ACTIONPATTERN_PRIORITY		3
-#define ACTIONPATTERN_PARAMNUM		4
+#define ACTIONPATTERN_ACTIONTYPE			0
+#define ACTIONPATTERN_SKILLID				1
+#define ACTIONPATTERN_ECOMMANDTARGET		2
+#define ACTIONPATTERN_PRIORITY				3
+#define ACTIONPATTERN_PARAMNUM				4
 
 // 敵キャラの行動パターンの一つを扱う構造体。
 typedef struct EnemyActionPattern{

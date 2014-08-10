@@ -25,11 +25,16 @@ public:
 	// パラメータ
 	// 意味合いはステートの種類によって異なる。
 	int		param, param2;
+	// ターン終了時のチェックを行ったか。
+	// ターン終了時にチェックを行われてtrueになり、
+	// その後falseに戻る。
+	bool	checkAtTurnEnd;
 	// コンストラクタ
 	Game_BattleState(){
 		refID = 0;
 		turn = 0;
 		param = param2 = 0;
+		checkAtTurnEnd = false;
 	}
 
 	// 並べ替え用の関数
@@ -136,6 +141,9 @@ public:
 	// ステートを解除した場合、ステートIDを返す。
 	WORD CheckStateTurn();
 
+	// ステートのフラグを解除する。
+	void ResetStateTurn();
+
 	// 単にすべてのステートのターン数を1進める。
 	void UpdateStateTurn();
 
@@ -154,6 +162,18 @@ public:
 	// そのステートになっていない場合は-1を返す。
 	int	GetStateParam(WORD stateRefID);
 	int	GetStateParam2(WORD stateRefID);
+
+	// インデックスで指定したステートのIDを返す。
+	// 0を返すこともあるので注意。
+	WORD GetStateID(WORD index){ return stateArray[index].refID; };
+	int	GetStateParamByIndex(WORD index){ return stateArray[index].param; };
+	int	GetStateParam2ByIndex(WORD index){ return stateArray[index].param2; };
+	
+	// ステートがチェックされたことの確認。
+	void StateCheckedAtTurnEnd(WORD index){ stateArray[index].checkAtTurnEnd = true; };
+	bool GetStateCheckedAtTurnEnd(WORD index){
+		return stateArray[index].checkAtTurnEnd; };
+
 
 	// そのステートになっているかどうかを判断する。
 	bool IsState(WORD stateRefID){ return CheckIsState(stateRefID)!=-1; };

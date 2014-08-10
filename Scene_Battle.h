@@ -337,6 +337,7 @@ public:
 	bool Action_No_MP(Game_BattleAction* pAction);
 	bool Action_Add_State(Game_BattleAction* pAction);
 	bool Action_Remove_State(Game_BattleAction* pAction);
+	bool Action_Keep_State(Game_BattleAction* pAction);
 
 	//=========================================
 	// Game_UnitCommandの内容の処理。
@@ -457,6 +458,15 @@ public:
 
 	// ユニット及びユニットのステートのターン数を増加させる。
 	void UpdateUnitTurn();
+
+	// ユニットのステートのフラグを元に戻す。
+	void ResetUnitState();
+
+	// ユニットに対するステートの処理を行い、
+	// 内容にアクションスタックを追加する。
+	// CheckStateTurn内から呼び出される。
+	bool CalcUnitState(Game_BattleUnit* pUnit, WORD id, int param, int param2);
+	
 
 	//=========================================
 	// 描画

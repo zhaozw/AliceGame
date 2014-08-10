@@ -49,6 +49,9 @@ void BWindow_FocusedUnit::OnOpened(){
 			s_target.index = -1;
 		}
 		break;
+	case BWND_FOCUS_TARGET_SELF:
+		CheckDollEnabled();
+		break;
 	default:
 		s_target.index = 0;
 		break;
@@ -251,6 +254,13 @@ void BWindow_FocusedUnit::DrawContent() const{
 			DrawCntDoll(n);
 		}
 		break;
+	case BWND_FOCUS_TARGET_SELF:
+		for(BYTE n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+			if(pScene->GetFrontDollPtr(n) == pOwner){
+				DrawCntDoll(n);
+			}
+		}
+		break;
 	}
 }
 
@@ -282,13 +292,6 @@ void BWindow_FocusedUnit::DrawCntDoll(BYTE n) const {
 
 	DrawRotaGraph(tmpX, tmpY, 1.0, 0,
 		g_image.icon.cursor[0], 1);
-
-	/*
-	DrawBox(
-		tmpX-5, tmpY-5,
-		tmpX+5, tmpY+5,
-		GetColor(255, 0, 0), 1);
-		*/
 }
 
 void BWindow_FocusedUnit::OpenWithParam(
@@ -338,6 +341,9 @@ BYTE BWindow_FocusedUnit::ConvertTargetTypeToFocusType(BYTE skillTarget){
 		break;
 	case SKILLTARGET_OPPONENT_ALL:
 		return BWND_FOCUS_TARGET_ALL_ENEMIES;
+		break;
+	case SKILLTARGET_SELF:
+		return BWND_FOCUS_TARGET_SELF;
 		break;
 	default:
 		return BWND_FOCUS_TARGET_NONE;

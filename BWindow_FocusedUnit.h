@@ -17,6 +17,7 @@
 #define		BWND_FOCUS_TARGET_ALL_UNITS		5	// 敵味方全体
 #define		BWND_FOCUS_TARGET_FIXED_DOLL	6	// 味方一体（カーソル移動不可）
 #define		BWND_FOCUS_TARGET_FIXED_ENEMY	7	// 敵一体（カーソル移動不可）
+#define		BWND_FOCUS_TARGET_SELF			8	// 人自信（カーソル移動不可）
 
 #define		BWND_FOCUS_TYPE_UNDIFINED		0
 #define		BWND_FOCUS_TYPE_ATTACK			1	// 攻撃時

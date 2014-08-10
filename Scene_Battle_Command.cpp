@@ -87,6 +87,13 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 			// 緊急修復。
 			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 1);
 			break;
+		case SKILL_SUPERGUARD:
+			// 防御
+			break;
+		case SKILL_WALL_ALICE:
+			// ウォール・アリス
+			AddStateToUnit(pCmd->GetOwner(), STATE_SUBSPD_UP, false, 5);
+			break;
 		}
 		break;
 	case COMMANDTYPE_ERROR:
@@ -100,6 +107,7 @@ char Scene_Battle::InterpretCommand_Before_Sort(Game_UnitCommand* pCmd){
 char Scene_Battle::InterpretCommand_After_Sort(Game_UnitCommand* pCmd){
 	// 基本的に自分に属性を付加する系のコマンド
 	Game_BattleAction action;
+	Game_BattleUnit* pUnit;
 	if(pCmd == NULL) return false;
 	switch(pCmd->GetActionType()){
 	case COMMANDTYPE_NONE:
@@ -109,6 +117,43 @@ char Scene_Battle::InterpretCommand_After_Sort(Game_UnitCommand* pCmd){
 	case COMMANDTYPE_GUARD:
 		AddStateToUnit(pCmd->GetOwner(), STATE_GUARD, false);
 		break;
+	case COMMANDTYPE_SKILL:
+		switch(pCmd->GetSkillID()){
+		case SKILL_SUPERGUARD:
+			AddStateToUnit(pCmd->GetOwner(), STATE_SUPERGUARD, true);
+			break;
+		case SKILL_WALL_ALICE:
+			if(pCmd->GetOwner()->IsDoll()){
+				for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
+					pUnit = (Game_BattleUnit*)GetFrontDollPtr(n, true);
+					if(pUnit != NULL){
+						if(pUnit->CanAct()){
+							AddStateToUnit(
+								pUnit, STATE_SUPERGUARD, false);
+						}
+					}
+				}
+			}else{
+				for(int n=0; n<MAX_BATTLEENEMY; n++){
+					pUnit = (Game_BattleUnit*)GetEnemyPtr(n, true);
+					if(pUnit != NULL){
+						if(pUnit->CanAct()){
+							AddStateToUnit(
+								pUnit, STATE_SUPERGUARD, false);
+						}
+					}
+				}
+			}
+			// 特技の使用を宣言する(行動不能になるためここでしか宣言できない)
+			action.Clear();
+			action.SetActor(pCmd->GetOwner());
+			action.SetOpponent(NULL);
+			action.SetParam(SKILL_WALL_ALICE);
+			action.SetType(Game_BattleAction::TYPE_ASSERTSKILL);
+			actionStack.Push(action);
+			return 1;
+			break;
+		}
 	case COMMANDTYPE_ERROR:
 		return -1;
 		break;
@@ -605,6 +650,10 @@ char Scene_Battle::InterpretCommand_Action(Game_UnitCommand* pCmd){
 					STATE_TMPATTR_NONE + (pCmd->GetSkillID() - SKILL_ENCHANT_NEUTRAL)
 					+ 3000);
 				subCommandIndex++;
+				break;
+			case SKILL_SUPERGUARD:
+			case SKILL_WALL_ALICE:
+				// 宣言のみで何も行わない
 				break;
 			}
 		}

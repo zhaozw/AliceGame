@@ -207,6 +207,19 @@ bool Data_SkillInfo::SetSkillData(){
 		_T("%sは星の力を呼び起こした！"), SKILLMESSAGE_TYPE_UNIT,
 		0, SKILLTARGET_TEAM_ONE);
 
+	// 鉄壁の守り
+	data[SKILL_SUPERGUARD].SetData(
+		_T("鉄壁の構え"),
+		_T("極めて強い守りの構えを取ります。"),
+		_T("%sは鉄壁の構えを取った！"), SKILLMESSAGE_TYPE_UNIT,
+		0, SKILLTARGET_SELF);
+
+	// ウォール・アリス
+	data[SKILL_WALL_ALICE].SetData(
+		_T("ウォール・アリス"),
+		_T("全員で守りの構えを取ります。"),
+		_T("%sたちは強靭な守りの壁を作った！"), SKILLMESSAGE_TYPE_UNIT,
+		1, SKILLTARGET_TEAM_ALL);
 
 	return true;
 }

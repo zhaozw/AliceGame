@@ -115,6 +115,27 @@ bool Data_StateMessage::SetStateMessages(){
 		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
 		_T("%sの属性が元に戻った！"));
 
+	// 超防御
+	stateMessages[STATE_SUPERGUARD].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは鉄壁の構えを取っている！"));
+	stateMessages[STATE_SUPERGUARD].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは鉄壁の構えを取っている！"));
+
+	// 自動回復
+	stateMessages[STATE_AUTOHEAL].SetMessage(
+		STATEMESSAGE_INDEX_DOLL_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは不思議な光に包まれた！"));
+	stateMessages[STATE_AUTOHEAL].SetMessage(
+		STATEMESSAGE_INDEX_ENEMY_ADDED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは不思議な光に包まれた！"));
+	stateMessages[STATE_AUTOHEAL].SetMessage(
+		STATEMESSAGE_INDEX_KEEP, STATEMESSAGE_TYPE_UNIT,
+		_T("%sは不思議な光に包まれている！"));
+	stateMessages[STATE_AUTOHEAL].SetMessage(
+		STATEMESSAGE_INDEX_REMOVED, STATEMESSAGE_TYPE_UNIT,
+		_T("%sを包む光が消えた！"));
 
 
 	return true;

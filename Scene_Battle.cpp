@@ -1055,6 +1055,8 @@ void Scene_Battle::SetupDollsCommand(){
 	commandIndex = 0;
 	// コマンドの配列をクリアする。
 	ClearCommands();
+	// ステートに関して立てられたフラグをOFFにする。
+	ResetUnitState();
 }
 
 void Scene_Battle::SetupEnemiesCommand(){
