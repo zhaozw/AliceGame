@@ -180,13 +180,13 @@ BYTE Window_HintMessage::NewPage(){
 
 	if(isFileEnd){
 		if(!isFirstPage){
-			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 1.0f);
+			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 0.8f);
 		}
 		return WND_HINT_NEWPAGE_END;
 	}else{
 		// ‚±‚±‚Å‰¹‚ð–Â‚ç‚·
 		if(!isFirstPage){
-			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 1.0f);
+			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 0.8f);
 		}
 		return WND_HINT_NEWPAGE_OK;
 	}

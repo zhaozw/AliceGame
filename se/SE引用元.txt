@@ -1,0 +1,18 @@
+引用元
+
+call_dollcommand　新・効果音大全集17 Sf・ホラー・ゲーム（効果音素材CD。プロユースに使えると謳っている代物。クレジット表記不要）
+call_dollcommand_old	自作（制作方法は省略）
+call_enemyaction	自作
+call_enemyaction_old	自作
+message_newpage		自作
+message_newpage_old　新・効果音大全集17 Sf・ホラー・ゲーム
+
+
+元ファイル名（高橋備忘録）
+　
+call_dollcommand　44 カーソル移動(4)
+call_dollcommand_old　No.22-システム音ピーン(USB patch B-7)_1
+call_enemyaction　No.49-mokkin_chorus_reverb(1)
+call_enemyaction_old　FM8-着弾SE_Mastering00001Closed Hi-Hat 04'
+message_newpage　Perc_Clave_01
+message_newpage_old　43 動きを表す音・コミカル(2)
