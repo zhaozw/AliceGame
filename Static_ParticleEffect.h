@@ -5,6 +5,11 @@
 #define PARTICLE_DUMMY					0	
 #define PARTICLE_DUMMY_LIFETIME			1
 
+// ダメージ時
+#define PARTICLE_SIGN_DAMAGE_WEAK		2	// 弱点をついた・つかれた
+#define PARTICLE_SIGN_DAMAGE_RESIST		3	// 相手に抵抗があった
+#define PARTICLE_SIGN_DAMAGE_LIFETIME	50
+
 
 
 #endif // STATIC_PARTICLEEFFECT_H

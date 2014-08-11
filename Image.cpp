@@ -180,6 +180,13 @@ bool Image::Load_Chars(){
 			}
 		}
 	}
+
+	// ƒ_ƒ[ƒW•¶š
+	if(LoadDivGraph(_T("img_system\\sign_damage.png"), 2, 2, 1, 
+		90, 60, chars.sign_damage) == -1){
+		return false;
+	}
+
 	return true;
 }
 

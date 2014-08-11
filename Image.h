@@ -44,6 +44,7 @@ typedef struct Image_Chars{
 	int num_damage_l[IMAGE_SIZE_NUMBER];	// ダメージ(弱点)表示用
 	int num_damage_m[IMAGE_SIZE_NUMBER];	// ダメージ(通常)表示用
 	int num_damage_s[IMAGE_SIZE_NUMBER];	// ダメージ(耐性)表示用
+	int sign_damage[2];						// 弱点・抵抗表示用
 	Image_Chars(){
 		dummy_number_i = -1;
 		num_damage = -1;
@@ -53,6 +54,9 @@ typedef struct Image_Chars{
 			num_damage_l[n] = -1;
 			num_damage_m[n] = -1;
 			num_damage_s[n] = -1;
+		}
+		for(int n=0; n<2; n++){
+			sign_damage[n] = -1;
 		}
 	};
 }IMAGE_CHARS;

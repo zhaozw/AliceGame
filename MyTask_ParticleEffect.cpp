@@ -29,6 +29,13 @@ MyTask_ParticleEffect::MyTask_ParticleEffect(float _x, float _y,
 
 // 更新
 bool MyTask_ParticleEffect::Update(){
+	switch(typeID){
+	case PARTICLE_SIGN_DAMAGE_RESIST:
+	case PARTICLE_SIGN_DAMAGE_WEAK:
+		y -= 5.0*max(0, (0.4-GetExistRate()));
+		x += 3.5*max(0, (0.4-GetExistRate()));
+		break;
+	}
 	// 末尾に親クラスのアップデートを実行
 	return MyTask_BaseEffect::Update();
 }
@@ -37,6 +44,10 @@ void MyTask_ParticleEffect::SetLifeTime(){
 	switch(typeID){
 	case PARTICLE_DUMMY:
 		lifeTime = PARTICLE_DUMMY_LIFETIME;
+		break;
+	case PARTICLE_SIGN_DAMAGE_WEAK:
+	case PARTICLE_SIGN_DAMAGE_RESIST:
+		lifeTime = PARTICLE_SIGN_DAMAGE_LIFETIME;
 		break;
 	default:
 		lifeTime = 0;

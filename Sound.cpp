@@ -34,7 +34,10 @@ bool Sound::LoadMusic(){
 
 bool Sound::LoadSound(){
 	// äeSEÇÃì«Ç›çûÇ›ÇçsÇ§ÅB
-	se[SE_DUMMY] = LoadSoundMem(TEXT("se\\dummy.ogg"));
+	se[MYSE_DUMMY] = LoadSoundMem(TEXT("se\\dummy.ogg"));
+	se[MYSE_CALL_DOLLCOMMAND] = LoadSoundMem(TEXT("se\\call_dollcommand.ogg"));
+	se[MYSE_MESSAGE_NEWPAGE] = LoadSoundMem(TEXT("se\\message_newpage.ogg"));
+	se[MYSE_CALL_ENEMYACTION] = LoadSoundMem(TEXT("se\\call_enemyaction.ogg"));
 
 
 	for(int n=0; n<MYGAME_MAX_SE; n++){

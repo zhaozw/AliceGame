@@ -399,6 +399,7 @@ char Scene_Battle::InterpretCommand_Fix_Target(Game_UnitCommand* pCmd){
 
 char Scene_Battle::InterpretCommand_Assert(Game_UnitCommand* pCmd){
 	Game_BattleAction action;
+	bool isDoll = pCmd->GetOwner()->IsDoll();
 	if(pCmd == NULL) return -1;
 	switch(pCmd->GetActionType()){
 	case COMMANDTYPE_NONE:

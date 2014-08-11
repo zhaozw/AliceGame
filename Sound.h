@@ -17,7 +17,10 @@ class Sound;
 #define MYGAME_MAX_SE	30
 
 // ゲームで使用するSEのIDを列挙する。
-#define SE_DUMMY		0
+#define MYSE_DUMMY					0
+#define MYSE_CALL_DOLLCOMMAND		1
+#define MYSE_MESSAGE_NEWPAGE		2
+#define MYSE_CALL_ENEMYACTION		3
 
 //==================================================
 // BGMクラス

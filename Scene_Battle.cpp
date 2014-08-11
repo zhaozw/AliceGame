@@ -9,6 +9,7 @@
 #include "KeyConfig.h"
 
 #include "MyTask_InfoEffect.h"
+#include "MyTask_ParticleEffect.h"
 #include "Game_BattleUnit.h"
 #include "Game_BattleDoll.h"
 #include "Sprite_BattleDoll.h"
@@ -20,6 +21,7 @@ extern DXFont		g_font;
 extern DXInput		g_input;
 extern KeyConfig	g_key;
 extern MyGroup*		gMyTask_InfoEffect;
+extern MyGroup*		gMyTask_ParticleEffect;
 extern AliceFile_140816		g_trialAliceFile;
 extern Sound		g_sound;
 
@@ -72,6 +74,7 @@ bool Scene_Battle::Initialize(bool fSkipFrame){
 
 	// タスクグループの初期化
 	gMyTask_InfoEffect->DeleteAllTask();
+	gMyTask_ParticleEffect->DeleteAllTask();
 	turn = 1;
 	return true;
 
@@ -148,6 +151,7 @@ void Scene_Battle::UpdateObjects(){
 
 	// エフェクトのアップデート
 	Update_MyTask_InfoEffect();
+	Update_MyTask_ParticleEffect();
 
 	// スプライトのアップデート
 	for(int n=0; n<NUM_BATTLEDOLL_FRONT; n++){
@@ -234,6 +238,7 @@ void Scene_Battle::Draw() const{
 	w_skillAccLine.Draw();
 
 	// エフェクトの描画
+	Draw_MyTask_ParticleEffect();
 	Draw_MyTask_InfoEffect();
 
 	// 前情報の描画
@@ -568,6 +573,8 @@ bool Scene_Battle::CheckNextAction(){
 					if(pDoll != NULL){
 						if(pDoll->CanAct()){
 							// ウィンドウを開く
+							// 効果音
+							g_sound.PlaySE(MYSE_CALL_DOLLCOMMAND, 1.0);
 							w_dollCommand.OpenWithActor(pDoll,
 								GetCommandWindowIsCancelable(currentIndex));
 							w_dollCommand.SetPhaze(BWND_DOLLCOMMAND_PHAZE_MAIN);

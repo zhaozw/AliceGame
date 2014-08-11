@@ -3,17 +3,21 @@
 #include "Scene_Battle.h"
 #include <string.h>
 #include "MyTask_InfoEffect.h"
+#include "MyTask_ParticleEffect.h"
 #include "Static_InfoEffect.h"
 #include "Data_SkillInfo.h"
 #include "Data_StateMessage.h"
 #include "Game_AliceInfo.h"
+#include "Sound.h"
 
 
-extern Data_SkillInfo d_skillInfo;
-extern Data_StateMessage d_stateMessage;
-extern Game_AliceInfo g_aliceInfo;
+extern Data_SkillInfo		d_skillInfo;
+extern Data_StateMessage	d_stateMessage;
+extern Game_AliceInfo		g_aliceInfo;
+extern Sound				g_sound;
 
 extern MyGroup* gMyTask_InfoEffect;
+extern MyGroup*	gMyTask_ParticleEffect;
 
 bool Scene_Battle::InterpretAction(Game_BattleAction* pAction){
 	if(pAction == NULL){ // アクションが不適切な場合
@@ -96,6 +100,7 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 		pSprite = (Sprite_Base*)GetDollSprite((Game_BattleDoll*)pAction->GetOpponent());
 		if(pSprite != NULL){
 			// タスクを発生させる
+			// 文字描画
 			pTask = gMyTask_InfoEffect->Call();
 			pDoll = (Sprite_BattleDoll*)pSprite;
 			if(pTask!=NULL){
@@ -114,6 +119,23 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 					new (pTask) MyTask_InfoEffect(
 						pDoll->GetDollX(), pDoll->GetDollY()+40,
 						INFO_DAMAGENUM_DOLL_RESIST, value, 0);
+					break;
+				}
+			}
+			// エフェクト描画
+			pTask = gMyTask_ParticleEffect->Call();
+			pDoll = (Sprite_BattleDoll*)pSprite;
+			if(pTask!=NULL){
+				switch(pAction->GetParam()/10000){
+				case 1: // 弱点
+					new (pTask) MyTask_ParticleEffect(
+						pDoll->GetDollX()+30, pDoll->GetDollY()+40,
+						PARTICLE_SIGN_DAMAGE_WEAK, 0, 0);
+					break;
+				case 2: // 抵抗
+					new (pTask) MyTask_ParticleEffect(
+						pDoll->GetDollX()+30, pDoll->GetDollY()+40,
+						PARTICLE_SIGN_DAMAGE_RESIST, 0, 0);
 					break;
 				}
 			}
@@ -140,6 +162,22 @@ bool Scene_Battle::Action_Damage(Game_BattleAction* pAction){
 					new (pTask) MyTask_InfoEffect(
 						pSprite->GetIX(), pSprite->GetIY(),
 						INFO_DAMAGENUM_ENEMY_RESIST, value, 0);
+					break;
+				}
+			}
+			// エフェクト描画
+			pTask = gMyTask_ParticleEffect->Call();
+			if(pTask!=NULL){
+				switch(pAction->GetParam()/10000){
+				case 1: // 弱点
+					new (pTask) MyTask_ParticleEffect(
+						pSprite->GetIX()+30, pSprite->GetIY(),
+						PARTICLE_SIGN_DAMAGE_WEAK, 0, 0);
+					break;
+				case 2: // 抵抗
+					new (pTask) MyTask_ParticleEffect(
+						pSprite->GetIX()+30, pSprite->GetIY(),
+						PARTICLE_SIGN_DAMAGE_RESIST, 0, 0);
 					break;
 				}
 			}
@@ -234,6 +272,7 @@ bool Scene_Battle::Action_AssertAttack(Game_BattleAction* pAction){
 		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetActor());
 		if(pSprite != NULL){
 			// タスクを発生させる
+			g_sound.PlaySE(MYSE_CALL_ENEMYACTION, 1.0);
 			pSprite->SetMorphID(SPMORPH_ENEMYATTACK, false);
 		}
 	}

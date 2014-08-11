@@ -9,12 +9,14 @@
 #include "DXInput.h"
 #include "KeyConfig.h"
 #include "Image.h"
+#include "Sound.h"
 
 extern WindowSkins		g_wndSkins;
 extern DXFont			g_font;
 extern DXInput			g_input;
 extern KeyConfig		g_key;
 extern Image			g_image;
+extern Sound			g_sound;
 
 Window_HintMessage::Window_HintMessage() : Window_Message(){
 	// ウィンドウの情報をクリアする。
@@ -116,6 +118,7 @@ bool Window_HintMessage::SetFileName(LPTSTR name){
 }
 
 BYTE Window_HintMessage::NewPage(){
+	bool isFirstPage = (lineCount == 0);
 	// 宣言
 	std::basic_ifstream<TCHAR> fin;
 	bool isError = false;
@@ -143,6 +146,7 @@ BYTE Window_HintMessage::NewPage(){
 		// ファイルを読み込んでbufferにコピーする
 		// 1行読み込む
 		fin.getline(tmpBuf, WND_MSG_STOCKLENGTH);
+		lineCount++;
 		// コマンドの判定
 		switch(CheckCommand(tmpBuf)){
 		case WND_HINT_CHKCMD_NEWPAGE:
@@ -174,7 +178,19 @@ BYTE Window_HintMessage::NewPage(){
 		return WND_HINT_NEWPAGE_ERROR;
 	}
 
-	return isFileEnd ? WND_HINT_NEWPAGE_END : WND_HINT_NEWPAGE_OK;
+	if(isFileEnd){
+		if(!isFirstPage){
+			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 1.0f);
+		}
+		return WND_HINT_NEWPAGE_END;
+	}else{
+		// ここで音を鳴らす
+		if(!isFirstPage){
+			g_sound.PlaySE(MYSE_MESSAGE_NEWPAGE, 1.0f);
+		}
+		return WND_HINT_NEWPAGE_OK;
+	}
+	// return isFileEnd ? WND_HINT_NEWPAGE_END : WND_HINT_NEWPAGE_OK;
 }
 
 bool Window_HintMessage::FlushBuffer(){
