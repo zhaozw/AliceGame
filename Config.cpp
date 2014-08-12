@@ -1,6 +1,7 @@
 // Config.cpp
 
 #include "Config.h"
+#include "Static_Game.h"
 #include <DxLib.h>
 
 Config::Config(){
@@ -148,7 +149,9 @@ bool Config::LoadConfig(){
 	// 初期ファイルに不備があった場合は設定を保存し、メッセージを出す
 	if(!result){
 		if(!SaveConfig()) return false;
+#ifdef MYGAME_CALL_DIALOG_OPTION
 		MessageBox(NULL, "設定はオプションから変更できます。", "起動オプション", MB_OK);
+#endif // MYGAME_CALL_DIALOG_OPTION
 	}
 
 	// ウィンドウサイズの設定

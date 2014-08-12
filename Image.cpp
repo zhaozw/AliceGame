@@ -316,3 +316,10 @@ bool Image::Load_Icon(){
 bool Image::Load_Effect(){
 	return true;
 }
+
+int Image::GetDollIconHandle(WORD type, WORD face, WORD attr){
+	if(type >= DOLL_TYPE_MAX) return -1;
+	if(face >= DOLL_FACE_NUM) return -1;
+	if(attr >= DOLL_ATTR_NUM) return -1;
+	return icon.doll[type][face][attr];
+}

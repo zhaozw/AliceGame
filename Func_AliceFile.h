@@ -58,7 +58,7 @@ void GenerateInitialDoll();
 // グローバル変数g_aliceFile140816から参照される。
 
 #define ALICEFILE_140816_TUTORIAL			10
-#define ALICEFILE_140816_FILENAME			"SaveData\\Trial_ver140806.dat"
+#define ALICEFILE_140816_FILENAME			"savedata\\Trial_ver140806.dat"
 #define ALICEFILE_140816_XORCODE			"aZkw7QQn"
 #define ALICEFILE_140816_XORCODE_LENGTH		8
 #define ALICEFILE_140816_XORCODE2			"3kkNniHnkkN"

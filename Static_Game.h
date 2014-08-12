@@ -71,6 +71,9 @@
 // 致命的なバグで終了する時にメッセージボックスを出すか否か。
 #define MYGAME_USE_WARN_ERROR
 
+// 設定はオプションで変更できます。メッセージを出すか
+// #define MYGAME_CALL_DIALOG_OPTION
+
 // Luaを使用するか否か。
 // #define MYGAME_USE_LUA
 
@@ -96,8 +99,7 @@
 
 #define FILE_CONFIG "config.ini"
 
-
-#define ARCHIVE_EXTENSION "dxa"
+#define ARCHIVE_EXTENSION "mtr"
 
 //===================================================
 // デバッグなどに関する記述。基本的に変更しない。

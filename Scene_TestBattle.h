@@ -15,6 +15,7 @@ protected:
 	Window_HintMessage		w_hint;
 	float					backX;	// 背景画像の描画位置の指標
 	float 					backY;
+	int						backDoll;	// 右下に人形を表示する
 
 public:
 	// コンストラクタ

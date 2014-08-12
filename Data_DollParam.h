@@ -7,7 +7,8 @@
 // 人形のレベルとパラメータの関係に関するデータを保持するクラス。
 // グローバル変数g_dollParamから参照される。
 
-#define DOLL_TYPENAME_BYTES		32
+#define DOLL_TYPENAME_BYTES		18
+#define DATFILE_DOLLPARAM		"dat\\doll.dat"
 
 // 内部レベルをパラメータに変換する際の数式の係数の構造体。
 // レベルをxとして、パラメータはax^2+bx+cで表される。
@@ -53,8 +54,16 @@ public:
 	// パラメータの数値を返す。
 	int GetParamFromLv(BYTE paramType, int lv);
 
+	// 構造体へのアクセサ
+	LEVELTOPARAM	GetLvToP(int paramType){ return LvToP[paramType]; }; 
+	LEVELUPBONUS	GetLvBonus(int lv){ return LvBonus[lv]; }; 
+	void			SetLvToP(int paramType, LEVELTOPARAM p){ LvToP[paramType] = p; };
+	void			SetLvBonus(int lv, LEVELUPBONUS p){ LvBonus[lv] = p; };
 	// 名前を返す。
 	void GetName(LPTSTR buf, int bufSize);
+	// 名前をセットする。
+	void SetName(LPTSTR name);
+
 };
 
 class Data_DollParam{
@@ -76,6 +85,15 @@ public:
 	// ロード
 	// 全人形のデータをロードする。
 	bool Load();
+
+	// csvファイルから読み込む場合
+	bool LoadFromCsv();
+
+	// datファイルから読み込む場合
+	bool LoadFromDat();
+
+	// Csvデータを暗号化してファイルに書き出す。
+	bool EncodeCsv();
 
 };
 

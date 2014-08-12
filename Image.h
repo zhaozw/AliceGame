@@ -165,6 +165,9 @@ public:
 	// エフェクト画像のロード。
 	bool Load_Effect();
 
+	// 人形のタイプ・属性・表情を指定すると人形のアイコンのハンドルを返す。
+	int GetDollIconHandle(WORD type, WORD face, WORD attr);
+
 	
 
 };

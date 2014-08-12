@@ -5,6 +5,9 @@
 #include "VectorList.h"
 #include "Static_AliceDoll.h"
 
+// 読み込み先のファイル名
+#define		DATFILE_ENEMYDRAW			_T("dat\\enemydraw.dat")
+
 // refIDがどの敵に対応するかの定数リスト
 #define		ENEMYDRAW_SMALLFAIRY		1
 #define		ENEMYDRAW_FAIRY				2
@@ -69,6 +72,10 @@ public:
 	// データの読み込み
 	bool Load();
 	bool LoadDataFromCsv();
+	bool LoadDataFromDat();
+
+	// データの暗号化
+	bool EncodeCsv();
 
 	// リストを開放する
 	void ReleaseList(){ drawList.Release(); };

@@ -11,11 +11,11 @@ Data_EnemyGroup_Each::Data_EnemyGroup_Each(){
 }
 
 void Data_EnemyGroup_Each::Refresh(){
-	refID = 0;
+	data.refID = 0;
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
-		enemy[n].refID = 0;
-		enemy[n].drawX = 0;
-		enemy[n].drawY = 0;
+		data.enemy[n].refID = 0;
+		data.enemy[n].drawX = 0;
+		data.enemy[n].drawY = 0;
 	}
 }
 

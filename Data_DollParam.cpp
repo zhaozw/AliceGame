@@ -5,8 +5,10 @@
 #include <Windows.h>
 #include <string.h>
 #include <tchar.h>
+#include <fstream>
 
 #include "CsvReader.h"
+#include "Static_CompileMode.h"
 
 //======================================================
 // Data_DollParam_Eachクラス
@@ -60,6 +62,10 @@ void Data_DollParam_Each::GetName(LPTSTR buf, int bufSize){
 	strcpy_s(buf, bufSize-1, typeName);
 }
 
+void Data_DollParam_Each::SetName(LPTSTR name){
+	strcpy_s(typeName, DOLL_TYPENAME_BYTES-1, name);
+}
+
 
 //======================================================
 // Data_DollParamクラス
@@ -68,6 +74,14 @@ Data_DollParam::Data_DollParam() : dollList(){
 }
 
 bool Data_DollParam::Load(){
+#ifndef MYGAME_USE_ENCODED_CSV
+	return LoadFromCsv();
+#else // MYGAME_USE_ENCODED_CSV
+	return LoadFromDat();
+#endif // MYGAME_USE_ENCODED_CSV
+}
+
+bool Data_DollParam::LoadFromCsv(){
 	TCHAR	fileName[MAX_PATH]; 
 	for(int n=0; n<DOLL_TYPE_MAX; n++){
 		wsprintf(fileName, _T("dat_doll\\doll%02d.csv"), n+1);
@@ -77,6 +91,77 @@ bool Data_DollParam::Load(){
 	}
 	return true;
 }
+
+bool Data_DollParam::LoadFromDat(){
+	// ファイルを開く
+	std::basic_ifstream<TCHAR> fin;
+	fin.open(DATFILE_DOLLPARAM,
+		std::ios::in|std::ios::binary);
+	if(!fin){
+		_RPTF0(_CRT_WARN, "読み込み用ファイルが開けませんでした。\n");
+		return false;
+	}
+
+	TCHAR			copiedTypeName[DOLL_TYPENAME_BYTES];
+	LEVELTOPARAM	copiedLTP;
+	LEVELUPBONUS	copiedBonus;
+	// 人形の数だけデータの書き出しを行う
+	for(int n=0; n<DOLL_TYPE_MAX; n++){
+		fin.read((char*)copiedTypeName, sizeof(TCHAR)*DOLL_TYPENAME_BYTES);
+		dollList[n].SetName(copiedTypeName);
+		for(int i=0; i<DOLL_PARAM_MAX; i++){
+			fin.read((char*)&copiedLTP, sizeof(LEVELTOPARAM));
+			dollList[n].SetLvToP(i, copiedLTP);
+		}
+		for(int i=0; i<DOLL_LEVEL_MAX; i++){
+			fin.read((char*)&copiedBonus, sizeof(LEVELUPBONUS));
+			dollList[n].SetLvBonus(i, copiedBonus);
+		}
+	}
+
+	// 読み込み終了
+	fin.close();
+	return true;
+}
+
+bool Data_DollParam::EncodeCsv(){
+	// データを読み込む
+	if(!LoadFromCsv()) return false;
+	// ファイルに書き出す
+	// ファイルを開く
+	std::basic_ofstream<TCHAR> fout;
+	fout.open(DATFILE_DOLLPARAM,
+		std::ios::out|std::ios::binary|std::ios::trunc);
+	if(!fout){
+		_RPTF0(_CRT_WARN, "書き出し用ファイルが開けませんでした。\n");
+		return false;
+	}
+
+	// 暗号化のためのコピーを行うバッファ
+	// (2014年夏コミでは暗号化を行わない
+	TCHAR		 copiedTypeName[DOLL_TYPENAME_BYTES];
+	LEVELTOPARAM copiedLTP;
+	LEVELUPBONUS copiedBonus;
+	// 人形の数だけデータの書き出しを行う
+	for(int n=0; n<DOLL_TYPE_MAX; n++){
+		dollList[n].GetName(copiedTypeName, DOLL_TYPENAME_BYTES);
+		fout.write((char*)copiedTypeName, sizeof(TCHAR)*DOLL_TYPENAME_BYTES);
+		for(int i=0; i<DOLL_PARAM_MAX; i++){
+			copiedLTP = dollList[n].GetLvToP(i);
+			fout.write((char*)&copiedLTP, sizeof(LEVELTOPARAM));
+		}
+		for(int i=0; i<DOLL_LEVEL_MAX; i++){
+			copiedBonus = dollList[n].GetLvBonus(i);
+			fout.write((char*)&copiedBonus, sizeof(LEVELUPBONUS));
+		}
+	}
+	// 書き出し終了
+	fout.close();
+	return true;
+
+}
+
+
 
 int Data_DollParam::GetParamFromLv(BYTE dollType, BYTE paramType, int lv){
 	if(dollType <= 0 || dollType > DOLL_TYPE_MAX) return -9999;

@@ -17,7 +17,6 @@
 #include "Static_Game.h"
 #include "Static_CompileMode.h"
 
-
 // 各リソースのヘッダファイル
 #include "Image.h"
 #include "Sound.h"
@@ -34,15 +33,13 @@
 // 各シーンのヘッダファイル
 #include "Scene_Base.h"
 #include "Scene_Sample.h"
-#include "Scene_Title.h"	// タイトル画面
-#include "Scene_File.h"		// ファイルのセーブ及びロードを行う
-#include "Scene_Camp.h"		// キャンプ
+#include "Scene_Title.h"			// タイトル画面
+#include "Scene_File.h"				// ファイルのセーブ及びロードを行う
+#include "Scene_Camp.h"				// キャンプ
 #include "Scene_DollCreate.h"		// 人形の作成
 #include "Scene_DollBirth.h"		// 人形の誕生
 #include "Scene_Battle.h"			// 戦闘
 #include "Scene_TestBattle.h"		// テストバトルの選択
-
-
 
 // ツール関連のヘッダファイル
 #include "MyTaskList.h"
@@ -118,6 +115,7 @@ bool WinMain_LoadResource();
 bool WinMain_ReleaseResource();
 bool WinMain_PlayScene();
 bool WinMain_Terminate(bool loopResult);
+bool Perform_Encoding();
 
 bool WinMain_Initialize(){
 	//============================================
@@ -134,7 +132,7 @@ bool WinMain_Initialize(){
 	// DXライブラリのアーカイブを使用する
 #ifdef MYGAME_USE_ENCODED_DATA
 	SetUseDXArchiveFlag(TRUE);
-	SetDXArchiveExtension(ARCHIVE_EXTENSION));
+	SetDXArchiveExtension(ARCHIVE_EXTENSION);
 #endif // MYGAME_USE_ENCODED_DATA
 
 #ifdef MYGAME_USE_CHECKMEMORY	
@@ -493,4 +491,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 
 	return 0;
+}
+
+bool Perform_Encoding(){
+	if(!d_dollParam.EncodeCsv()){
+		return false;
+	}
+	if(!d_enemyDraw.EncodeCsv()){
+		return false;
+	}
+	return true;
 }

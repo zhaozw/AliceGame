@@ -26,14 +26,20 @@ bool Scene_TestBattle::Initialize(bool fSkipFrame){
 	// シーン開始時にデータをセーブする
 	g_trialAliceFile.Save();
 
+	// 背景に関するパラメータの初期化
+	backX = backY = 0;
+	backDoll = -1;
+
 	// 最初の場合はウィンドウを開く
 	if(!g_trialAliceFile.data.firstHint){
 		if(!OpenHintWindow()){
 			return false;
 		}
+	}else{
+		backDoll = GetRand(4*DOLL_FACE_NUM*DOLL_ATTR_NUM-1);
 	}
 
-	backX = backY = 0;
+
 	return true;
 }
 
@@ -145,6 +151,26 @@ void Scene_TestBattle::Draw() const{
 	// 背景の枠の描画
 	DrawBox(90, 45, 580, 475, GetColor(127, 191, 159), 1);
 	DrawBox(50, 30, 540, 460, GetColor(223, 239, 232), 1);
+
+	// 人形の描画
+	WORD dollType=0, dollFace=0, dollAttr=0;
+	int hDollImage = -1;
+	int tmp = backDoll;
+	if(tmp != -1){
+		dollType = tmp/(DOLL_FACE_NUM*DOLL_ATTR_NUM);
+		tmp -= dollType*DOLL_FACE_NUM*DOLL_ATTR_NUM;
+		dollFace = tmp/DOLL_ATTR_NUM;
+		tmp -= dollFace*DOLL_ATTR_NUM;
+		dollAttr = tmp;
+		hDollImage = g_image.GetDollIconHandle(
+			dollType*DOLL_TYPE_PER_GROUP, dollFace, dollAttr);
+	}
+	if(hDollImage != -1){
+		DrawRotaGraphF(
+			630, 400+20*sin(2.0*M_PI*(sceneTime-90)/720),
+			1.0, 0,
+			hDollImage, 1);
+	}
 
 	// 文字の描画
 	int color;

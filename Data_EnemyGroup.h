@@ -19,47 +19,52 @@ typedef struct EnemyInGroup{
 	}
 } ENEMYINGROUP;
 
+// 敵グループ一つを表す構造体。
+typedef struct Data_EnemyGroup_Each_Data{
+	// 敵グループID。マップなどから参照される。
+	WORD				refID;		
+	// 各敵キャラ。
+	ENEMYINGROUP		enemy[MAX_BATTLEENEMY];
+} DATA_ENEMYGROUP_EACH_DATA;
+
 // 敵グループ一つを表すクラス。
 // Data_EnemyGroupクラスにFlexListとして保持される。
 class Data_EnemyGroup_Each{
 private:
-	// 敵グループID。マップなどから参照される。
-	WORD		refID;		
-	// 各敵キャラ。
-	ENEMYINGROUP		enemy[MAX_BATTLEENEMY];
+	DATA_ENEMYGROUP_EACH_DATA		data;
 public:
 	// コンストラクタ
 	Data_EnemyGroup_Each();
 	void Refresh();
 	// アクセサ
-	void	SetRefID(WORD _refID){ refID = _refID; };
-	WORD	GetRefID(){ return refID; };
+	void	SetRefID(WORD _refID){ data.refID = _refID; };
+	WORD	GetRefID(){ return data.refID; };
 	void	SetEnemyRefID(int index, WORD _refID){
-		if(IsIndex(index)) enemy[index].refID = _refID;
+		if(IsIndex(index)) data.enemy[index].refID = _refID;
 	}
 	WORD	GetEnemyRefID(int index){
-		if(IsIndex(index)) return enemy[index].refID;
+		if(IsIndex(index)) return data.enemy[index].refID;
 		return 0;
 	}
 	void	SetEnemyDrawX(int index, int _drawX){
-		if(IsIndex(index)) enemy[index].drawX = _drawX;
+		if(IsIndex(index)) data.enemy[index].drawX = _drawX;
 	}
 	WORD	GetEnemyDrawX(int index){
-		if(IsIndex(index)) return enemy[index].drawX;
+		if(IsIndex(index)) return data.enemy[index].drawX;
 		return 0;
 	}
 	void	SetEnemyDrawY(int index, int _drawY){
-		if(IsIndex(index)) enemy[index].drawY = _drawY;
+		if(IsIndex(index)) data.enemy[index].drawY = _drawY;
 	}
 	WORD	GetEnemyDrawY(int index){
-		if(IsIndex(index)) return enemy[index].drawY;
+		if(IsIndex(index)) return data.enemy[index].drawY;
 		return 0;
 	}
 	void	SetEnemyAttr(int index, BYTE _attr){
-		if(IsIndex(index)) enemy[index].attr = _attr;
+		if(IsIndex(index)) data.enemy[index].attr = _attr;
 	}
 	BYTE	GetEnemyAttr(int index){
-		if(IsIndex(index)) return enemy[index].attr;
+		if(IsIndex(index)) return data.enemy[index].attr;
 		return DOLL_ATTR_NONE;
 	}
 	bool	IsIndex(int index){ return index >= 0 && index < MAX_BATTLEENEMY; };

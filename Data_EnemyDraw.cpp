@@ -34,7 +34,11 @@ Data_EnemyDraw::Data_EnemyDraw(){
 
 
 bool Data_EnemyDraw::Load(){
+#ifndef USE_ENCODED_CSV
 	return LoadDataFromCsv();
+#else // USE_ENCODED_CSV
+	return LoadDataFromDat();
+#endif // USE_ENCODED_CSV
 }
 
 bool Data_EnemyDraw::LoadDataFromCsv(){
@@ -47,7 +51,7 @@ bool Data_EnemyDraw::LoadDataFromCsv(){
 	// グループの内容を一時的に保持する変数
 	Data_EnemyDraw_Each		tmpDraw;
 
-	strcpy_s(fileName, MAX_PATH-1, _T("dat_enemy\\enemydraw.csv"));
+	strcpy_s(fileName, MAX_PATH-1, DATFILE_ENEMYDRAW);
 	if(reader.Open(fileName)){
 		// ダミー行
 		reader.NextLine();
@@ -81,6 +85,15 @@ bool Data_EnemyDraw::LoadDataFromCsv(){
 	}else{
 		return false;
 	}
+	return true;
+}
+
+bool Data_EnemyDraw::LoadDataFromDat(){
+	return true;
+}
+
+bool Data_EnemyDraw::EncodeCsv(){
+	if(!LoadDataFromCsv()) return false;
 	return true;
 }
 
