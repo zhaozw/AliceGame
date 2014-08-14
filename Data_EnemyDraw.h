@@ -6,6 +6,7 @@
 #include "Static_AliceDoll.h"
 
 // 読み込み先のファイル名
+#define		CSVFILE_ENEMYDRAW			_T("dat\\enemydraw.csv")
 #define		DATFILE_ENEMYDRAW			_T("dat\\enemydraw.dat")
 
 // refIDがどの敵に対応するかの定数リスト
@@ -24,8 +25,7 @@
 // 敵グラフィックの描画位置と描画ハンドルを保持するクラス。
 // グローバル変数g_enemyDrawから参照される。
 
-class Data_EnemyDraw_Each{
-private:
+typedef struct Data_EnemyDraw_Data{
 	// 参照ID
 	WORD	refID;
 	// 描画の中心位置
@@ -36,13 +36,18 @@ private:
 	float	baseExRate;
 	// 画像のハンドル(属性ごと)
 	int		hImg[DOLL_ATTR_NUM];
-public:
 	// コンストラクタ
-	Data_EnemyDraw_Each();
-	// 初期化
-	void Refresh();
-
+	Data_EnemyDraw_Data(){
+		refID = -1;
+		cx = cy = 0;
+		iWidth = iHeight = 1;
+		baseExRate = 1.0;
+		for(int i=0; i<DOLL_ATTR_NUM; i++){
+			hImg[i] = -1;
+		}
+	}
 	// アクセサ
+	/*
 	WORD	GetRefID(){ return refID; };
 	void	SetRefID(WORD id){ refID = id; };
 	float	GetCX(){ return cx; };
@@ -57,14 +62,12 @@ public:
 	void	SetIHeight(int i){ iHeight = i; };
 	float	GetExRate(){ return baseExRate; };
 	void	SetExRate(float r){ baseExRate = r; };
-
-
-
-};
+	*/
+} DATA_ENEMYDRAW_DATA;
 
 class Data_EnemyDraw{
 private:
-	VectorList<Data_EnemyDraw_Each>		drawList;
+	VectorList<DATA_ENEMYDRAW_DATA>		drawList;
 public:
 	// コンストラクタ
 	Data_EnemyDraw();
@@ -84,7 +87,7 @@ public:
 	int	GetImgHandleByRefID(WORD refID, BYTE attr);
 
 	// ベクトルの中からrefIDが該当する値を返す。
-	Data_EnemyDraw_Each* GetEnemyDraw(WORD refID);
+	Data_EnemyDraw_Data* GetEnemyDraw(WORD refID);
 
 	// 大きさを返す。
 	int GetSize(){ return drawList.GetSize(); };

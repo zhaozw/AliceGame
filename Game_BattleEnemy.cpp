@@ -26,18 +26,18 @@ void Game_BattleEnemy::Reset(int n){
 
 void Game_BattleEnemy::LoadFromData(Data_EnemyParam_Each* pData){
 	// データIDの取得
-	dataID = pData->GetRefID();
+	dataID = pData->data.refID;
 
 	// 名前の取得
-	SetName(pData->GetNamePtr());
+	SetName(pData->data.name);
 
 	// 属性・経験値の取得
-	SetAttr(pData->GetAttr());
-	SetExp(pData->GetExp());
+	SetAttr(pData->data.attr);
+	SetExp(pData->data.exp);
 
 	// 各パラメータ値の取得
 	for(int n=0; n<BATTLEUNIT_PARAM_NUM; n++){
-		SetEachParam(n, pData->GetParam(n));
+		SetEachParam(n, pData->data.param[n]);
 	}
 }
 

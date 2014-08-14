@@ -3,6 +3,8 @@
 #include "Data_BattleState.h"
 #include "CsvReader.h"
 
+#include "Static_CompileMode.h"
+
 #define MAX_BATTLESTATE			999
 
 Data_BattleState_Each::Data_BattleState_Each(){
@@ -33,6 +35,8 @@ bool Data_BattleState::Load(){
 	return LoadDataFromCsv();
 }
 
+
+
 bool Data_BattleState::LoadDataFromCsv(){
 	// リストの解放
 	stateList.Release();
@@ -45,7 +49,7 @@ bool Data_BattleState::LoadDataFromCsv(){
 	// グループの内容を一時的に保持する変数
 	Data_BattleState_Each	tmpState;
 
-	strcpy_s(fileName, MAX_PATH-1, _T("dat_battle\\stateinfo.csv"));
+	strcpy_s(fileName, MAX_PATH-1, CSVFILE_STATEINFO);
 	if(reader.Open(fileName)){
 		// ダミー行
 		reader.NextLine();

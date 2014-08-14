@@ -473,6 +473,11 @@ bool WinMain_ReleaseResource(){
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 						LPSTR lpCmdLine, int nCmdShow )
 {
+#ifdef MYGAME_PERFORM_ENCODING
+	// エンコーディングを行う場合はこの一行のみ
+	return (Perform_Encoding()?0:-1);
+#endif // MYGAME_PERFORM_ENCODING
+
 #ifdef MYGAME_USE_CHECKMEMORY
 	// プログラムの終了時にメモリリークを表示する
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -498,6 +503,12 @@ bool Perform_Encoding(){
 		return false;
 	}
 	if(!d_enemyDraw.EncodeCsv()){
+		return false;
+	}
+	if(!d_enemyGroup.EncodeCsv()){
+		return false;
+	}
+	if(!d_enemyParam.EncodeCsv()){
 		return false;
 	}
 	return true;

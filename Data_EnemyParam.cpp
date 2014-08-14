@@ -1,37 +1,17 @@
 // Data_EnemyParam.cpp
 
 #include "Data_EnemyParam.h"
+
+#include <fstream>
+
 #include "Game_AliceDoll.h"
 #include "CsvReader.h"
+#include "Static_CompileMode.h"
 
 #define MAX_ENEMYPARAMFILE		999
 
 Data_EnemyParam_Each::Data_EnemyParam_Each(){
-	Refresh();
-}
-
-void Data_EnemyParam_Each::Refresh(){
-	refID = 0;
-	attr = DOLL_ATTR_NONE;
-	exp = 0;
-	for(int n=0; n<BATTLEUNIT_PARAM_NUM-1; n++){
-		param[n] = 0;
-	}
-	strcpy_s(name, BATTLEUNIT_NAME_BYTES-1, _T(""));
-	// 各攻撃パターンのリセット
-	for(int n=0; n<MAX_ACTIONPATTERN; n++){
-		actionPtn[n].actionType = COMMANDTYPE_ERROR;
-		actionPtn[n].skillID = 0;
-		actionPtn[n].targetType = ACTIONTARGET_NONE;
-		actionPtn[n].priority = 0;
-		// 攻撃条件のリセット
-		for(int i=0; i<MAX_CONDITION; i++){
-			actionPtn[n].conditionType[i] = CONDITIONTYPE_ALWAYS;
-			for(int j=0; j<MAX_CONDITIONPARAM; j++){
-				actionPtn[n].conditionParam[i][j] = 0;
-			}
-		}
-	}
+	data = DATA_ENEMYPARAM_EACH_DATA();
 }
 
 // アクセサ関連
@@ -79,37 +59,41 @@ ENEMYACTIONPATTERN* Data_EnemyParam_Each::GetActionPatternPtr(int index){
 	if(index < 0 || index >= MAX_ACTIONPATTERN){
 		return NULL;
 	}
-	if(actionPtn[index].priority == 0){
+	if(data.actionPtn[index].priority == 0){
 		return NULL;
 	}
-	return &actionPtn[index];
+	return &data.actionPtn[index];
 }
 
 void Data_EnemyParam_Each::SetActConditionPattern(
 	int index, int conditionIndex, int type){
-	actionPtn[index].conditionType[conditionIndex] = type;
+	data.actionPtn[index].conditionType[conditionIndex] = type;
 }
 
 int Data_EnemyParam_Each::GetActConditionPattern(
 	int index, int conditionIndex){
-	return actionPtn[index].conditionType[conditionIndex];
+	return data.actionPtn[index].conditionType[conditionIndex];
 }
 
 void Data_EnemyParam_Each::SetActConditionParam(
 	int index, int conditionIndex, int paramIndex, int type){
-	actionPtn[index].conditionParam[conditionIndex][paramIndex] = type;
+	data.actionPtn[index].conditionParam[conditionIndex][paramIndex] = type;
 }
 
 int Data_EnemyParam_Each::GetActConditionParam(
 	int index, int conditionIndex, int paramIndex){
-	return actionPtn[index].conditionParam[conditionIndex][paramIndex];
+	return data.actionPtn[index].conditionParam[conditionIndex][paramIndex];
 }
 
 Data_EnemyParam::Data_EnemyParam() : enemyList(){
 }
 
 bool Data_EnemyParam::Load(){
+#ifdef MYGAME_USE_ENCODED_CSV
+	return LoadDataFromDat();
+#else // MYGAME_USE_ENCODED_CSV
 	return LoadDataFromCsv();
+#endif // MYGAME_USE_ENCODED_CSV
 }
 
 bool Data_EnemyParam::LoadDataFromCsv(){
@@ -128,10 +112,10 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 	int						actionIndex = 0;
 
 	for(int n=1; n<=MAX_ENEMYPARAMFILE; n++){
-		sprintf_s(fileName, MAX_PATH-1, "dat_enemy\\enemy%03d.csv", n);
+		sprintf_s(fileName, MAX_PATH-1, CSVFILE_ENEMYPARAM, n);
 		// csvファイルを読み込んでグループに格納する
 		if(reader.Open(fileName)){
-			tmpEnemy.Refresh();
+			tmpEnemy = Data_EnemyParam_Each();
 			nEmptyFile = 0; // 空ファイル数のリセット
 			index = 0;
 			// ダミー行
@@ -141,25 +125,25 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 				if(reader.GetIntValue(0, 0) == 0){
 					continue;
 				}
-				tmpEnemy.SetRefID((WORD)reader.GetIntValue(0, 0));
+				tmpEnemy.data.refID = (WORD)reader.GetIntValue(0, 0);
 			}
 			// ダミー行
 			reader.NextLine();
 			// 敵の名前と属性と経験値を取得する
 			if(reader.Read() == CSV_READ_NOERROR){
 				// バッファに直接値を入れる
-				reader.GetValue(0, tmpEnemy.GetNamePtr(), BATTLEUNIT_NAME_BYTES-1);
+				reader.GetValue(0, tmpEnemy.data.name, BATTLEUNIT_NAME_BYTES-1);
 				// 属性を読み取る
-				tmpEnemy.SetAttr((BYTE)reader.GetIntValue(1, DOLL_ATTR_NONE));
+				tmpEnemy.data.attr = (BYTE)reader.GetIntValue(1, DOLL_ATTR_NONE);
 				// 経験値を読み取る
-				tmpEnemy.SetExp((DWORD)reader.GetIntValue(2, 0));
+				tmpEnemy.data.exp = (DWORD)reader.GetIntValue(2, 0);
 			}
 			// ダミー行
 			reader.NextLine();
 			// 敵の各パラメータを取得する
 			reader.Read();
 			for(int i=0; i<NUM_ENEMYPARAM_DATA; i++){
-				tmpEnemy.SetParam(i, reader.GetIntValue(i, 0));
+				tmpEnemy.data.param[i] = reader.GetIntValue(i, 0);
 			}
 			reader.NextLine();
 			// ステートの配列を取得する
@@ -213,6 +197,63 @@ bool Data_EnemyParam::LoadDataFromCsv(){
 	return true;
 }
 
+bool Data_EnemyParam::LoadDataFromDat(){
+	// ファイルを開く
+	std::basic_ifstream<TCHAR>	fin;
+	TCHAR						fileName[MAX_PATH];
+
+	DATA_ENEMYPARAM_EACH_DATA		copiedData;
+	Data_EnemyParam_Each			data;
+	// データの数、またifstreamがおかしくない限りデータの読み込みを行う
+	for(DWORD n=0; n<MAX_ENEMYPARAMFILE; n++){
+		wsprintf(fileName, DATFILE_ENEMYPARAM, n);
+		fin.open(fileName,
+			std::ios::in|std::ios::binary);
+		if(fin){
+			fin.read((char*)&copiedData, sizeof(DATA_ENEMYPARAM_EACH_DATA));
+			data.data = copiedData;
+			enemyList.AddData(data);
+		}else{
+		}
+		fin.close();
+		fin.clear();
+	}
+	return true;
+}
+
+bool Data_EnemyParam::EncodeCsv(){
+	if(!LoadDataFromCsv()) return false;
+	// VectorListのデータ部分を書き出す
+	// ファイルに書き出す
+
+	TCHAR						fileName[MAX_PATH];
+	std::basic_ofstream<TCHAR>	fout;
+
+	// 暗号化のためのコピーを行うバッファ
+	// (2014年夏コミでは暗号化を行わない
+	DATA_ENEMYPARAM_EACH_DATA			copiedData;
+	Data_EnemyParam_Each*				dataPtr;
+	// 人形の数だけデータの書き出しを行う
+	DWORD length = enemyList.GetSize();
+	// データの個数を最初に書き出す
+	for(DWORD n=0; n<length; n++){
+		// 実体を返す
+		dataPtr = enemyList.GetPointerByIndex(n);
+		copiedData = dataPtr->data;
+		wsprintf(fileName, DATFILE_ENEMYPARAM, n);
+		fout.open(fileName,
+			std::ios::out|std::ios::binary|std::ios::trunc);
+		if(!fout){
+			_RPTF0(_CRT_WARN, "書き出し用ファイルが開けませんでした。\n");
+			return false;
+		}
+		fout.write((char*)&copiedData, sizeof(DATA_ENEMYPARAM_EACH_DATA));
+		fout.close();
+		fout.clear();
+	}
+	return true;
+}
+
 WORD Data_EnemyParam::GetActionTypeFromChar(TCHAR c){
 	switch(c){
 	case 'A':
@@ -239,7 +280,7 @@ Data_EnemyParam_Each* Data_EnemyParam::GetEnemyParam(WORD _refID){
 	int maxSize = enemyList.GetSize();
 	for(int n=0; n<maxSize; n++){
 		pResult = enemyList.GetPointerByIndex(n);
-		if(pResult->GetRefID() == _refID){
+		if(pResult->data.refID == _refID){
 			// 欲しいIDと一致するものがあればそれを返す
 			return pResult;
 		}

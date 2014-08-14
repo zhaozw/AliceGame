@@ -4,9 +4,14 @@
 #include <Windows.h>
 #include "Static_Battle.h"
 #include "VectorList.h"
+#include "Static_AliceDoll.h"
 
 // 敵キャラの能力値のデータベースを扱うクラス。
 //データはグローバル変数d_enemyParamから参照される。
+
+// ファイル名
+#define CSVFILE_ENEMYPARAM		"dat_enemy\\enemy%03d.csv"
+#define DATFILE_ENEMYPARAM		"dat\\enemy%03d.dat"
 
 // 定数
 #define MAX_CONDITION			2	// 複数条件を指定可能
@@ -57,11 +62,7 @@ typedef struct EnemyInitialState{
 	}
 } ENEMYINITIALSTATE;
 
-// Data_EnemyParam_Eachクラス。
-// 敵一体についての情報を保持する。
-// 実際には、このクラスの配列を持つFlexListが作成される。
-class Data_EnemyParam_Each{
-private:
+typedef struct Data_EnemyParam_Each_Data{
 	WORD		refID;							// 参照される時のID
 	TCHAR		name[BATTLEUNIT_NAME_BYTES];	// 名前
 	int			param[NUM_ENEMYPARAM_DATA];		// 各能力値(HPを除く)
@@ -71,78 +72,86 @@ private:
 	ENEMYACTIONPATTERN		actionPtn[MAX_ACTIONPATTERN];
 	// 初期状態で持っているステート及びパラメータの配列
 	ENEMYINITIALSTATE		stateArray[MAX_INITIALSTATE];
+	Data_EnemyParam_Each_Data(){
+		refID = 0;
+		attr = DOLL_ATTR_NONE;
+		exp = 0;
+		for(int n=0; n<BATTLEUNIT_PARAM_NUM-1; n++){
+			param[n] = 0;
+		}
+		strcpy_s(name, BATTLEUNIT_NAME_BYTES-1, "");
+		// 各攻撃パターンのリセット
+		for(int n=0; n<MAX_ACTIONPATTERN; n++){
+			actionPtn[n].actionType = COMMANDTYPE_ERROR;
+			actionPtn[n].skillID = 0;
+			actionPtn[n].targetType = ACTIONTARGET_NONE;
+			actionPtn[n].priority = 0;
+			// 攻撃条件のリセット
+			for(int i=0; i<MAX_CONDITION; i++){
+				actionPtn[n].conditionType[i] = CONDITIONTYPE_ALWAYS;
+				for(int j=0; j<MAX_CONDITIONPARAM; j++){
+					actionPtn[n].conditionParam[i][j] = 0;
+				}
+			}
+		}
+	}
+} DATA_ENEMYPARAM_EACH_DATA;
+
+// Data_EnemyParam_Eachクラス。
+// 敵一体についての情報を保持する。
+// 実際には、このクラスの配列を持つFlexListが作成される。
+class Data_EnemyParam_Each{
+public:
+	DATA_ENEMYPARAM_EACH_DATA	data;
 public:
 	// コンストラクタ
 	Data_EnemyParam_Each();
-	void	Refresh();
-	// アクセサ
-	void	SetRefID(WORD _refID){ refID = _refID; };
-	WORD	GetRefID(){ return refID; };
-	LPTSTR	GetNamePtr(){ return name; }; // 直接ポインタを取得する。割と危険。
 	void	GetName(LPTSTR buf, int bufSize=-1){
-		strcpy_s(buf, (bufSize!=-1?bufSize-1:BATTLEUNIT_NAME_BYTES-1), name); 
+		strcpy_s(buf, (bufSize!=-1?bufSize-1:BATTLEUNIT_NAME_BYTES-1), data.name); 
 	}
 	void	SetName(LPTSTR name){
-		strcpy_s(name, BATTLEUNIT_NAME_BYTES-1, name); 
+		strcpy_s(name, BATTLEUNIT_NAME_BYTES-1, data.name); 
 	}
-	void	SetAttr(BYTE _attr){ attr = _attr; };
-	BYTE	GetAttr(){ return attr; };
-	void	SetExp(DWORD _exp){ exp = _exp; };
-	DWORD	GetExp(){ return exp; };
-	// パラメータ
-	void	SetParam(int index, int value){
-		if(index >= 0 && index < NUM_ENEMYPARAM_DATA){
-			param[index] = value; 
-		}
-	};
-	int		GetParam(int index){
-		if(index >= 0 && index < NUM_ENEMYPARAM_DATA){
-			return param[index]; 
-		}
-		return BATTLEUNIT_PARAM_ERROR;
-	};
 	// 各パラメータの参照
-	void	SetHP(int value){ param[ENEMYPARAM_HP] = value; };
-	void	SetAtk(int value){ param[ENEMYPARAM_ATK] = value; };
-	void	SetDef(int value){ param[ENEMYPARAM_DEF] = value; };
-	void	SetSpd(int value){ param[ENEMYPARAM_SPD] = value; };
-	void	SetMgc(int value){ param[ENEMYPARAM_MGC] = value; };
-	void	SetTec(int value){ param[ENEMYPARAM_TEC] = value; };
-	int		GetHP(){ return param[ENEMYPARAM_HP]; };
-	int		GetAtk(){ return param[ENEMYPARAM_ATK]; };
-	int		GetDef(){ return param[ENEMYPARAM_DEF]; };
-	int		GetSpd(){ return param[ENEMYPARAM_SPD]; };
-	int		GetMgc(){ return param[ENEMYPARAM_MGC]; };
-	int		GetTec(){ return param[ENEMYPARAM_TEC]; };
+	void	SetHP(int value){	data.param[ENEMYPARAM_HP] = value; };
+	void	SetAtk(int value){	data.param[ENEMYPARAM_ATK] = value; };
+	void	SetDef(int value){	data.param[ENEMYPARAM_DEF] = value; };
+	void	SetSpd(int value){	data.param[ENEMYPARAM_SPD] = value; };
+	void	SetMgc(int value){	data.param[ENEMYPARAM_MGC] = value; };
+	void	SetTec(int value){	data.param[ENEMYPARAM_TEC] = value; };
+	int		GetHP(){	return data.param[ENEMYPARAM_HP]; };
+	int		GetAtk(){	return data.param[ENEMYPARAM_ATK]; };
+	int		GetDef(){	return data.param[ENEMYPARAM_DEF]; };
+	int		GetSpd(){	return data.param[ENEMYPARAM_SPD]; };
+	int		GetMgc(){	return data.param[ENEMYPARAM_MGC]; };
+	int		GetTec(){	return data.param[ENEMYPARAM_TEC]; };
 
 	void	SetInitialState(int index, WORD refID, int param, int param2){
-		stateArray[index].refID = refID;
-		stateArray[index].param = param;
-		stateArray[index].param2 = param2;
+		data.stateArray[index].refID = refID;
+		data.stateArray[index].param = param;
+		data.stateArray[index].param2 = param2;
 	};
-
-	WORD	GetInitialStateRefID(int index){ return stateArray[index].refID; };
-	int		GetInitialStateParam(int index){ return stateArray[index].param; };
-	int		GetInitialStateParam2(int index){ return stateArray[index].param2; };
-
+	WORD	GetInitialStateRefID(int index){ return data.stateArray[index].refID; };
+	int		GetInitialStateParam(int index){ return data.stateArray[index].param; };
+	int		GetInitialStateParam2(int index){ return data.stateArray[index].param2; };
 
 	// 行動パターンをインデックスで指定
 	void	SetActionPattern(int index, int paramIndex, int value);
 	int		GetActionPattern(int index, int paramIndex);
 	ENEMYACTIONPATTERN*	GetActionPatternPtr(int index);
 	// 行動パターンを直接指定
-	void	SetActionType(int index, WORD type){ actionPtn[index].actionType = type; };
+	void	SetActionType(int index, WORD type){ data.actionPtn[index].actionType = type; };
 	void	SetActionSkillID(int index, DWORD skillID){
-		actionPtn[index].skillID = skillID; 
+		data.actionPtn[index].skillID = skillID; 
 	};
-	void	SetActionTarget(int index, BYTE type){ actionPtn[index].targetType = type; };
-	void	SetActionPriority(int index, WORD p){ actionPtn[index].priority = p; };
-	WORD	GetActionType(int index){ return actionPtn[index].actionType; };
-	DWORD	GetActionSkillID(int index){ return actionPtn[index].skillID; };
-	BYTE	GetActionTarget(int index){ return actionPtn[index].targetType; };
-	WORD	GetActionPriority(int index){ return actionPtn[index].priority; };
+	void	SetActionTarget(int index, BYTE type){ data.actionPtn[index].targetType = type; };
+	void	SetActionPriority(int index, WORD p){ data.actionPtn[index].priority = p; };
+	WORD	GetActionType(int index){ return data.actionPtn[index].actionType; };
+	DWORD	GetActionSkillID(int index){ return data.actionPtn[index].skillID; };
+	BYTE	GetActionTarget(int index){ return data.actionPtn[index].targetType; };
+	WORD	GetActionPriority(int index){ return data.actionPtn[index].priority; };
 	// 行動パターンの参照を返す
-	ENEMYACTIONPATTERN* GetActPatternPtr(){ return actionPtn; };
+	ENEMYACTIONPATTERN* GetActPatternPtr(){ return data.actionPtn; };
 	// 行動パターンの条件
 	void	SetActConditionPattern(int index, int conditionIndex, int type);
 	int		GetActConditionPattern(int index, int conditionIndex);
@@ -164,6 +173,10 @@ public:
 	// 内容をファイルから読み込む
 	bool Load();
 	bool LoadDataFromCsv();
+	bool LoadDataFromDat();
+
+	// 暗号化
+	bool EncodeCsv();
 
 	void ReleaseList(){ enemyList.Release(); };
 

@@ -52,20 +52,20 @@ void Sprite_BattleEnemy::UpdateRefID(){
 	// 参照用のデータがあるか
 	if(refID == 0) return;
 	// 参照用のデータを取得
-	Data_EnemyDraw_Each* pDrawData = d_enemyDraw.GetEnemyDraw(refID);
+	Data_EnemyDraw_Data* pDrawData = d_enemyDraw.GetEnemyDraw(refID);
 	// データの存在を確認
 	if(pDrawData == NULL) return;
 	// 中心の描画位置を指定
-	cx = pDrawData->GetCX();
-	cy = pDrawData->GetCY();
+	cx = pDrawData->cx;
+	cy = pDrawData->cy;
 	// 画像サイズと表示倍率からスプライトの大きさを取得
 	SetSize(
-		(int)(pDrawData->GetIWidth()*pDrawData->GetExRate()),
-		(int)(pDrawData->GetIHeight()*pDrawData->GetExRate()));
+		(int)(pDrawData->iWidth*pDrawData->baseExRate),
+		(int)(pDrawData->iHeight*pDrawData->baseExRate));
 	// 画像の表示倍率を取得
-	baseExRate = pDrawData->GetExRate();
+	baseExRate = pDrawData->baseExRate;
 	// 画像のハンドルを取得
-	hImg = pDrawData->GetHImg(pEnemy->GetAmendedAttr());
+	hImg = pDrawData->hImg[pEnemy->GetAmendedAttr()];
 }
 
 void Sprite_BattleEnemy::Update(){

@@ -74,14 +74,14 @@ Data_DollParam::Data_DollParam() : dollList(){
 }
 
 bool Data_DollParam::Load(){
-#ifndef MYGAME_USE_ENCODED_CSV
-	return LoadFromCsv();
+#ifdef MYGAME_USE_ENCODED_CSV
+	return LoadDataFromDat();
 #else // MYGAME_USE_ENCODED_CSV
-	return LoadFromDat();
+	return LoadDataFromCsv();
 #endif // MYGAME_USE_ENCODED_CSV
 }
 
-bool Data_DollParam::LoadFromCsv(){
+bool Data_DollParam::LoadDataFromCsv(){
 	TCHAR	fileName[MAX_PATH]; 
 	for(int n=0; n<DOLL_TYPE_MAX; n++){
 		wsprintf(fileName, _T("dat_doll\\doll%02d.csv"), n+1);
@@ -92,7 +92,7 @@ bool Data_DollParam::LoadFromCsv(){
 	return true;
 }
 
-bool Data_DollParam::LoadFromDat(){
+bool Data_DollParam::LoadDataFromDat(){
 	// ファイルを開く
 	std::basic_ifstream<TCHAR> fin;
 	fin.open(DATFILE_DOLLPARAM,
@@ -126,7 +126,7 @@ bool Data_DollParam::LoadFromDat(){
 
 bool Data_DollParam::EncodeCsv(){
 	// データを読み込む
-	if(!LoadFromCsv()) return false;
+	if(!LoadDataFromCsv()) return false;
 	// ファイルに書き出す
 	// ファイルを開く
 	std::basic_ofstream<TCHAR> fout;

@@ -129,7 +129,7 @@ bool Scene_Battle::LoadPresetDolls(int defaultID, BYTE battleType){
 
 bool Scene_Battle::LoadEnemyGroup(){
 	// 敵ユニットのIDであるenemyGroup(WORD)値を使用する。
-	Data_EnemyGroup_Each* pEnemyGroup = NULL;
+	Data_EnemyGroup_Data* pEnemyGroup = NULL;
 	WORD tmpRefID;
 	pEnemyGroup = d_enemyGroup.GetEnemyGroup(enemyGroup);
 	if(pEnemyGroup == NULL){
@@ -137,12 +137,12 @@ bool Scene_Battle::LoadEnemyGroup(){
 		return false;
 	}
 	for(int n=0; n<MAX_BATTLEENEMY; n++){
-		tmpRefID = pEnemyGroup->GetEnemyRefID(n);
+		tmpRefID = pEnemyGroup->enemy[n].refID;
 		if(tmpRefID != 0){
 			// IDから敵を作成する
 			LoadEnemyData(n, tmpRefID,
-				pEnemyGroup->GetEnemyDrawX(n), pEnemyGroup->GetEnemyDrawY(n),
-				pEnemyGroup->GetEnemyAttr(n));
+				pEnemyGroup->enemy[n].drawX, pEnemyGroup->enemy[n].drawY,
+				pEnemyGroup->enemy[n].attr);
 			// 敵の数を入力
 			enemiesNum = n+1;
 		}else{
@@ -182,7 +182,7 @@ bool Scene_Battle::LoadEnemyData(WORD index, WORD enemyID, int drawX, int drawY,
 	// 描画位置
 	enemies[index].SetDrawPos(drawX, drawY);
 	// 経験値
-	enemies[index].SetExp(pEnemyParam->GetExp());
+	enemies[index].SetExp(pEnemyParam->data.exp);
 	// 初期ステート
 	for(int n=0; n<MAX_INITIALSTATE; n++){
 		if(pEnemyParam->GetInitialStateRefID(n) != 0){

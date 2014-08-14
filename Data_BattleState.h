@@ -4,7 +4,9 @@
 #include <Windows.h>
 #include "VectorList.h"
 
-#define STATENAME_LENGTH	32
+#define STATENAME_LENGTH		32
+
+#define CSVFILE_STATEINFO		_T("dat\\stateinfo.dat")
 
 //==================================================
 // 各ステート。

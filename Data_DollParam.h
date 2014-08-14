@@ -87,10 +87,10 @@ public:
 	bool Load();
 
 	// csvファイルから読み込む場合
-	bool LoadFromCsv();
+	bool LoadDataFromCsv();
 
 	// datファイルから読み込む場合
-	bool LoadFromDat();
+	bool LoadDataFromDat();
 
 	// Csvデータを暗号化してファイルに書き出す。
 	bool EncodeCsv();

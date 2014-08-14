@@ -294,6 +294,7 @@ bool Scene_Battle::Action_AssertSkill(Game_BattleAction* pAction){
 		pSprite = (Sprite_Base*)GetEnemySprite((Game_BattleEnemy*)pAction->GetActor());
 		if(pSprite != NULL){
 			// ƒ^ƒXƒN‚ð”­¶‚³‚¹‚é
+			g_sound.PlaySE(MYSE_CALL_ENEMYACTION, 1.0);
 			pSprite->SetMorphID(SPMORPH_ENEMYATTACK, false);
 		}
 	}

@@ -148,7 +148,7 @@ template<class T>LPVOID VectorList<T>::SaveToString(LPDWORD size){
 
 		// エラーが出た場合は解放処理を行う
 		if(!isOK){
-			VirtualFree(NULL, allDataSize, MEM_DECOMMIT);
+			VirtualFree(data, allDataSize, MEM_DECOMMIT);
 		}else{
 			*size = allDataSize;
 		}
