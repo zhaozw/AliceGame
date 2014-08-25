@@ -387,6 +387,12 @@
     <ClCompile Include="Window_HintMessage.cpp">
       <Filter>ソース ファイル\Source_System\Source_Window</Filter>
     </ClCompile>
+    <ClCompile Include="Scene_Map.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Game_MapPoint.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -655,6 +661,15 @@
     </ClInclude>
     <ClInclude Include="Window_HintMessage.h">
       <Filter>ヘッダー ファイル\Header_System\Header_Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Map.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Static_Map.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Static</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_MapPoint.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
