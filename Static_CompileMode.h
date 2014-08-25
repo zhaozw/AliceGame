@@ -9,7 +9,7 @@
 
 // 暗号化したデータを使うか否か。
 // (DXArchiveで作成した素材アーカイブを用いる)
-// #define MYGAME_USE_ENCODED_DATA
+#define MYGAME_USE_ENCODED_DATA
 
 // 暗号化したデータを使うか否か。
 // 元々Csvデータであるものを独自関数により暗号化したものを用いる。
