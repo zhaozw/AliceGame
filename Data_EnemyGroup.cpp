@@ -14,6 +14,7 @@ Data_EnemyGroup::Data_EnemyGroup(){
 }
 
 bool Data_EnemyGroup::Load(){
+	groupList.Reserve(DATANUM_ENEMYGROUP);
 #ifdef MYGAME_USE_ENCODED_CSV
 	return LoadDataFromDat();
 #else // MYGAME_USE_ENCODED_CSV

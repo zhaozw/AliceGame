@@ -30,6 +30,9 @@ public:
 	// 末尾にデータを追加する。
 	bool AddData(T data);
 	
+	// 予めデータの領域を確保しておく。
+	void Reserve(int n);
+
 	// リスト全体を含むバイナリ文字列を作成する。
 	// その文字列のポインタとサイズを返す。
 	LPVOID SaveToString(LPDWORD strSize);
@@ -56,11 +59,18 @@ template<class T>bool VectorList<T>::AddData(T data){
 	return true;
 }
 
+template<class T>void VectorList<T>::Reserve(int n){
+	list.reserve(n);
+}
+
+
 template<class T>bool VectorList<T>::Release(){
 	// 要素を全て解放する
 	list.clear();
 	// メモリも開放する
-	std::vector<T>().swap(list);
+	//std::vector<T>().swap(list);
+	// C++11の書き方
+	list.shrink_to_fit();
 	// 
 	return true;
 }

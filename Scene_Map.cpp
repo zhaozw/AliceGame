@@ -16,7 +16,7 @@ Scene_Map::Scene_Map():Scene_Base(){
 bool Scene_Map::Initialize(bool fSkipFrame){
 	Scene_Base::Initialize(fSkipFrame);
 
-
+	return true;
 }
 
 bool Scene_Map::InitWindow(){

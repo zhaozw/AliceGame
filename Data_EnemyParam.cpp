@@ -89,6 +89,7 @@ Data_EnemyParam::Data_EnemyParam() : enemyList(){
 }
 
 bool Data_EnemyParam::Load(){
+	enemyList.Reserve(DATANUM_ENEMYPARAM);
 #ifdef MYGAME_USE_ENCODED_CSV
 	return LoadDataFromDat();
 #else // MYGAME_USE_ENCODED_CSV

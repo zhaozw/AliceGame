@@ -7,6 +7,7 @@
 
 #define CSVFILE_ENEMYGROUP _T("dat_egroup\\group%03d.csv")
 #define DATFILE_ENEMYGROUP _T("dat\\enemygroup.dat")
+#define DATANUM_ENEMYGROUP		200
 
 // 敵グループ内の敵一体を表す構造体
 typedef struct EnemyInGroup{

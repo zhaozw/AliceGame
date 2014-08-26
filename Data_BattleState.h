@@ -7,6 +7,7 @@
 #define STATENAME_LENGTH		32
 
 #define CSVFILE_STATEINFO		_T("dat\\stateinfo.dat")
+#define DATANUM_STATEINFO		400
 
 //==================================================
 // 各ステート。

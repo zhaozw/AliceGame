@@ -32,6 +32,7 @@ Data_BattleState::Data_BattleState(){
 }
 
 bool Data_BattleState::Load(){
+	stateList.Reserve(DATANUM_STATEINFO);
 	return LoadDataFromCsv();
 }
 

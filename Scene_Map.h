@@ -3,6 +3,7 @@
 
 #include "Scene_Base.h"
 #include "Game_MapPoint.h"
+#include "Static_Map.h"
 #include "VectorList.h"
 
 class Scene_Map : public Scene_Base{

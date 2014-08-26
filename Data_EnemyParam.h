@@ -12,6 +12,7 @@
 // ファイル名
 #define CSVFILE_ENEMYPARAM		"dat_enemy\\enemy%03d.csv"
 #define DATFILE_ENEMYPARAM		"dat\\enemy%03d.dat"
+#define DATANUM_ENEMYPARAM		200
 
 // 定数
 #define MAX_CONDITION			2	// 複数条件を指定可能
