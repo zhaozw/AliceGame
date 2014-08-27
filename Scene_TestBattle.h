@@ -4,6 +4,7 @@
 #include "Scene_Base.h"
 #include "Selectable.h"
 #include "Window_HintMessage.h"
+#include "Game_BGEffect.h"
 
 #define MAX_TESTBATTLE			10
 #define MAX_TESTBATTLE_MENU		3
@@ -12,10 +13,11 @@
 class Scene_TestBattle : public Scene_Base{
 protected:
 	Selectable				s_main;	// メニューの選択画面
-	Window_HintMessage		w_hint;
+	Window_HintMessage		w_hint;	// シャンハイのヒントウィンドウ
 	float					backX;	// 背景画像の描画位置の指標
 	float 					backY;
 	int						backDoll;	// 右下に人形を表示する
+	Game_BGEffect			bg;			// エフェクトつきの背景
 
 public:
 	// コンストラクタ

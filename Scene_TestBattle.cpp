@@ -39,12 +39,19 @@ bool Scene_TestBattle::Initialize(bool fSkipFrame){
 		backDoll = GetRand(4*DOLL_FACE_NUM*DOLL_ATTR_NUM-1);
 	}
 
+	// ”wŒi‚Ì‰Šú‰»
+	bg.Initialize();
+	bg.SetTypeID(GAME_BG_TYPE_DUMMY);
 
 	return true;
 }
 
 bool Scene_TestBattle::Terminate(){
+	// ‰¹Šy‚Ì’âŽ~
 	g_sound.StopBGM(BGM_MENU);
+	
+	// ”wŒi‚Ì‰ð•ú
+	bg.Terminate();
 	return true;
 }
 
@@ -75,6 +82,10 @@ int Scene_TestBattle::Update(){
 	if(backY > BACKTILE_SIZE) backY -= BACKTILE_SIZE;
 	if(backY < 0) backY += BACKTILE_SIZE;
 
+	// ”wŒi‚ÌXV
+	bg.Update();
+
+	// ‘I‘ðŽˆ‚Ìˆ—‚È‚Ç
 	if(w_hint.GetClosed()){
 		switch(s_main.Move()){
 		case SELECT_CHOOSE:
@@ -137,6 +148,7 @@ void Scene_TestBattle::Draw() const{
 	};
 
 	// ”wŒi‚Ì•`‰æ
+	/*
 	int tmpX = backX-BACKTILE_SIZE;
 	int tmpY = backY-BACKTILE_SIZE;
 	while(tmpY < WND_HEIGHT){
@@ -147,6 +159,8 @@ void Scene_TestBattle::Draw() const{
 		tmpY += BACKTILE_SIZE;
 		tmpX = backX - BACKTILE_SIZE;
 	}
+	*/
+	bg.Draw();
 
 	// ”wŒi‚Ì˜g‚Ì•`‰æ
 	DrawBox(90, 45, 580, 475, GetColor(127, 191, 159), 1);

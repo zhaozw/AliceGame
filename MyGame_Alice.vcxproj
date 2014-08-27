@@ -122,6 +122,7 @@
     <ClCompile Include="Game_BattleDoll.cpp" />
     <ClCompile Include="Game_BattleEnemy.cpp" />
     <ClCompile Include="Game_BattleUnit.cpp" />
+    <ClCompile Include="Game_BGEffect.cpp" />
     <ClCompile Include="Game_DollList.cpp" />
     <ClCompile Include="Game_FileHeader.cpp" />
     <ClCompile Include="Game_MapPoint.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Game_BattleDoll.h" />
     <ClInclude Include="Game_BattleEnemy.h" />
     <ClInclude Include="Game_BattleUnit.h" />
+    <ClInclude Include="Game_BGEffect.h" />
     <ClInclude Include="Game_DollList.h" />
     <ClInclude Include="Game_MapPoint.h" />
     <ClInclude Include="Game_UnitSubCommand.h" />

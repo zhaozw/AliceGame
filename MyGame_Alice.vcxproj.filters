@@ -393,6 +393,9 @@
     <ClCompile Include="Game_MapPoint.cpp">
       <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
     </ClCompile>
+    <ClCompile Include="Game_BGEffect.cpp">
+      <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -670,6 +673,9 @@
     </ClInclude>
     <ClInclude Include="Game_MapPoint.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="Game_BGEffect.h">
+      <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
