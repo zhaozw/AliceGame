@@ -36,6 +36,13 @@ private:
 	float		posX;
 	float		posY;
 
+	// 繰り返しに使用する値で、
+	// 画像の幅と高さなどに使用する。
+	// 使い方はtypeIDによって異なってもよい。
+	float		loopWidth;
+	float		loopHeight;
+
+
 public:
 
 	// コンストラクタ
