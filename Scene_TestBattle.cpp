@@ -41,7 +41,35 @@ bool Scene_TestBattle::Initialize(bool fSkipFrame){
 
 	// îwåiÇÃèâä˙âª
 	bg.Initialize();
+	// ***GAME_BG_TYPE_DUMMY
 	bg.SetTypeID(GAME_BG_TYPE_DUMMY);
+
+    // ***GAME_BG_TYPE_LOOP_WAVE
+    /*
+    bg.SetInputScreen(g_image.illust.doll[1][0]);
+    bg.SetFacter(-10, -10);
+    bg.SetPosition(400, 300);
+    bg.SetRadian(0.01f, 0.01f);
+    bg.SetParam(500);
+	bg.SetTypeID(GAME_BG_TYPE_LOOP_WAVE);
+    */
+
+    // ***GAME_BG_TYPE_HUE
+    /*
+    bg.SetInputScreen(g_image.illust.doll[0][1]);
+    bg.SetParam(500);
+    bg.SetPosition(400, 300);
+    bg.SetTypeID(GAME_BG_TYPE_HUE);
+    */
+
+    // ***GAME_BG_TYPE_PC
+    /*
+    bg.SetInputScreen(g_image.illust.doll[0][1]);
+    bg.SetParam(500);
+    bg.SetPosition(400, 300);
+    bg.SetFacter(300, 200);
+    bg.SetTypeID(GAME_BG_TYPE_PC);
+    */
 
 	return true;
 }
