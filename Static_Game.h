@@ -24,6 +24,21 @@
 #define SCENE_DOLLBIRTH		6		// キャンプ画面。
 #define SCENE_BATTLE		7		// 戦闘画面。
 #define SCENE_TESTBATTLE	8		// テストバトル選択。
+#define SCENE_STOCKDOLLS	9		// アリスの記憶した人形のストック。
+#define SCENE_RECORDS		10		// トロフィーの確認。
+#define SCENE_AREAMAP		11		// エリア選択画面。
+#define SCENE_MAP			12		// エリア内マップ画面。
+
+// チャプターの配列。
+#define CHAPTER_TEST		0		// テストプレイ用のチャプター。
+#define CHAPTER_FIRST		1		// 1章。
+#define CHAPTER_SECOND		2		// 2章。
+#define CHAPTER_THIRD		3		// 3章。
+#define CHAPTER_LAST		4		// 最終章。
+#define CHAPTER_EXTRA		10		// Extraチャプター。
+#define MAX_CHAPTER			5		// タイトルで選択出来るチャプター数。
+									// テストプレイ用のチャプターは、
+									// 特殊な方法で入るために外している。
 
 // ボタンの名称の羅列。
 // 作るゲームに合わせて覚えやすいように変える。

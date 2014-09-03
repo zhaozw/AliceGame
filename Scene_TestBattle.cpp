@@ -45,31 +45,31 @@ bool Scene_TestBattle::Initialize(bool fSkipFrame){
 	bg.SetTypeID(GAME_BG_TYPE_DUMMY);
 
     // ***GAME_BG_TYPE_LOOP_WAVE
-    /*
+	/*
     bg.SetInputScreen(g_image.illust.doll[1][0]);
     bg.SetFacter(-10, -10);
     bg.SetPosition(400, 300);
     bg.SetRadian(0.01f, 0.01f);
     bg.SetParam(500);
 	bg.SetTypeID(GAME_BG_TYPE_LOOP_WAVE);
-    */
 
+	*/
     // ***GAME_BG_TYPE_HUE
-    /*
+	/*
     bg.SetInputScreen(g_image.illust.doll[0][1]);
     bg.SetParam(500);
     bg.SetPosition(400, 300);
     bg.SetTypeID(GAME_BG_TYPE_HUE);
-    */
+	*/
 
     // ***GAME_BG_TYPE_PC
-    /*
+	/*
     bg.SetInputScreen(g_image.illust.doll[0][1]);
     bg.SetParam(500);
     bg.SetPosition(400, 300);
     bg.SetFacter(300, 200);
     bg.SetTypeID(GAME_BG_TYPE_PC);
-    */
+	*/
 
 	return true;
 }
@@ -132,6 +132,9 @@ int Scene_TestBattle::Update(){
 					g_trialAliceFile.data.tutorialHint
 						= !g_trialAliceFile.data.tutorialHint;
 				}
+				if(s_main.index == MAX_TESTBATTLE+2){
+					ReserveScene(SCENE_TITLE, 5);
+				}
 				if(s_main.index == TESTBATTLE_SELECT_NUM-1){
 					ReserveScene(SCENE_END, 60);
 				}
@@ -172,7 +175,8 @@ void Scene_TestBattle::Draw() const{
 	TCHAR	menuTitle[MAX_TESTBATTLE_MENU][128] = {
 		_T("Readmeシャンハイ"), 
 		_T("シャンハイ解説"), 
-		_T("ゲームを終了する"), 
+		_T("タイトル画面へ移動"),
+		_T("ゲームを終了する"),
 	};
 
 	// 背景の描画
@@ -191,8 +195,8 @@ void Scene_TestBattle::Draw() const{
 	bg.Draw();
 
 	// 背景の枠の描画
-	DrawBox(90, 45, 580, 475, GetColor(127, 191, 159), 1);
-	DrawBox(50, 30, 540, 460, GetColor(223, 239, 232), 1);
+	DrawBox(90, 45, 580, 515, GetColor(127, 191, 159), 1);
+	DrawBox(50, 30, 540, 500, GetColor(223, 239, 232), 1);
 
 	// 人形の描画
 	WORD dollType=0, dollFace=0, dollAttr=0;
@@ -261,7 +265,7 @@ void Scene_TestBattle::Draw() const{
 	}
 
 	// 説明ウィンドウ表示する/しないの表示
-	DrawStringToHandle(360+3, 50+30*11+3,
+	DrawStringToHandle(360-((s_main.index==11)?4:0)+3, 50+30*11+3,
 		g_trialAliceFile.data.tutorialHint ? 
 		_T("毎回表示") : _T("初回のみ"),
 		TESTBATTLE_SHADOWCOLOR,

@@ -7,7 +7,7 @@
 #include "Game_BGEffect.h"
 
 #define MAX_TESTBATTLE			10
-#define MAX_TESTBATTLE_MENU		3
+#define MAX_TESTBATTLE_MENU		4
 #define TESTBATTLE_SELECT_NUM	(MAX_TESTBATTLE+MAX_TESTBATTLE_MENU)
 
 class Scene_TestBattle : public Scene_Base{
