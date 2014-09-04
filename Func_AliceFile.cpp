@@ -8,13 +8,13 @@
 
 #include "MyFiles.h"
 #include "Game_FileHeader.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "Game_DollList.h"
 #include "TempData.h"
 #include "Common_Macro.h"
 
 // ゲームデータを保存するためのグローバル変数群
-extern Game_AliceInfo		g_aliceInfo;
+extern Record_AliceInfo		r_aliceInfo;
 extern TempData				g_temp;
 extern Game_DollList		g_dollList;
 
@@ -80,7 +80,7 @@ bool GetGameFileHeader(Game_FileHeader* pHeader, BYTE index){
 // ゲームデータを保存する
 bool SaveGame(BYTE index){
 	// 現在の時間情報を更新する
-	g_aliceInfo.GetCntTime();
+	r_aliceInfo.GetCntTime();
 
 	// ファイル名の取得
 	TCHAR fileName[SIZE_SAVEFILENAME];
@@ -93,10 +93,10 @@ bool SaveGame(BYTE index){
 
 	// ゲーム保存用のヘッダを作成する
 	Game_FileHeader fileHeader;
-	fileHeader.data.alice_mp = g_aliceInfo.data.mp;
-	fileHeader.data.savedYMD = g_aliceInfo.data.savedYMD;
-	fileHeader.data.savedHMS = g_aliceInfo.data.savedHMS;
-	fileHeader.data.playTime = g_aliceInfo.data.playTime;
+	fileHeader.data.alice_mp = r_aliceInfo.data.mp;
+	fileHeader.data.savedYMD = r_aliceInfo.data.savedYMD;
+	fileHeader.data.savedHMS = r_aliceInfo.data.savedHMS;
+	fileHeader.data.playTime = r_aliceInfo.data.playTime;
 
 	// ファイルヘッダの保存
 	if(file.AddObjectToFiles(
@@ -110,9 +110,9 @@ bool SaveGame(BYTE index){
 		_T(SAVEFILE_CODE_FILEHEADER), (WORD)strlen(_T(SAVEFILE_CODE_FILEHEADER)));
 
 	// アリスの情報の保存
-	Game_AliceInfo_Data aliceData = g_aliceInfo.data;
+	Record_AliceInfo_Data aliceData = r_aliceInfo.data;
 	if(file.AddObjectToFiles(
-		(LPVOID)&aliceData, sizeof(Game_AliceInfo_Data),
+		(LPVOID)&aliceData, sizeof(Record_AliceInfo_Data),
 		_T("aliceinfo"), SAVEFILE_INDEX_ALICEINFO) == INDEX_ERROR){
 			file.ReleaseAll();
 			return false;
@@ -139,7 +139,7 @@ bool SaveGame(BYTE index){
 // ゲームデータを読み込む
 bool LoadGame(BYTE index){
 	// 現在の時間情報を更新する
-	g_aliceInfo.GetCntTime(true);
+	r_aliceInfo.GetCntTime(true);
 	// ファイル名の取得
 	TCHAR fileName[SIZE_SAVEFILENAME];
 	// ファイルのポインタを受け取る
@@ -174,7 +174,7 @@ bool LoadGame(BYTE index){
 	pData = file.GetFilePointerByIndex(SAVEFILE_INDEX_ALICEINFO);
 	// ファイルサイズが正しいかどうかの確認
 	fileSize = file.GetFileSize(SAVEFILE_INDEX_ALICEINFO);
-	if(!g_aliceInfo.LoadFromBytes(pData, fileSize)){
+	if(!r_aliceInfo.LoadFromBytes(pData, fileSize)){
 		return false;
 	}
 
@@ -185,15 +185,15 @@ bool LoadGame(BYTE index){
 
 bool NewGame(){
 	// グローバル変数を全て初期化する必要がある
-	g_aliceInfo = Game_AliceInfo();
+	r_aliceInfo = Record_AliceInfo();
 	// 現在の時間情報を更新する
-	g_aliceInfo.GetCntTime(true);
+	r_aliceInfo.GetCntTime(true);
 	// 前からあるリストを解放し、新しいリストを作成する
 	g_dollList.Release();
 	g_dollList = Game_DollList();
 	g_temp.Reset();
 	GenerateInitialDoll();
-	// g_aliceInfo.data.mp = 0;
+	// r_aliceInfo.data.mp = 0;
 	return true;
 }
 

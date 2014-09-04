@@ -2,7 +2,7 @@
 
 #include "BWindow_DollSkill.h"
 #include "WindowSkin.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "DXFont.h"
 #include "Game_BattleDoll.h"
 #include "Static_AliceDoll.h"
@@ -12,7 +12,7 @@
 #include "BWindow_DollCommand.h"
 
 extern WindowSkins			g_wndSkins;
-extern Game_AliceInfo		g_aliceInfo;
+extern Record_AliceInfo		r_aliceInfo;
 extern DXFont				g_font;
 extern Data_SkillInfo		d_skillInfo;
 
@@ -110,7 +110,7 @@ void BWindow_DollSkill::Update(){
 	case UPDATING:
 		switch(select.CheckKey()){
 		case SELECT2D_CHOOSE:
-			if(costMP[select.index] <= g_aliceInfo.data.mp){
+			if(costMP[select.index] <= r_aliceInfo.data.mp){
 				tmpSkillID = pOwner->GetSkillID(select.index);
 				targetType = d_skillInfo.GetTargetType(tmpSkillID);
 				if(tmpSkillID == 0) return;
@@ -146,7 +146,7 @@ void BWindow_DollSkill::Update(){
 
 void BWindow_DollSkill::DrawContentItem(int index, BYTE color) const{
 	// color’l‚ÍŽÀÛ‚É‚Æ‚Íˆá‚¤‚à‚Ì‚ð—p‚¢‚é
-	bool canUse = (g_aliceInfo.data.mp >= costMP[index]);
+	bool canUse = (r_aliceInfo.data.mp >= costMP[index]);
 	BYTE useColor = (!canUse ? WND_SELECTABLE_COLOR_INACTIVE 
 		: (index == select.index 
 		? WND_SELECTABLE_COLOR_SELECTED 

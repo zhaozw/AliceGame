@@ -9,7 +9,8 @@ Game_AliceDoll_Essence::Game_AliceDoll_Essence(){
 	data.type = DOLL_TYPE_UNDIFINED;
 	data.level = 1;
 	data.exp = 0;
-	data.serial = 0;
+	data.aliceID = 0;
+	data.id = 0;
 	for(int n=0; n<DOLL_ATTRSTONE_NUM; n++){
 		data.attrStone[n] = DOLL_ATTR_NONE;
 	}
@@ -26,7 +27,8 @@ Game_AliceDoll_Essence::Game_AliceDoll_Essence(const Game_AliceDoll_Essence& i){
 	data.type = i.data.type;
 	data.level = i.data.level;
 	data.exp = i.data.exp;
-	data.serial = i.data.serial;
+	data.aliceID = i.data.aliceID;
+	data.id = i.data.id;
 	for(int n=0; n<DOLL_ATTRSTONE_NUM; n++){
 		data.attrStone[n] = i.data.attrStone[n];
 	}
@@ -40,7 +42,8 @@ Game_AliceDoll_Essence &Game_AliceDoll_Essence::operator=(const Game_AliceDoll_E
 	data.type = i.data.type;
 	data.level = i.data.level;
 	data.exp = i.data.exp;
-	data.serial = i.data.serial;
+	data.aliceID = i.data.aliceID;
+	data.id = i.data.id;
 	for(int n=0; n<DOLL_ATTRSTONE_NUM; n++){
 		data.attrStone[n] = i.data.attrStone[n];
 	}

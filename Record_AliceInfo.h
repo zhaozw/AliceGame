@@ -1,14 +1,17 @@
-#ifndef GAME_ALICEINFO_H
-#define GAME_ALICEINFO_H
+#ifndef Record_AliceInfo_H
+#define Record_AliceInfo_H
 
 #include <Windows.h>
 #include "Static_AliceInfo.h"
 #include "Static_AliceDoll.h"
 
 // アリス自身の情報を持つクラス。
-// グローバル変数g_AliceInfoから参照される。
+// グローバル変数r_aliceInfoから参照される。
 
-struct Game_AliceInfo_Data{
+struct Record_AliceInfo_Data{
+	int chapter;		// このファイルでプレイ中の章
+	int level;			// アリスのレベル。
+	int exp;			// アリスの積算経験値。
 	int mp;				// アリスの魔力
 	int maxMP;			// 最大魔力
 	int day;			// 経過日数
@@ -20,9 +23,9 @@ struct Game_AliceInfo_Data{
 	DWORD savedYMD;		// セーブした年・月・日
 	DWORD savedHMS;		// セーブした時間・分・秒
 	
-	int serial;			// 次に作成する人形のシリアルナンバー
-
-	Game_AliceInfo_Data(){
+	Record_AliceInfo_Data(){
+		chapter = 0;
+		level = 0;
 		mp = MAX_MP;
 		maxMP = MAX_MP;
 		day = 0;
@@ -41,23 +44,19 @@ struct Game_AliceInfo_Data{
 			}
 		}
 		playTime = 0;
-		serial = 1;
 		savedYMD = 0;
 		savedHMS = 0;
 	};
 };
 
-class Game_AliceInfo{
+class Record_AliceInfo{
 public:
-	Game_AliceInfo_Data		data; // データ保存用にデータ用構造体を作成
+	Record_AliceInfo_Data		data; // データ保存用にデータ用構造体を作成
 	// 保存しない
 	DWORD					lastSavedWinTime;	// 最後にセーブした時のウィンドウズの時間
 public:
-	Game_AliceInfo();
+	Record_AliceInfo();
 
-	// シリアル番号を取得する。
-	// シリアル番号を1増やす。
-	int GetSerial(){ data.serial++; return data.serial-1; }; 
 	// バイト列からデータに内容をコピーする
 	bool LoadFromBytes(LPVOID pBytes, DWORD fileSize);
 	// 現在の現実時間を代入する。
@@ -73,4 +72,4 @@ public:
 	bool SubMP(int p);
 };
 
-#endif // GAME_ALICEINFO_H
+#endif // Record_AliceInfo_H

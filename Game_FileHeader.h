@@ -2,7 +2,7 @@
 #define GAME_FILEHEADER_H
 
 #include <Windows.h>
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 
 struct Game_FileHeader_Data{
 	int		playTime;		// ƒvƒŒƒCŽžŠÔ(•b)

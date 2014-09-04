@@ -24,11 +24,11 @@ typedef struct ParamLevel{
 // セーブデータに含める必要のあるデータを保持する構造体。
 // Game_AliceDoll_Essenseクラスに保持される。
 typedef struct Game_AliceDoll_Essence_Data{
+	DWORD		aliceID;			// この人形を作成したアリスのID。
+	DWORD		id;					// 人形のID。ゲーム全体を通して通し番号で割り振られる。
+									// aliceIDとidが同一の人形は区別されない。
+	int			chapter;			// この人形が作成された章の番号。
 	WORD		name[MAX_DOLLNAME];	// 人形の名前。
-	DWORD		serial;				// 参照関係などを保持するためのシリアルナンバー。
-									// （少なくとも同一シーン内に存在する範囲の）
-									// 全ての人形は別々のシリアルナンバーを持つ。
-									// ゲーム内では1から作成する。
 	BYTE		type;				// ここでは、上海人形など人形の種類。
 									// 人形の種類（バランスタイプなどのタイプは"group"）
 	WORD		level;				// 全体としてのレベル
@@ -39,7 +39,9 @@ typedef struct Game_AliceDoll_Essence_Data{
 	WORD		skillID[DOLL_SKILL_MAX];	// 覚えているスキルの配列
 
 	Game_AliceDoll_Essence_Data(){
-		serial = 0;
+		aliceID = 0;
+		id = 0;
+		chapter = 0;
 		type = DOLL_TYPE_UNDIFINED;
 		level = 1;
 		exp = 0;
@@ -78,8 +80,10 @@ public:
 	Game_AliceDoll_Essence &operator=(const Game_AliceDoll_Essence &i);
 
 	// アクセサ
-	DWORD		GetSerial(){ return data.serial; };
-	void		SetSerial(DWORD serial){ data.serial = serial; };
+	DWORD		GetAliceID(){ return data.aliceID; };
+	void		SetAliceID(DWORD _aliceID){ data.aliceID = _aliceID; };
+	DWORD		GetID(){ return data.id; };
+	void		SetID(DWORD _id){ data.id = _id; };
 	BYTE		GetType(){ return data.type; };
 	void		SetType(BYTE type){ data.type = type; };
 	WORD		GetLevel(){ return data.level; };
@@ -88,24 +92,34 @@ public:
 	void		SetExp(DWORD exp){ data.exp = exp; };
 	int			GetHP(){ return data.hp; };
 	void		SetHP(int hp){ data.hp = hp; };
+	// aliceIDとidの値を用いて同一の人形かどうかを取得する。
+	bool		CheckSerial(DWORD aliceID, DWORD id){
+		return (data.aliceID==aliceID && data.id==id); };
+
+	// 内部レベルを取得。
 	DWORD		GetPotentialLevel(BYTE param){
 		if(param >= DOLL_PARAM_MAX){
 			return 0;
 		}
 		return data.paramLevel[param].potential;
 	};
+
+	// 成長レベルを取得。
 	DWORD		GetGrowthLevel(BYTE param){
 		if(param >= DOLL_PARAM_MAX){
 			return 0;
 		}
 		return data.paramLevel[param].growth;
 	};
+
+	// 内部レベルをセット。
 	void		SetPotentialLevel(BYTE param, DWORD level){
 		if(param >= DOLL_PARAM_MAX){
 			return;
 		}
 		data.paramLevel[param].potential = level;
 	}
+	// 成長レベルをセット。
 	void		SetGrowthLevel(BYTE param, DWORD level){
 		if(param >= DOLL_PARAM_MAX){
 			return;
@@ -142,7 +156,8 @@ public:
 	DWORD		GetGLevel(BYTE paramID) const;	// 各パラメータ
 	DWORD		GetGeneralGLevel() const;		// 全パラメータの平均(経験値テーブルなどに使用)
 
-	// 人形の属性を取得する関数
+	// 人形の属性を取得する関数。
+	// 一番かけらの多い属性を返す。
 	BYTE		GetAttr() const;
 
 	// セーブデータとして保存するために内容をバイト列に変換する関数

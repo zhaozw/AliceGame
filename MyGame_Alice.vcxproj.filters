@@ -222,9 +222,6 @@
     <ClCompile Include="Game_AliceDoll.cpp">
       <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
     </ClCompile>
-    <ClCompile Include="Game_AliceInfo.cpp">
-      <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
-    </ClCompile>
     <ClCompile Include="Game_DollList.cpp">
       <Filter>ソース ファイル\Source_Camp\CSource_Instance</Filter>
     </ClCompile>
@@ -396,6 +393,24 @@
     <ClCompile Include="Game_BGEffect.cpp">
       <Filter>ソース ファイル\Source_System\Source_Instance</Filter>
     </ClCompile>
+    <ClCompile Include="GRecord_Others.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Record_AliceInfo.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_ChooseArea.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_ChooseMap.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Records.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_StockDolls.cpp">
+      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.h">
@@ -545,9 +560,6 @@
     <ClInclude Include="Game_AliceDoll.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
     </ClInclude>
-    <ClInclude Include="Game_AliceInfo.h">
-      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
-    </ClInclude>
     <ClInclude Include="Game_DollList.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Instance</Filter>
     </ClInclude>
@@ -676,6 +688,24 @@
     </ClInclude>
     <ClInclude Include="Game_BGEffect.h">
       <Filter>ヘッダー ファイル\Header_System\Header_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="GRecord_Others.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Record_AliceInfo.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_ChooseArea.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_ChooseMap.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Records.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_StockDolls.h">
+      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

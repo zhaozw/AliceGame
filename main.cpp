@@ -40,13 +40,18 @@
 #include "Scene_DollBirth.h"		// 人形の誕生
 #include "Scene_Battle.h"			// 戦闘
 #include "Scene_TestBattle.h"		// テストバトルの選択
+#include "Scene_StockDolls.h"		// 人形ストック選択
+#include "Scene_Records.h"			// トロフィー確認
+#include "Scene_ChooseArea.h"		// エリア選択
+#include "Scene_ChooseMap.h"		// マップ選択
+#include "Scene_Map.h"				// マップ画面
 
 // ツール関連のヘッダファイル
 #include "MyTaskList.h"
 #include "Selectable.h"
 
 // ゲームオブジェクトのうち、グローバル変数として扱うもの
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "Game_DollList.h"
 
 // データオブジェクト
@@ -57,6 +62,12 @@
 #include "Data_BattleState.h"
 #include "Data_StateMessage.h"
 #include "Data_SkillInfo.h"
+
+// レコードオブジェクト
+
+
+// 共通レコードオブジェクト
+#include "GRecord_Others.h"
 
 // 体験版のデータ
 #include "Func_AliceFile.h"
@@ -87,7 +98,7 @@ GlobalData	g_dat;
 TempData	g_temp;
 
 // オブジェクトのうち、グローバル変数として表現されるもの
-Game_AliceInfo	g_aliceInfo;
+Record_AliceInfo	r_aliceInfo;
 Game_DollList	g_dollList;
 
 // 体験版のデータ
@@ -101,6 +112,9 @@ Data_EnemyDraw		d_enemyDraw;
 Data_BattleState	d_battleState;
 Data_StateMessage	d_stateMessage;
 Data_SkillInfo		d_skillInfo;
+
+// グローバルレコードクラス
+GRecord_Others		gr_others;
 
 int			hDrawWindow;	// 描画用画面のハンドル。
 							// 描画内容はここに描画したものを
@@ -263,6 +277,21 @@ bool WinMain_PlayScene(){
 					break;
 				case SCENE_TESTBATTLE:
 					scene = NEW Scene_TestBattle();
+					break;
+				case SCENE_STOCKDOLLS:
+					scene = NEW Scene_StockDolls();
+					break;
+				case SCENE_RECORDS:
+					scene = NEW Scene_Records();
+					break;
+				case SCENE_CHOOSEAREA:
+					scene = NEW Scene_ChooseArea();
+					break;
+				case SCENE_CHOOSEMAP:
+					scene = NEW Scene_ChooseMap();
+					break;
+				case SCENE_MAP:
+					scene = NEW Scene_Map();
 					break;
 				case SCENE_END:
 					isOK = false;

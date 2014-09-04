@@ -5,11 +5,11 @@
 
 #include "Image.h"
 #include "DXFont.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 
 extern Image g_image;
 extern DXFont g_font;
-extern Game_AliceInfo	g_aliceInfo;
+extern Record_AliceInfo	r_aliceInfo;
 
 void Scene_Battle::DrawBG() const{
 }
@@ -37,7 +37,7 @@ void Scene_Battle::DrawBattleInfo() const{
 	switch(phaze){
 	case DOLLS_COMMAND:
 	case ALICE_COMMAND:
-		wsprintf(buf, _T("Žc‚è–‚—Í:%d"), g_aliceInfo.data.mp);
+		wsprintf(buf, _T("Žc‚è–‚—Í:%d"), r_aliceInfo.data.mp);
 		w = GetStrWidth(buf, strlen(buf), g_font.hInfo);
 		DrawStringToHandle(150-w/2, 378-FONTSIZE_INFO, buf, GetColor(255,255,255), g_font.hInfo);
 	}

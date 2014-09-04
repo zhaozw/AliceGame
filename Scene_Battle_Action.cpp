@@ -7,13 +7,13 @@
 #include "Static_InfoEffect.h"
 #include "Data_SkillInfo.h"
 #include "Data_StateMessage.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "Sound.h"
 
 
 extern Data_SkillInfo		d_skillInfo;
 extern Data_StateMessage	d_stateMessage;
-extern Game_AliceInfo		g_aliceInfo;
+extern Record_AliceInfo		r_aliceInfo;
 extern Sound				g_sound;
 
 extern MyGroup* gMyTask_InfoEffect;

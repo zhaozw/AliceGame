@@ -26,8 +26,9 @@
 #define SCENE_TESTBATTLE	8		// テストバトル選択。
 #define SCENE_STOCKDOLLS	9		// アリスの記憶した人形のストック。
 #define SCENE_RECORDS		10		// トロフィーの確認。
-#define SCENE_AREAMAP		11		// エリア選択画面。
-#define SCENE_MAP			12		// エリア内マップ画面。
+#define SCENE_CHOOSEAREA	11		// エリア選択画面。
+#define SCENE_CHOOSEMAP		12		// マップ選択画面。
+#define SCENE_MAP			13		// マップ画面。
 
 // チャプターの配列。
 #define CHAPTER_TEST		0		// テストプレイ用のチャプター。

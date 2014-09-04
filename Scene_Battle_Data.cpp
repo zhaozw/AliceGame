@@ -4,14 +4,14 @@
 #include "Data_EnemyGroup.h"
 #include "Data_EnemyParam.h"
 #include "Game_AliceDoll.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "CsvReader.h"
 #include "TempData.h"
 
 // データベース
 extern Data_EnemyGroup	d_enemyGroup;
 extern Data_EnemyParam	d_enemyParam;
-extern Game_AliceInfo	g_aliceInfo;
+extern Record_AliceInfo	r_aliceInfo;
 extern TempData			g_temp;
 
 bool Scene_Battle::SetupDolls(){
@@ -63,7 +63,7 @@ bool Scene_Battle::LoadPresetDolls(int defaultID, BYTE battleType){
 	}
 	// 最初の二行はアリスの魔力
 	reader.Read();
-	g_aliceInfo.SetMP(reader.GetIntValue(1));
+	r_aliceInfo.SetMP(reader.GetIntValue(1));
 	// 次の二行は空行
 	reader.Read();
 	reader.Read();

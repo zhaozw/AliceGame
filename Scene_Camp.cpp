@@ -60,6 +60,9 @@ int Scene_Camp::Update(){
 			switch(s_main.Move()){
 			case SELECT_CHOOSE:
 				switch(s_main.index){
+				case CAMP_MENU_START:
+					ReserveScene(SCENE_CHOOSEAREA, 20);
+					break;
 				case CAMP_MENU_CREATE:
 					ReserveScene(SCENE_DOLLCREATE, 20);
 					break;

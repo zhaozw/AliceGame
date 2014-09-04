@@ -1,16 +1,16 @@
-// Game_AliceInfo.cpp
+// Record_AliceInfo.cpp
 
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include <Windows.h>
 #include <tchar.h>
 #include <crtdbg.h>
 #include "Func_Windows.h"
 
-Game_AliceInfo::Game_AliceInfo() : data(){
+Record_AliceInfo::Record_AliceInfo() : data(){
 
 }
 
-bool Game_AliceInfo::LoadFromBytes(LPVOID pBytes, DWORD fileSize){
+bool Record_AliceInfo::LoadFromBytes(LPVOID pBytes, DWORD fileSize){
 	if(fileSize != sizeof(data)){
 		return false;
 	}
@@ -20,7 +20,7 @@ bool Game_AliceInfo::LoadFromBytes(LPVOID pBytes, DWORD fileSize){
 	return true;
 }
 
-void Game_AliceInfo::GetCntTime(bool load){
+void Record_AliceInfo::GetCntTime(bool load){
 	if(load){
 		lastSavedWinTime = GetTickCount();
 	}
@@ -34,7 +34,7 @@ void Game_AliceInfo::GetCntTime(bool load){
 	lastSavedWinTime = cntTime;
 }
 
-bool Game_AliceInfo::AddMP(int p){
+bool Record_AliceInfo::AddMP(int p){
 	if(p < 0) return SubMP(-p);
 	bool result = true;
 	if(data.mp + p > data.maxMP) result = false;
@@ -42,7 +42,7 @@ bool Game_AliceInfo::AddMP(int p){
 	return result;
 }
 
-bool Game_AliceInfo::SubMP(int p){
+bool Record_AliceInfo::SubMP(int p){
 	if(p < 0) return AddMP(-p);
 	bool result = true;
 	if(data.mp < p) result = false;

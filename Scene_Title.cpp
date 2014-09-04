@@ -4,13 +4,15 @@
 #include "DXFont.h"
 #include "TempData.h"
 #include "Func_AliceFile.h"
+#include "Record_AliceInfo.h"
 
-extern DXFont		g_font;
-extern TempData		g_temp;
+extern DXFont				g_font;
+extern TempData				g_temp;
+extern Record_AliceInfo		r_aliceInfo;
 
 Scene_Title::Scene_Title():Scene_Base(),
 s_main(MAX_TITLE_MENU), s_chapter(MAX_CHAPTER, 0, false, true) {
-	phaze = 0;
+	phaze = TITLE_PHAZE_MAIN;
 }
 
 bool Scene_Title::Initialize(bool fSkipFrame){
@@ -33,6 +35,9 @@ bool Scene_Title::Initialize(bool fSkipFrame){
 	s_main.isActive[TITLE_MENU_STOCKDOLLS] = false;
 	s_main.isActive[TITLE_MENU_RECORDS] = false;
 
+	// クリアしていないチャプターを無効化
+
+
 	return true;
 }
 
@@ -42,45 +47,62 @@ bool Scene_Title::Terminate(){
 }
 
 int Scene_Title::Update(){
-	if(!SceneIsReserved()){
-		switch(s_main.Move()){
-		case SELECT_CHOOSE:
-			switch(s_main.index){
-			case TITLE_MENU_NEWGAME:
+	if(!SceneIsReserved())
+		switch(phaze){
+		case TITLE_PHAZE_MAIN:
+			switch(s_main.Move()){
+			case SELECT_CHOOSE:
+				switch(s_main.index){
+				case TITLE_MENU_NEWGAME:
+					phaze = TITLE_PHAZE_CHAPTER;
+					break;
+				case TITLE_MENU_CONTINUE:
+					g_temp.sceneParam = TEMP_PARAM_FILE_LOADMODE;
+					ReserveScene(SCENE_FILE, 20);
+					break;
+				case TITLE_MENU_STOCKDOLLS:
+					ReserveScene(SCENE_TESTBATTLE, 90);
+					break;
+				case TITLE_MENU_RECORDS:
+					ReserveScene(SCENE_TESTBATTLE, 90);
+					break;
+				case TITLE_MENU_TESTBATTLE:
+					ReserveScene(SCENE_TESTBATTLE, 10);
+					break;
+				case TITLE_MENU_OPTION:
+					// ReserveScene(SCENE_TESTBATTLE, 10);
+					break;
+				case TITLE_MENU_EXIT:
+					ReserveScene(SCENE_END, 90);
+					break;
+				}
+				break;
+			case SELECT_CANCEL:
+				// インデックスがEXITに合っている時は終了する、
+				// そうで無い場合はEXITに合わせる
+				if(s_main.index == TITLE_MENU_EXIT){
+					ReserveScene(SCENE_END, 90);
+				}else{
+					s_main.index = TITLE_MENU_EXIT;
+				}
+				break;
+			}
+			break;
+		case TITLE_PHAZE_CHAPTER:
+			switch(s_chapter.Move()){
+			case SELECT_CHOOSE:
+				// 決定キー
+				// 章を決定してニューゲーム
 				g_temp.sceneParam = TEMP_PARAM_FILE_NEWGAME;
 				ReserveScene(SCENE_FILE, 20);
 				break;
-			case TITLE_MENU_CONTINUE:
-				g_temp.sceneParam = TEMP_PARAM_FILE_LOADMODE;
-				ReserveScene(SCENE_FILE, 20);
-				break;
-			case TITLE_MENU_STOCKDOLLS:
-				ReserveScene(SCENE_TESTBATTLE, 90);
-				break;
-			case TITLE_MENU_RECORDS:
-				ReserveScene(SCENE_TESTBATTLE, 90);
-				break;
-			case TITLE_MENU_TESTBATTLE:
-				ReserveScene(SCENE_TESTBATTLE, 10);
-				break;
-			case TITLE_MENU_OPTION:
-				// ReserveScene(SCENE_TESTBATTLE, 10);
-				break;
-			case TITLE_MENU_EXIT:
-				ReserveScene(SCENE_END, 90);
+			case SELECT_CANCEL:
+				// キャンセルキー
+				phaze = TITLE_PHAZE_MAIN;
+				s_main.index = 0;
 				break;
 			}
 			break;
-		case SELECT_CANCEL:
-			// インデックスがEXITに合っている時は終了する、
-			// そうで無い場合はEXITに合わせる
-			if(s_main.index == TITLE_MENU_EXIT){
-				ReserveScene(SCENE_END, 90);
-			}else{
-				s_main.index = TITLE_MENU_EXIT;
-			}
-			break;
-		}
 	}
 	return SCENE_NONE;
 }

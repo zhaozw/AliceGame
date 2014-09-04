@@ -5,10 +5,10 @@
 #include "Data_BattleState.h"
 #include "Static_Skill.h"
 #include "Game_UnitSubCommand.h"
-#include "Game_AliceInfo.h"
+#include "Record_AliceInfo.h"
 #include "Data_SkillInfo.h"
 
-extern Game_AliceInfo g_aliceInfo;
+extern Record_AliceInfo r_aliceInfo;
 extern Data_SkillInfo d_skillInfo;
 
 char Scene_Battle::InterpretCommand(Game_UnitCommand* pCmd, int phaze){
@@ -179,9 +179,9 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 		break;
 	case COMMANDTYPE_SKILL:
 		if(pCmd->GetOwner()->IsDoll()){
-			if(g_aliceInfo.data.mp >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
+			if(r_aliceInfo.data.mp >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
 				// ここでMPを減らす
-				g_aliceInfo.SubMP(d_skillInfo.GetCostMP(pCmd->GetSkillID()));
+				r_aliceInfo.SubMP(d_skillInfo.GetCostMP(pCmd->GetSkillID()));
 			}else{
 				// MPが足りない場合、「しかしMPが足りない！」に差し替え
 				pCmd->SetTargetType(ACTIONTARGET_NO_MP);
