@@ -427,16 +427,18 @@ namespace BackGroundEffect{
                     VECTOR v2 = VGet(pcU, pcV, 0);
 
                     VECTOR c = VSub(v1, v2);
-                    float r = VSize(c) * uMax;
+                    float r = VSize(c);
 
                     float ac = c.x / r;
                     float theta = acos(ac) * vMax / DX_PI_F;
                     // –{—ˆ‚È‚ç0~2PI‚Ì’l‚ğ‚Æ‚é‚×‚«‚¾‚ªUVÀ•W‚ÌŠÖŒWã‚¤‚Ü‚­‚¢‚©‚È‚¢‚Ì‚Å‚ ‚«‚ç‚ß‚é
                     //if (c.y < 0) theta = -theta;
-
+                	
                     float rate = r*r*pcFacter;
                     rate = max(0, min(1.0f, rate));
 
+                	r *= uMax;
+                	
                     cur->u = cur->u * rate + r * (1.0f - rate);
                     cur->v = cur->v * rate + theta * (1.0f - rate);
                 }
