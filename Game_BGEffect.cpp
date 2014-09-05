@@ -294,12 +294,12 @@ namespace BackGroundEffect{
         }
 
         // 画像に合うようにUV値を計算
-    {
-        int w, h;
-        GetGraphTextureSize(gh, &w, &h);
-        uMax = texW / (float)w;
-        vMax = texH / (float)h;
-    }
+        {
+            int w, h;
+            GetGraphTextureSize(gh, &w, &h);
+            uMax = texW / (float)w;
+            vMax = texH / (float)h;
+        }
 
         // 頂点情報を取得
         CreateVertex(div);
@@ -327,6 +327,15 @@ namespace BackGroundEffect{
         vertexNum = divNum * 2 * divNum * 2;
         vertex = new VERTEX2D[vertexNum];
         SetVertexPosition();
+        VERTEX2D* cur = &vertex[0];
+        VERTEX2D* end = cur + vertexNum;
+        while (cur < end){
+            cur->dif.r = 255;
+            cur->dif.g = 255;
+            cur->dif.b = 255;
+            cur->rhw = 1.0f;
+            ++cur;
+        }
 
         return;
     }
@@ -373,9 +382,6 @@ namespace BackGroundEffect{
 
     void Object::SetVertexPosition()
     {
-        float gridW = polyW / (float)(divNum * 2);
-        float gridH = polyH / (float)(divNum * 2);
-
         for (int y = 0; y < divNum * 2; ++y){
             for (int x = 0; x < divNum * 2; ++x){
                 VERTEX2D* cur = &vertex[x + y*divNum * 2];
@@ -389,7 +395,6 @@ namespace BackGroundEffect{
                 cur->pos.y -= polyH / 2.0f;
                 cur->pos.x += centerPos.x;
                 cur->pos.y += centerPos.y;
-
             }
         }
 
@@ -422,28 +427,19 @@ namespace BackGroundEffect{
                     VECTOR v2 = VGet(pcU, pcV, 0);
 
                     VECTOR c = VSub(v1, v2);
-                    float r = VSize(c);
+                    float r = VSize(c) * uMax;
 
                     float ac = c.x / r;
-                    float theta = 0;
-                    theta += acos(ac);
-
-                    theta /= DX_PI_F;
+                    float theta = acos(ac) * vMax / DX_PI_F;
                     // 本来なら0~2PIの値をとるべきだがUV座標の関係上うまくいかないのであきらめる
                     //if (c.y < 0) theta = -theta;
 
                     float rate = r*r*pcFacter;
                     rate = max(0, min(1.0f, rate));
 
-                    r = r;
-                    theta = theta;
-                    r *= uMax;
-                    theta *= vMax;
-
                     cur->u = cur->u * rate + r * (1.0f - rate);
                     cur->v = cur->v * rate + theta * (1.0f - rate);
                 }
-
 
                 float sinWave = sin(sinWaveTheta + DX_PI_F*xr);
                 sinWave = sinWave * sinWaveFacter / polyW;
@@ -452,12 +448,6 @@ namespace BackGroundEffect{
 
                 cur->u += cosWave + addU;
                 cur->v += sinWave + addV;
-
-                cur->dif.a = 255;
-                cur->dif.r = 255;
-                cur->dif.g = 255;
-                cur->dif.b = 255;
-                cur->rhw = 1.0f;
             }
         }
 
@@ -487,8 +477,8 @@ namespace BackGroundEffect{
         float vTexel = 1.0f / texH;
 
         // uvをピクセルに合わせる
-        uMax = uTexel * polyW * 2;
-        vMax = vTexel * polyH * 2;
+        uMax = uTexel * polyW;
+        vMax = vTexel * polyH;
 
         SetUV();
 
@@ -637,7 +627,7 @@ namespace BackGroundEffect{
         SetTextureAddressModeUV(DX_TEXADDRESS_WRAP, DX_TEXADDRESS_WRAP, 0);
 
         // ポリゴンを描画
-        SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(255.0f*alpha));
+        //SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(255.0f*alpha));
         DrawPrimitiveIndexed2D(
             vertex, vertexNum, index, indexNum,
             DX_PRIMTYPE_TRIANGLESTRIP, texture, true);
@@ -697,7 +687,7 @@ namespace BackGroundEffect{
         */
 
         // 一応
-        SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
+        //SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 
         return;
     }
