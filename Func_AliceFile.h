@@ -11,12 +11,14 @@
 // 各セーブコンテンツを収納するためのインデックス値
 #define SAVEFILE_INDEX_FILEHEADER		0
 #define SAVEFILE_INDEX_ALICEINFO		1
-#define SAVEFILE_INDEX_DOLLLIST			2
+#define SAVEFILE_INDEX_CHOOSEMAP		2
+#define SAVEFILE_INDEX_DOLLLIST			3
 
 
 // 各セーブコンテンツを暗号化するための文字列
 #define SAVEFILE_CODE_FILEHEADER		"7zgC6Hd"
 #define SAVEFILE_CODE_ALICEINFO			"7zgD63a"
+#define SAVEFILE_CODE_CHOOSEMAP			"bvgD53d"
 #define SAVEFILE_CODE_DOLLLIST			"9zgD6Hd"
 
 

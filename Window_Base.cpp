@@ -12,7 +12,7 @@ WINDOWAREA GetWindowArea(int _x, int _y, int _w, int _h){
 	return area;
 }
 
-Window_Base::Window_Base() : frameArea(), contentArea(){
+Window_Base::Window_Base() : frameArea(), contentArea(), pChildWindow(NULL){
 	// ëSÇƒÇÃÉÅÉìÉoÇÃèâä˙âª
 	Initialize();
 }
@@ -25,16 +25,19 @@ void Window_Base::Initialize(){
 	pSkin = NULL;
 	count = 0;
 	haveChild = false;
+	pChildWindow = NULL;
 }
 
 bool Window_Base::Setup(WindowSkin* pSkin,
 	WINDOWAREA _frameArea, WINDOWAREA _contentArea,
 	bool _visible){
+		AttachSkin(pSkin);
 		frameArea = _frameArea;
 		contentArea = _contentArea;
 		visible = _visible;
-		AttachSkin(pSkin);
 		haveChild = false;
+		pChildWindow = NULL;
+
 		return true;
 }
 
@@ -46,6 +49,7 @@ bool Window_Base::Setup_FixPadding(WindowSkin* _pSkin,
 		SetContentSizeByMargin(_px, _py);
 		visible = _visible;
 		haveChild = false;
+		pChildWindow = NULL;
 		return true;
 }
 
@@ -57,6 +61,7 @@ bool Window_Base::Setup_FixContentWidth(WindowSkin* pSkin,
 		SetContentSizeByContentWidth(_contentWidth, _py);
 		visible = _visible;
 		haveChild = false;
+		pChildWindow = NULL;
 		return true;
 }
 

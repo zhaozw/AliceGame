@@ -108,6 +108,7 @@
     <ClCompile Include="Data_EnemySprite.cpp" />
     <ClCompile Include="Data_SkillInfo.cpp" />
     <ClCompile Include="Data_StateMessage.cpp" />
+    <ClCompile Include="Data_ChooseMap.cpp" />
     <ClCompile Include="DXFont.cpp" />
     <ClCompile Include="DXInput.cpp" />
     <ClCompile Include="DXTimeCtrl.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="MyTask_ParticleEffect_Draw.cpp" />
     <ClCompile Include="MyTask_Sample.cpp" />
     <ClCompile Include="Player_Sample.cpp" />
+    <ClCompile Include="Record_ChooseMap.cpp" />
     <ClCompile Include="Scene_Base.cpp" />
     <ClCompile Include="Scene_Battle.cpp" />
     <ClCompile Include="Scene_Battle_Action.cpp" />
@@ -163,7 +165,6 @@
     <ClCompile Include="Scene_StockDolls.cpp" />
     <ClCompile Include="Scene_TestBattle.cpp" />
     <ClCompile Include="Scene_Title.cpp" />
-    <ClCompile Include="Scene_ChooseArea.cpp" />
     <ClCompile Include="Selectable.cpp" />
     <ClCompile Include="Selectable2D.cpp" />
     <ClCompile Include="Sound.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Data_EnemySprite.h" />
     <ClInclude Include="Data_SkillInfo.h" />
     <ClInclude Include="Data_StateMessage.h" />
+    <ClInclude Include="Data_ChooseMap.h" />
     <ClInclude Include="EnvData.h" />
     <ClInclude Include="Func_Windows.h" />
     <ClInclude Include="Game_BattleAction.h" />
@@ -219,8 +221,8 @@
     <ClInclude Include="Game_UnitCommand.h" />
     <ClInclude Include="MyTask_ParticleEffect.h" />
     <ClInclude Include="GRecord_Others.h" />
+    <ClInclude Include="Record_ChooseMap.h" />
     <ClInclude Include="Scene_Battle.h" />
-    <ClInclude Include="Scene_ChooseArea.h" />
     <ClInclude Include="Scene_ChooseMap.h" />
     <ClInclude Include="Scene_Map.h" />
     <ClInclude Include="Scene_Records.h" />

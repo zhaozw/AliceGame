@@ -19,6 +19,6 @@ void Window_Yesno::Setup(
 		SetGridSize(
 			horizontal?2:1,
 			horizontal?1:2);
-		Window_Selectable::Setup(pSkin, _frameArea, _contentArea, 
+		Window_Selectable::Setup(_pSkin, _frameArea, _contentArea, 
 			_font, _contentArea.w/(horizontal?2:1));
 }

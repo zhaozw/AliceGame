@@ -42,7 +42,6 @@
 #include "Scene_TestBattle.h"		// テストバトルの選択
 #include "Scene_StockDolls.h"		// 人形ストック選択
 #include "Scene_Records.h"			// トロフィー確認
-#include "Scene_ChooseArea.h"		// エリア選択
 #include "Scene_ChooseMap.h"		// マップ選択
 #include "Scene_Map.h"				// マップ画面
 
@@ -62,8 +61,10 @@
 #include "Data_BattleState.h"
 #include "Data_StateMessage.h"
 #include "Data_SkillInfo.h"
+#include "Data_ChooseMap.h"
 
 // レコードオブジェクト
+#include "Record_ChooseMap.h"
 
 
 // 共通レコードオブジェクト
@@ -112,6 +113,10 @@ Data_EnemyDraw		d_enemyDraw;
 Data_BattleState	d_battleState;
 Data_StateMessage	d_stateMessage;
 Data_SkillInfo		d_skillInfo;
+Data_ChooseMap		d_chooseMap;
+
+// レコードクラス
+Record_ChooseMap	r_chooseMap;
 
 // グローバルレコードクラス
 GRecord_Others		gr_others;
@@ -283,9 +288,6 @@ bool WinMain_PlayScene(){
 					break;
 				case SCENE_RECORDS:
 					scene = NEW Scene_Records();
-					break;
-				case SCENE_CHOOSEAREA:
-					scene = NEW Scene_ChooseArea();
 					break;
 				case SCENE_CHOOSEMAP:
 					scene = NEW Scene_ChooseMap();
@@ -460,6 +462,16 @@ bool WinMain_LoadResource(){
 		return false;
 	}
 
+	if(!d_chooseMap.Load()){
+#ifdef MYGAME_USE_WARN_ERROR
+		MessageBox(NULL, TEXT("全体マップデータの読み込みに失敗しました。"),
+		TEXT("エラー"), MB_OK|MB_ICONWARNING);
+#endif // MYGAME_USE_WARN_INIERROR		
+		return false;
+	}
+
+
+
 	// タスク群
 	if(!Create_MyTaskList()) return false;
 
@@ -538,6 +550,9 @@ bool Perform_Encoding(){
 		return false;
 	}
 	if(!d_enemyParam.EncodeCsv()){
+		return false;
+	}
+	if(!d_chooseMap.EncodeCsv()){
 		return false;
 	}
 	return true;

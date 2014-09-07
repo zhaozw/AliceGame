@@ -37,7 +37,7 @@ bool Scene_DollCreate::Initialize(bool fSkipFrame){
 	// 選択不可能な人形の選択肢をセット
 	for(int t=0; t<DOLL_GROUP_NUM; t++){
 		for(int n=0; n<DOLL_TYPE_PER_GROUP; n++){
-			if(!r_aliceInfo.data.dollRecepe[t*DOLL_TYPE_PER_GROUP+n+1]){
+			if(!r_aliceInfo.GetHaveDollRecepe(t*DOLL_TYPE_PER_GROUP+n+1)){
 				s_type[t].isActive[n] = false; // 横キーで人形の切り替え
 			}
 		}
@@ -99,7 +99,7 @@ int Scene_DollCreate::Update(){
 		case SCNSTATE_DOLLCREATE_CHOOSESTONE:
 			switch(s_attr.Move()){
 			case SELECT_CHOOSE:
-				if(r_aliceInfo.data.pieceNum[s_group.index][s_attr.index] > 0){
+				if(r_aliceInfo.GetPieceNum(s_group.index, s_attr.index) > 0){
 					// 引き続き属性の石を選ぶ
 					SetAttrStone(s_group.index, s_attr.index+1, cntAttrStone);
 					cntAttrStone++;
@@ -163,7 +163,7 @@ void Scene_DollCreate::Draw() const{
 	// 人形アイコンの描画
 	for(int n=0; n<DOLL_TYPE_PER_GROUP; n++){
 		index = DOLL_TYPE_PER_GROUP*s_group.index+n+1;
-		if(r_aliceInfo.data.dollRecepe[index]){
+		if(r_aliceInfo.GetHaveDollRecepe(index)){
 			if(s_type[s_group.index].index == n){
 				SetDrawBright(255, 255, 255);
 			}else{
@@ -204,7 +204,7 @@ void Scene_DollCreate::DrawEachGroup(int x, int y, BYTE group, bool focused) con
 		DrawAttrStone(x+72*a+12+4, y+30+12,
 			group, a+1, (float)SIZE_ATTRICON/SIZE_ATTRSTONE);
 		// 持っている欠片の個数の描画
-		n = r_aliceInfo.data.pieceNum[group-1][a];
+		n = r_aliceInfo.GetPieceNum(group-1, a);
 		DrawNum(n,
 			x+3*a*SIZE_ATTRICON+SIZE_ATTRICON+NUMBER_I_WIDTH+4, y+30,
 			g_image.chars.number_i,
@@ -248,7 +248,7 @@ void Scene_DollCreate::ResetAttrStones(){
 
 void Scene_DollCreate::SetAttrStone(BYTE group, BYTE attr, int pos){
 	attrStones[pos] = attr;
-	r_aliceInfo.data.pieceNum[group][attr-1]--;
+	r_aliceInfo.ReducePieceNum(group, attr-1);
 }
 
 void Scene_DollCreate::ResetAttrStone(int pos){
@@ -256,7 +256,7 @@ void Scene_DollCreate::ResetAttrStone(int pos){
 	BYTE attr = attrStones[pos];
 	if(attr != DOLL_ATTR_NONE){
 		// 該当する欠片の数を増やす
-		r_aliceInfo.data.pieceNum[s_group.index][attr-1]++;
+		r_aliceInfo.AddPieceNum(s_group.index, attr-1);
 		// 欠片を回収する
 		attrStones[pos] = DOLL_ATTR_NONE;
 	}

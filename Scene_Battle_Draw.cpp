@@ -37,7 +37,7 @@ void Scene_Battle::DrawBattleInfo() const{
 	switch(phaze){
 	case DOLLS_COMMAND:
 	case ALICE_COMMAND:
-		wsprintf(buf, _T("Žc‚è–‚—Í:%d"), r_aliceInfo.data.mp);
+		wsprintf(buf, _T("Žc‚è–‚—Í:%d"), r_aliceInfo.GetMP());
 		w = GetStrWidth(buf, strlen(buf), g_font.hInfo);
 		DrawStringToHandle(150-w/2, 378-FONTSIZE_INFO, buf, GetColor(255,255,255), g_font.hInfo);
 	}

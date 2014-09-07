@@ -110,7 +110,7 @@ void BWindow_DollSkill::Update(){
 	case UPDATING:
 		switch(select.CheckKey()){
 		case SELECT2D_CHOOSE:
-			if(costMP[select.index] <= r_aliceInfo.data.mp){
+			if(costMP[select.index] <= r_aliceInfo.GetMP()){
 				tmpSkillID = pOwner->GetSkillID(select.index);
 				targetType = d_skillInfo.GetTargetType(tmpSkillID);
 				if(tmpSkillID == 0) return;
@@ -146,7 +146,7 @@ void BWindow_DollSkill::Update(){
 
 void BWindow_DollSkill::DrawContentItem(int index, BYTE color) const{
 	// color’l‚ÍŽÀÛ‚É‚Æ‚Íˆá‚¤‚à‚Ì‚ð—p‚¢‚é
-	bool canUse = (r_aliceInfo.data.mp >= costMP[index]);
+	bool canUse = (r_aliceInfo.GetMP() >= costMP[index]);
 	BYTE useColor = (!canUse ? WND_SELECTABLE_COLOR_INACTIVE 
 		: (index == select.index 
 		? WND_SELECTABLE_COLOR_SELECTED 

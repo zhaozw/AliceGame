@@ -8,8 +8,8 @@
 // アリス自身の情報を持つクラス。
 // グローバル変数r_aliceInfoから参照される。
 
-struct Record_AliceInfo_Data{
-	int chapter;		// このファイルでプレイ中の章
+typedef struct Record_AliceInfo_Data{
+	WORD chapter;		// このファイルでプレイ中の章
 	int level;			// アリスのレベル。
 	int exp;			// アリスの積算経験値。
 	int mp;				// アリスの魔力
@@ -47,11 +47,11 @@ struct Record_AliceInfo_Data{
 		savedYMD = 0;
 		savedHMS = 0;
 	};
-};
+} RECORD_ALICEINFO_DATA;
 
 class Record_AliceInfo{
-public:
-	Record_AliceInfo_Data		data; // データ保存用にデータ用構造体を作成
+private:
+	RECORD_ALICEINFO_DATA	data; // データ保存用にデータ用構造体を作成
 	// 保存しない
 	DWORD					lastSavedWinTime;	// 最後にセーブした時のウィンドウズの時間
 public:
@@ -62,6 +62,26 @@ public:
 	// 現在の現実時間を代入する。
 	void GetCntTime(bool load=false);
 
+	// アクセサ
+	WORD GetChapter(){ return data.chapter;};
+	void SetChapter(WORD _chapter){ data.chapter = _chapter; };
+
+	// 人形が作成可能かどうかを取得する
+	bool GetHaveDollRecepe(int index){ return data.dollRecepe[index]; };
+
+	// 人形作成のための石の数を取得する
+	int GetPieceNum(int group, int attr){ return data.pieceNum[group][attr]; };
+	// 石を増減させる。
+	void AddPieceNum(int group, int attr, int num=1){ data.pieceNum[group][attr] += num; };
+	bool ReducePieceNum(int group, int attr, int num=1){
+		data.pieceNum[group][attr] -= num;
+		if(data.pieceNum[group][attr] < 0){
+			data.pieceNum[group][attr] = 0;
+			return false;
+		}
+		return true;
+	};
+
 	// MPを設定する。
 	void SetMP(int p){ data.mp = p; data.maxMP = max(data.maxMP, p); };
 	// MPを増やす。上限などの判定を使用する。
@@ -70,6 +90,18 @@ public:
 	// MPを減らす。加減などの判定を使用する。
 	// 指定した値だけ減らせなかった場合：false
 	bool SubMP(int p);
+	// MPを取得する。
+	int GetMP(){ return data.mp; };
+
+	// 時間を取得する
+	DWORD GetSavedYMD(){ return data.savedYMD; };
+	DWORD GetSavedHMS(){ return data.savedHMS; };
+
+	// プレイ時間を取得する
+	DWORD GetPlayTime(){ return data.playTime; };
+
+	// データの構造体全体を渡す。
+	RECORD_ALICEINFO_DATA GetData(){ return data; };
 };
 
 #endif // Record_AliceInfo_H

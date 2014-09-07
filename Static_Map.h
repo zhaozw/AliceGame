@@ -2,6 +2,31 @@
 #define STATIC_MAP_H
 
 //======================================
+// 全体マップに関する定数。
+// CHOOSEMAPはWorldMapの略。
+
+// エリア数とパス数の最大値。
+#define CHOOSEMAP_AREA_MAX			16		// エリア数
+#define CHOOSEMAP_POINT_MAX			24		// ポイント数（必ずしもポイントとエリアは一致しない）
+#define CHOOSEMAP_PATH_MAX			32		// パス数
+#define CHOOSEMAP_SPOT_MAX			8		// 特殊な施設数
+#define CHOOSEMAP_STAGE_MAX			8		// 各エリアの最大ステージ数。
+
+// パスの状態に関する定数
+#define CHOOSEMAP_PATHSTATE_NONE	0		// 道が解放されていない
+#define CHOOSEMAP_PATHSTATE_OPENED	1		// 道が解放された
+#define CHOOSEMAP_PATHSTATE_CLOSED	2		// 何らかの理由で一時的に閉ざされている
+#define CHOOSEMAP_PATHSTATE_HIDDEN	3		// 何らかの理由で一時的に閉ざされた上、見えない
+
+// マップ上で用いる方向の定数。
+// 北から時計回り。
+#define MAP_NODIRECTION				0
+#define MAP_NORTH					1
+#define MAP_EAST					2
+#define MAP_SOUTH					3
+#define MAP_WEST					4
+
+//======================================
 // マップをグリッドによって指定する。
 
 #define MAPGRID_INI_X			100

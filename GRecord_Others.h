@@ -34,10 +34,10 @@ typedef struct GRecord_Others_Data{
 	// 章をクリアしているか否か。
 	// 実際には要素の番号が1ずれる。
 	// 例として、1章をクリアした場合は要素0番の値がtrueになる。
-	bool isClearedChapter[MAX_CHAPTER+1];
+	bool isClearedChapter[MAX_CHAPTER];
 
 	GRecord_Others_Data(){
-		for(int n=0; n<MAX_CHAPTER+1; n++){
+		for(int n=0; n<MAX_CHAPTER; n++){
 			isClearedChapter[n] = false;
 		}
 		aliceID = 0;

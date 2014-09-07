@@ -11,7 +11,7 @@ extern TempData				g_temp;
 extern Record_AliceInfo		r_aliceInfo;
 
 Scene_Title::Scene_Title():Scene_Base(),
-s_main(MAX_TITLE_MENU), s_chapter(MAX_CHAPTER, 0, false, true) {
+s_main(MAX_TITLE_MENU), s_chapter(MAX_CHAPTER-1, 0, false, true) {
 	phaze = TITLE_PHAZE_MAIN;
 }
 
@@ -123,6 +123,7 @@ void Scene_Title::Draw() const{
 		_T("死者の夢(仮)"),
 		_T("少女の夢(仮)"),
 		_T("アリスの夢(仮)"),
+		_T("テストプレイ用")
 	};
 	
 	// 各メニューを描画する

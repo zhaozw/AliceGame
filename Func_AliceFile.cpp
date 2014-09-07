@@ -8,13 +8,16 @@
 
 #include "MyFiles.h"
 #include "Game_FileHeader.h"
-#include "Record_AliceInfo.h"
 #include "Game_DollList.h"
 #include "TempData.h"
 #include "Common_Macro.h"
 
+#include "Record_AliceInfo.h"
+#include "Record_ChooseMap.h"
+
 // ゲームデータを保存するためのグローバル変数群
 extern Record_AliceInfo		r_aliceInfo;
+extern Record_ChooseMap		r_chooseMap;
 extern TempData				g_temp;
 extern Game_DollList		g_dollList;
 
@@ -93,10 +96,10 @@ bool SaveGame(BYTE index){
 
 	// ゲーム保存用のヘッダを作成する
 	Game_FileHeader fileHeader;
-	fileHeader.data.alice_mp = r_aliceInfo.data.mp;
-	fileHeader.data.savedYMD = r_aliceInfo.data.savedYMD;
-	fileHeader.data.savedHMS = r_aliceInfo.data.savedHMS;
-	fileHeader.data.playTime = r_aliceInfo.data.playTime;
+	fileHeader.data.alice_mp = r_aliceInfo.GetMP();
+	fileHeader.data.savedYMD = r_aliceInfo.GetSavedYMD();
+	fileHeader.data.savedHMS = r_aliceInfo.GetSavedHMS();
+	fileHeader.data.playTime = r_aliceInfo.GetPlayTime();
 
 	// ファイルヘッダの保存
 	if(file.AddObjectToFiles(
@@ -110,7 +113,7 @@ bool SaveGame(BYTE index){
 		_T(SAVEFILE_CODE_FILEHEADER), (WORD)strlen(_T(SAVEFILE_CODE_FILEHEADER)));
 
 	// アリスの情報の保存
-	Record_AliceInfo_Data aliceData = r_aliceInfo.data;
+	Record_AliceInfo_Data aliceData = r_aliceInfo.GetData();
 	if(file.AddObjectToFiles(
 		(LPVOID)&aliceData, sizeof(Record_AliceInfo_Data),
 		_T("aliceinfo"), SAVEFILE_INDEX_ALICEINFO) == INDEX_ERROR){
@@ -122,6 +125,19 @@ bool SaveGame(BYTE index){
 		_T(SAVEFILE_CODE_ALICEINFO), (WORD)strlen(_T(SAVEFILE_CODE_ALICEINFO)));
 
 	// 人形リストの保存
+
+	// マップ情報の保存
+	Record_ChooseMap_Data chooseMapData = r_chooseMap.GetData();
+	if(file.AddObjectToFiles(
+		(LPVOID)&chooseMapData, sizeof(Record_ChooseMap_Data),
+		_T("chooseMap"), SAVEFILE_INDEX_CHOOSEMAP) == INDEX_ERROR){
+			file.ReleaseAll();
+			return false;
+	}
+	file.EncodeFileXOR(
+		SAVEFILE_INDEX_CHOOSEMAP, 
+		_T(SAVEFILE_CODE_CHOOSEMAP), (WORD)strlen(_T(SAVEFILE_CODE_CHOOSEMAP)));
+
 
 	// ファイルを書き出す
 	DWORD bytesOfFile = 0;
@@ -180,6 +196,18 @@ bool LoadGame(BYTE index){
 
 	// 人形リストの読み込み
 
+	// 復号化
+	file.EncodeFileXOR(
+		SAVEFILE_INDEX_CHOOSEMAP, 
+		_T(SAVEFILE_CODE_CHOOSEMAP), (WORD)strlen(_T(SAVEFILE_CODE_CHOOSEMAP)));
+	// ポインタの取得
+	pData = file.GetFilePointerByIndex(SAVEFILE_INDEX_CHOOSEMAP);
+	// ファイルサイズが正しいかどうかの確認
+	fileSize = file.GetFileSize(SAVEFILE_INDEX_CHOOSEMAP);
+	if(!r_chooseMap.LoadFromBytes(pData, fileSize)){
+		return false;
+	}
+
 	return true;
 }
 
@@ -194,6 +222,8 @@ bool NewGame(){
 	g_temp.Reset();
 	GenerateInitialDoll();
 	// r_aliceInfo.data.mp = 0;
+	r_chooseMap = Record_ChooseMap();
+
 	return true;
 }
 

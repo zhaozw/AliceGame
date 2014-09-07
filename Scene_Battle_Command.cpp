@@ -179,7 +179,7 @@ char Scene_Battle::InterpretCommand_Fix_Command(Game_UnitCommand* pCmd){
 		break;
 	case COMMANDTYPE_SKILL:
 		if(pCmd->GetOwner()->IsDoll()){
-			if(r_aliceInfo.data.mp >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
+			if(r_aliceInfo.GetMP() >= d_skillInfo.GetCostMP(pCmd->GetSkillID())){
 				// ‚±‚±‚ÅMP‚ðŒ¸‚ç‚·
 				r_aliceInfo.SubMP(d_skillInfo.GetCostMP(pCmd->GetSkillID()));
 			}else{

@@ -26,20 +26,17 @@
 #define SCENE_TESTBATTLE	8		// テストバトル選択。
 #define SCENE_STOCKDOLLS	9		// アリスの記憶した人形のストック。
 #define SCENE_RECORDS		10		// トロフィーの確認。
-#define SCENE_CHOOSEAREA	11		// エリア選択画面。
-#define SCENE_CHOOSEMAP		12		// マップ選択画面。
-#define SCENE_MAP			13		// マップ画面。
+#define SCENE_CHOOSEMAP		11		// マップ選択画面。
+#define SCENE_MAP			12		// マップ画面。
 
 // チャプターの配列。
-#define CHAPTER_TEST		0		// テストプレイ用のチャプター。
-#define CHAPTER_FIRST		1		// 1章。
-#define CHAPTER_SECOND		2		// 2章。
-#define CHAPTER_THIRD		3		// 3章。
-#define CHAPTER_LAST		4		// 最終章。
-#define CHAPTER_EXTRA		10		// Extraチャプター。
-#define MAX_CHAPTER			5		// タイトルで選択出来るチャプター数。
-									// テストプレイ用のチャプターは、
-									// 特殊な方法で入るために外している。
+#define CHAPTER_FIRST		0		// 1章。
+#define CHAPTER_SECOND		1		// 2章。
+#define CHAPTER_THIRD		2		// 3章。
+#define CHAPTER_LAST		3		// 最終章。
+#define CHAPTER_EXTRA		4		// Extraチャプター。
+#define CHAPTER_TEST		5		// テストプレイ用のチャプター。
+#define MAX_CHAPTER			6		// 全チャプター数。
 
 // ボタンの名称の羅列。
 // 作るゲームに合わせて覚えやすいように変える。

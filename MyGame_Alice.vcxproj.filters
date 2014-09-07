@@ -399,9 +399,6 @@
     <ClCompile Include="Record_AliceInfo.cpp">
       <Filter>ソース ファイル\Source_Data</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_ChooseArea.cpp">
-      <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene_ChooseMap.cpp">
       <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
     </ClCompile>
@@ -410,6 +407,12 @@
     </ClCompile>
     <ClCompile Include="Scene_StockDolls.cpp">
       <Filter>ソース ファイル\Source_Camp\CSource_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Record_ChooseMap.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Data_ChooseMap.cpp">
+      <Filter>ソース ファイル\Source_Data</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -695,9 +698,6 @@
     <ClInclude Include="Record_AliceInfo.h">
       <Filter>ヘッダー ファイル\Header_Data</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_ChooseArea.h">
-      <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene_ChooseMap.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
     </ClInclude>
@@ -706,6 +706,12 @@
     </ClInclude>
     <ClInclude Include="Scene_StockDolls.h">
       <Filter>ヘッダー ファイル\Header_Camp\CHeader_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Record_ChooseMap.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_ChooseMap.h">
+      <Filter>ヘッダー ファイル\Header_Data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
